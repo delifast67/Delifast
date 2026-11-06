@@ -7,9 +7,9 @@ const navigation = [
   { label: "Aide", href: "#aide" },
 ] as const;
 
-export function HomeBrand() {
+export function HomeBrand({ href = "#accueil" }: { href?: string }) {
   return (
-    <a className={styles.brand} href="#accueil" aria-label="Delifast, accueil">
+    <a className={styles.brand} href={href} aria-label="Delifast, accueil">
       <span className={styles.brandMark} aria-hidden="true">
         ➤
       </span>

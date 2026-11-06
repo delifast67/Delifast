@@ -13,52 +13,72 @@ src/
 ├── app/
 │   ├── (public)/          # Accueil, catalogue, restaurants, commerces, aide
 │   ├── (auth)/            # Connexion Google et choix du type de compte
-│   ├── client/            # Parcours et espace client
-│   ├── commercant/        # Espace et gestion du commerçant
+│   ├── client/             # Parcours et espace client
+│   ├── commercant/         # Espace et gestion du commerçant
 │   ├── administration/    # Espace administrateur unique
-│   ├── api/               # Route Handlers serveur
+│   ├── api/                # Route Handlers serveur
 │   ├── layout.tsx
 │   └── globals.css
 ├── components/
-│   ├── ui/                # Primitives shadcn/ui personnalisées
+│   ├── ui/                 # Primitives shadcn/ui personnalisées
 │   ├── layout/
 │   ├── navigation/
 │   ├── shared/
 │   ├── forms/
 │   └── feedback/
-├── features/              # auth, profiles, catalogue, commerces, commandes,
-│                          # paiements, abonnements, livraison, localisation
+├── features/               # auth, profiles, catalogue, commerces, commandes,
+│                           # paiements, abonnements, livraison, localisation
 ├── hooks/
-├── lib/                   # Supabase, validations, formatage, données de démo
+├── lib/                    # Supabase, validations, formatage, données de démo
 ├── styles/
 └── types/
-supabase/migrations/       # Migrations SQL futures, aucune créée en phase 1
- tests/                    # unit/, integration/, e2e/
-docs/                      # Architecture, cahier, sécurité et feuille de route
+supabase/migrations/        # Migrations SQL futures
+ tests/                     # unit/, integration/, e2e/
+docs/                       # Architecture, cahier, sécurité et feuille de route
 ```
 
 Les dossiers vides ne préjugent pas de l’implémentation des écrans. Chaque fonctionnalité sera ajoutée au moment prévu, plutôt que de créer 53 pages factices.
 
 ## Frontières à respecter
 
-- Les composants d’interface ne doivent pas accéder directement à PostgreSQL ou aux secrets.
-- Les autorisations et les rôles devront être vérifiés côté serveur, avec des politiques RLS sur Supabase.
-- Les justificatifs de paiement seront dans un espace Storage privé.
-- Les fixtures de démonstration resteront sous `src/lib/demo-data/` ou dans les fixtures de test et ne seront jamais insérées dans les tables de production.
-- Les migrations futures seront versionnées dans `supabase/migrations/` et appliquées seulement après validation de l’environnement cible.
+- Les composants d’interface n’accèdent pas directement à PostgreSQL ni aux secrets.
+- Les autorisations et les rôles sont vérifiés côté serveur, avec des politiques RLS sur Supabase.
+- Les justificatifs de paiement résident dans un espace Storage privé.
+- Les fixtures de démonstration restent sous `src/lib/demo-data/` ou dans les fixtures de test et ne sont jamais insérées dans les tables de production.
+- Les migrations sont versionnées dans `supabase/migrations/` et appliquées uniquement après validation de l’environnement cible.
 
 ## Routes réservées
 
 Les segments `client`, `commercant`, `administration` et `api` sont des emplacements d’architecture. Aucun écran, endpoint ou contrôle de rôle métier n’est livré à ce stade.
 
+## Exigences du registre officiel v2.0 — 6 novembre 2026
 
-## Complément validé le 6 novembre 2026 — panier, stock et options
+Les points ci-dessous traduisent les règles métier en exigences d’architecture. Ils ne constituent ni un schéma PostgreSQL final, ni des tables déjà créées, ni des contrôles opérationnels : ces choix de structure seront précisés lors de la phase d’implémentation.
 
-Les points ci-dessous sont des exigences pour l’architecture à implémenter, pas des tables ou contrôles déjà livrés dans cette phase de conception.
+### Panier, prix et commandes mono-commerçant
 
-- **Panier et commandes mono-commerçant :** associer le panier à un commerçant et contrôler côté serveur que chaque ligne ajoutée, puis chaque ligne de commande, appartient à ce même commerçant. Le backend ne se fie pas à la confirmation frontend pour faire respecter cette contrainte.
-- **Stock facultatif par produit :** prévoir `stock_tracking_enabled` (booléen), `stock_quantity` (entier nullable) et `is_available` (booléen) sur le produit. Lorsque le suivi est actif, le service de commande doit contrôler la quantité disponible de façon cohérente côté serveur et rendre un produit indisponible à zéro ; lorsque le suivi est inactif, la disponibilité est gérée manuellement par le commerçant.
-- **Options et prix conservés :** prévoir des groupes et choix d’options distincts pour les produits, ainsi que des lignes d’options de commande contenant une copie du libellé et du supplément appliqué. Le serveur calcule le prix à partir du catalogue validé et conserve le résultat avec la commande ; une modification future du catalogue ne réécrit pas l’historique.
-- **Tests futurs obligatoires :** couvrir les paniers et commandes d’un seul commerçant, le rejet serveur d’un produit d’un autre commerçant, les commandes avec suivi de stock actif et inactif, le stock à zéro et les quantités excédentaires, les produits sans options ou avec plusieurs groupes, et la stabilité des suppléments copiés dans l’historique. Ces tests seront écrits avec les services et migrations ultérieurs.
+- Le serveur vérifie que le panier, chaque ligne et la commande appartiennent à un seul commerçant. Une confirmation frontend avant remplacement du panier ne remplace jamais cette validation.
+- Le serveur recalcule les prix à partir du catalogue validé et des options sélectionnées ; il ne fait pas confiance aux montants transmis par le navigateur.
+- Les lignes de commande conservent une copie des libellés, options, suppléments, quantités et prix calculés au moment de la commande.
 
-Le moment de déduction ou de restitution du stock, le caractère obligatoire d’un groupe et les limites ou la cardinalité de sélection restent à valider séparément. Aucune migration ni décision complémentaire n’est créée par cette note.
+### Disponibilité, stock et réservations
+
+- Le modèle doit distinguer le choix de suivi de stock propre à chaque produit, la quantité suivie quand ce suivi est actif et la disponibilité commerciale gérée par le commerçant. La disponibilité n’est pas déduite uniquement du suivi de stock.
+- Toute commande portant sur un produit indisponible est refusée côté serveur. Avec suivi actif, le serveur contrôle les quantités et empêche de dépasser le stock.
+- L’envoi d’une commande réserve les quantités suivies. Les réservations n’expirent pas automatiquement. Une validation manuelle du paiement par le commerçant consomme le stock réservé ; un refus ou une annulation avant consommation libère les quantités. Après consommation, la restitution n’est possible que pour une annulation avant préparation ou remise au client, sans restitution automatique ensuite.
+- Réservation, consommation, libération et restitution sont traitées atomiquement. L’implémentation empêche les doubles réservations et les quantités négatives, y compris en concurrence.
+- Les libérations manuelles sont autorisées pour les réservations du commerçant concerné, ou pour l’ensemble des commerçants côté administrateur. Elles nécessitent un motif et enregistrent auteur, horodatage, motif et quantités. Une réservation consommée ne peut être libérée comme active ; la commande est mise dans un état cohérent et le client est informé si sa commande est affectée.
+
+### Options et modifications pendant la préparation
+
+- Un produit peut n’avoir aucune option ou posséder plusieurs groupes. Les validations serveur appliquent, pour chaque groupe, son type obligatoire/facultatif, son minimum, son maximum et le nombre d’options disponibles ; chaque supplément est recalculé depuis le catalogue.
+- Une modification proposée par un commerçant en préparation est enregistrée comme une proposition distincte. La composition actuelle et la nouvelle composition/le nouveau montant restent historisés. Aucune modification ne prend effet sans accord explicite du client.
+- Après acceptation, les réservations sont ajustées de façon atomique. Un refus passe par le processus d’annulation approprié. Après paiement, une baisse est gérée directement par le commerçant (sans remboursement automatique prétendu par Delifast) ; une hausse exige un paiement complémentaire payé et vérifié avant la poursuite.
+
+### Autorisations et tests
+
+- Les accès du commerçant sont limités à ses produits, commandes et réservations. L’administrateur unique peut agir sur les réservations de tous les commerçants ; les permissions sont contrôlées côté serveur et renforcées par RLS.
+- Les tests futurs couvrent : panier/commande mono-commerçant ; produit indisponible ; suivi activé, désactivé et stock nul ; quantité excédentaire ; options facultatives et obligatoires, minima/maxima et suppléments ; copie des prix historiques ; réservations concurrentes ; transitions de paiement, annulation, préparation/remise ; libérations manuelles et journaux ; acceptation/refus des propositions et ajustement des réservations.
+- Prévoir des tests unitaires, d’intégration, de sécurité et de concurrence avant livraison opérationnelle.
+
+Aucune migration de base de données, route métier ou transaction réelle n’est créée dans la phase de conception des maquettes.

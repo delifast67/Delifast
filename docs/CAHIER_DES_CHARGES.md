@@ -125,6 +125,6 @@ Ce sommaire reprend le périmètre du document fourni. Il décrit la couverture 
 Les maquettes doivent prévoir les états initial, chargement, vide, succès, erreur, désactivé, en attente, validé et refusé. Quand un paiement est refusé, le motif doit être visible et le parcours doit permettre une nouvelle preuve lorsque c’est prévu.
 
 
-## Décisions transversales validées — 6 novembre 2026
+## Règles métier transversales — version officielle v2.0, 6 novembre 2026
 
-Le périmètre reste de **53 écrans**. Les règles officielles de panier mono-commerçant, de suivi de stock facultatif par produit et d’options de produit facultatives sont décrites dans [`REGLES_METIER.md`](REGLES_METIER.md) et matérialisées dans les maquettes des écrans 04, 05, 11, 12, 16, 28, 29, 33 et 47. La galerie des interfaces et un rendu individuel par écran sont disponibles dans [`maquettes/`](maquettes/README.md). Les propositions encore ouvertes ne sont pas appliquées comme règles.
+Le périmètre reste de **53 écrans**. Le registre complet des décisions validées, y compris le cycle de réservation/libération du stock et le traitement des articles indisponibles en préparation, se trouve dans [`REGLES_METIER.md`](REGLES_METIER.md). Les règles sont matérialisées dans les interfaces existantes concernées, sans ajouter ni supprimer d’écran. La galerie, le carnet PDF et un rendu PNG individuel par écran sont disponibles dans [`maquettes/`](maquettes/README.md). Aucune règle non validée n’est déduite des exemples.

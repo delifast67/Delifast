@@ -57,13 +57,17 @@ def main():
     images = []
     failures = []
     rule_checks = {
-        4: ["Accompagnement", "Suppléments", "500 FCFA", "sélection restent à préciser"],
+        4: ["Accompagnement", "Facultatif", "Minimum 0", "obligatoire", "maximum 1"],
         11: ["Changer de commerce ?", "Garder mon panier", "Remplacer le panier", "côté serveur"],
-        28: ["suivi actif", "suivi désactivé", "côté serveur"],
-        29: ["Activer le suivi de stock", "Quantité disponible", "gère manuellement", "Suppléments"],
-        16: ["Prix de base à la commande", "supplément : 500 FCFA", "Option et supplément figés"],
-        33: ["Prix de base à la commande", "supplément : 500 FCFA", "Option et supplément figés"],
-        47: ["Prix de base à la commande", "supplément : 500 FCFA", "Option et supplément figés"],
+        12: ["un seul commerçant", "réservé", "indisponible"],
+        13: ["réservé", "sans expiration automatique"],
+        14: ["consommé après validation", "libérée"],
+        16: ["Proposition du commerce", "Accepter", "Refuser", "nouvelle composition"],
+        28: ["Suivi stock", "Disponibilité manuelle", "indépendante", "côté serveur"],
+        29: ["Activer le suivi du stock", "Quantité disponible", "Minimum", "Maximum", "obligatoire", "facultatif"],
+        33: ["Motif obligatoire", "Libérer la réservation active", "accord explicite", "remplacement"],
+        35: ["stock réservé", "consomme le stock", "refus"],
+        47: ["Motif obligatoire", "réservation active", "Historique", "Quantité : 2", "administrateur"],
     }
     with sync_playwright() as p:
         browser = p.chromium.launch(

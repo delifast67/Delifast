@@ -35,12 +35,23 @@ export default function ClientDashboardPage() {
             <span aria-hidden="true">⌂</span>
             <span>Client</span>
           </Link>
-          {clientNavigation.map((item) => (
-            <span className={styles.navItem} key={item.label}>
-              <span aria-hidden="true">{item.icon}</span>
-              <span>{item.label}</span>
-            </span>
-          ))}
+          {clientNavigation.map((item) =>
+            item.label === "Panier" ? (
+              <Link
+                className={styles.navItem}
+                href="/client/panier"
+                key={item.label}
+              >
+                <span aria-hidden="true">{item.icon}</span>
+                <span>{item.label}</span>
+              </Link>
+            ) : (
+              <span className={styles.navItem} key={item.label}>
+                <span aria-hidden="true">{item.icon}</span>
+                <span>{item.label}</span>
+              </span>
+            ),
+          )}
         </nav>
         <div className={styles.sidebarNote}>
           <span aria-hidden="true">●</span> Mode démonstration

@@ -193,7 +193,9 @@ export default function ClientCartPage() {
                 <span>Total estimé</span>
                 <strong>8 500 FCFA</strong>
               </div>
-              <DemoButton>Continuer la commande</DemoButton>
+              <Link className={`${styles.actionButton} ${styles.primaryButton}`} href="/client/validation-commande">
+                Continuer la commande
+              </Link>
               <Link className={`${styles.actionButton} ${styles.outlineButton}`} href="/catalogue">
                 Retour au catalogue
               </Link>

@@ -4,14 +4,15 @@
 
 Le dépôt de référence `main` contient le cahier des 53 écrans, les règles métier, l’architecture, le repère visuel, les conventions de sécurité et la feuille de route. Aucun flux métier ni interface applicative opérationnelle n’est livré dans ce jalon.
 
-## Phase 2 — Conception des interfaces (maquettes v2.1 prêtes pour validation visuelle)
+## Phase 2 — Conception des interfaces (maquettes v2.2 prêtes pour validation visuelle)
 
 - Une maquette statique distincte est produite pour chacun des 53 écrans du cahier, avec un rendu PNG individuel et un carnet PDF de 53 pages.
 - Les neuf états communs (initial, chargement, vide, succès, erreur, désactivé, en attente, validé et refusé) disposent d’une planche de référence.
-- Les maquettes reflètent le registre officiel v2.1 du 6 novembre 2026 : panier mono-commerçant, suivi de stock facultatif et disponibilité indépendante, cycle de réservation et libération manuelle, groupes d’options avec règles de sélection, proposition de retrait/remplacement et accord explicite du client.
-- Après un refus, le client choisit et enregistre dans la demande une annulation totale ou limitée aux articles concernés. Le remboursement total couvre la somme payée ; le remboursement partiel suit les prix historiques et suppléments directement associés, sans modifier les frais partagés.
-- Les vues de commande existantes montrent l’arrêt confirmé si la préparation a commencé, le rejet motivé d’une preuve, son renvoi corrigé et sa nouvelle vérification par l’administration, puis la reprise confirmée des articles restants après finalisation partielle (sans reprise après une annulation totale).
-- Les changements d’état importants déclenchent, dans la règle métier, une notification dans l’application au client et au commerçant avec le nouveau statut, le montant concerné et l’action attendue ; aucun SMS ou e-mail n’est prévu en première version.
+- Les maquettes reflètent le registre officiel v2.2 du 6 novembre 2026 : panier mono-commerçant, stock et disponibilité séparés, réservations, options, modifications soumises à l’accord du client, annulation, remboursement et notifications.
+- Après un refus, le client choisit l’annulation totale ou partielle. Une ligne est un produit avec options ; le prix net historique unitaire inclut suppléments, ajustements propres à la ligne et part des remises ou autres ajustements globaux hors frais communs snapshotée. Annuler `n` unités rembourse ce prix unitaire multiplié par `n`.
+- Les remises et autres ajustements monétaires globaux hors frais communs sont répartis au prorata entre articles et enregistrés au snapshot, avec une règle déterministe des fractions. En partiel, les frais communs restent inchangés ; en total, le remboursement couvre le montant effectivement payé.
+- Les vues de commande existantes montrent l’arrêt/reprise confirmés, le rejet motivé et la vérification par l’administrateur des preuves corrigées. Les dépôts et décisions sont append-only ; aucun nombre maximal de renvois ni expiration automatique n’est ajouté.
+- Toute transition réelle d’un état déjà prévu de commande, paiement, modification, annulation, remboursement ou réservation affectant la commande, ainsi que l’arrêt/reprise confirmé de préparation, déclenche une notification dans l’application aux deux parties avec statut/libellé, montant et action propre au destinataire. Aucun SMS/e-mail en v1, aucun message pour brouillon ou modification sans transition.
 - Les interfaces restent statiques : elles ne créent ni routes métier Next.js, ni composants React réutilisables, ni comptes, commandes, réservations, preuves ou paiements opérationnels.
 - Les noms, commerces, prix, références, coordonnées et preuves illustrés sont des données fictives.
 
@@ -32,4 +33,4 @@ Chaque phase importante attend la validation de Hilton avant de poursuivre.
 - La feuille initiale distinguait la préparation du dépôt de la phase Next.js. La conception des interfaces est traitée séparément afin de faire valider les choix visuels avant leur intégration.
 - Le projet démarre avec une application Next.js à la racine et des Route Handlers plus tard ; aucun backend séparé n’est créé sans contrainte technique réelle.
 - Prisma n’est pas ajouté au démarrage ; Supabase/PostgreSQL et ses outils d’accès sont privilégiés.
-- Les règles du registre officiel v2.1 sont intégrées aux maquettes. Seuls les détails explicitement identifiés comme non décidés dans ce registre restent à confirmer avant implémentation ; les visuels ne doivent pas servir à en déduire une règle nouvelle.
+- Les quatre arbitrages métier délégués (remboursement par unités, prorata des remises et autres ajustements globaux hors frais, déclencheurs/libellés de notification, renvoi et historique des preuves) sont décidés et intégrés au registre v2.2. Aucun n’est encore ouvert ; le détail technique backend reste pour les phases d’implémentation. Les visuels ne créent ni statut ni règle nouvelle.

@@ -4,15 +4,14 @@
 
 Les contrôles de base sont `npm run lint`, `npm run typecheck` et `npm run build`. La page `/` sert uniquement à vérifier que l’application démarre ; elle ne valide aucun parcours métier.
 
-## À compléter dans les phases suivantes
+## Contrôle documentaire et rendu des maquettes
 
-- `tests/unit/` : règles pures, validations, formatage et génération des liens USSD.
-- `tests/integration/` : services serveur et accès Supabase avec une base explicitement dédiée aux tests.
-- `tests/e2e/` : parcours web client, commerçant et administration.
-- Les tests ne doivent jamais payer, envoyer de SMS/e-mail métier ou écrire dans la production.
+`python3 scripts/render-maquettes.py` vérifie l’inventaire des 53 écrans, leurs éléments métier, les images et le débordement mobile, puis régénère les PNG et le carnet PDF. Le même contrôle effectue un exemple arithmétique isolé : prix de base et suppléments, remise propre à la ligne, allocation au prorata d’une remise globale, remboursement d’une unité et remboursement total du montant payé. Il vérifie également que le rendu contient les déclencheurs, états et libellés de notification approuvés.
 
-## Règles d’annulation et notifications — couverture future
+Ce contrôle porte seulement sur les règles écrites et leurs rendus statiques. Il ne teste aucune transition opérationnelle, logique de backend, notification réelle, preuve privée, remboursement, appel API ou écriture de données.
 
-Les tests opérationnels à écrire après validation de l’implémentation devront vérifier les six règles consignées dans [`../REGLES_METIER.md`](../REGLES_METIER.md) : choix et enregistrement du périmètre par le client ; montants historiques et traitement des frais partagés ; rejet motivé, renvoi d’une preuve corrigée et nouvelle vérification ; confirmations de l’arrêt et de la reprise par le commerçant ; notification dans l’application du statut, du montant et de l’action attendue aux deux parties, sans SMS ni e-mail en v1.
+## Couverture opérationnelle future
 
-La génération des maquettes et son inventaire à 53 écrans ne simulent que des rendus statiques. Ils ne constituent pas des tests de transitions, de notifications réelles, de remboursement ou d’écriture de données.
+Après implémentation, les tests unitaires, d’intégration et e2e devront vérifier le périmètre d’annulation choisi et historisé, le calcul fondé sur les snapshots, le prorata des remises et autres ajustements monétaires globaux hors frais communs, le traitement des frais communs, les preuves et décisions append-only, le rejet motivé et la nouvelle vérification, l’arrêt/reprise de préparation, les notifications aux deux parties sur chaque transition réelle, ainsi que les réservations et la cohérence du stock.
+
+Les tests ne doivent jamais payer, envoyer de SMS/e-mail métier ou écrire dans la production. Aucun test d’implémentation backend n’est ajouté dans cette mise à jour.

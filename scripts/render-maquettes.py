@@ -52,7 +52,42 @@ def make_pdf(images):
     pdf.save()
 
 
+def allocate_pro_rata(total, weights):
+    """Allocate integer currency units by largest remainder; ties follow source order."""
+    denominator = sum(weights)
+    if total < 0 or not weights or denominator <= 0 or any(weight < 0 for weight in weights):
+        raise ValueError("Invalid pro-rata allocation inputs")
+    shares = [(total * weight) // denominator for weight in weights]
+    remainders = [(total * weight) % denominator for weight in weights]
+    units_left = total - sum(shares)
+    for index in sorted(range(len(weights)), key=lambda item: (-remainders[item], item))[:units_left]:
+        shares[index] += 1
+    return shares
+
+
+def verify_documentary_examples():
+    """Check a documented illustration only; this is not a backend test."""
+    line_discount_per_unit = allocate_pro_rata(1_000, [1, 1])
+    global_discount_by_line = allocate_pro_rata(1_000, [6_000, 4_000])
+    global_discount_per_unit = allocate_pro_rata(global_discount_by_line[0], [1, 1])
+    net_unit_price = 3_000 + 500 - line_discount_per_unit[0] - global_discount_per_unit[0]
+    partial_refund = net_unit_price * 1
+    line_a_total = net_unit_price * 2
+    line_b_total = 4_000 - global_discount_by_line[1]
+    paid_total = line_a_total + line_b_total + 1_000
+    if line_discount_per_unit != [500, 500]:
+        raise AssertionError(f"Line discount allocation mismatch: {line_discount_per_unit}")
+    if global_discount_by_line != [600, 400]:
+        raise AssertionError(f"Global discount allocation mismatch: {global_discount_by_line}")
+    if partial_refund != 2_700 or paid_total != 10_000:
+        raise AssertionError(f"Refund example mismatch: partial={partial_refund}, paid={paid_total}")
+    if partial_refund + (line_a_total - partial_refund) != line_a_total:
+        raise AssertionError("Partial-unit refund does not reconcile with the historical line total")
+    print("Contrôle documentaire OK : 1 unité = 2 700 FCFA ; remboursement total = 10 000 FCFA.")
+
+
 def main():
+    verify_documentary_examples()
     OUT.mkdir(parents=True, exist_ok=True)
     images = []
     failures = []
@@ -63,16 +98,30 @@ def main():
         13: ["réservé", "sans expiration automatique"],
         14: ["consommé après validation", "libérée"],
         15: ["Annulation en cours", "Annulée partiellement", "Terminée"],
-        16: ["Proposition du commerce", "Après votre refus", "Annulation totale", "Annulation partielle", "enregistré dans la demande", "4 000 FCFA", "frais partagés", "Notification dans l’application", "Action attendue", "aucun SMS ni e-mail", "cancellation_pending", "rejected", "proof_submitted", "verified", "partially_cancelled", "completed"],
+        16: ["Proposition du commerce", "Après votre refus", "Annulation totale", "Annulation partielle", "enregistré dans la demande", "2 700 FCFA", "10 000 FCFA", "frais partagés", "Notification dans l’application", "Action attendue", "aucun SMS ni e-mail", "cancellation_pending", "rejected", "proof_submitted", "verified", "partially_cancelled", "completed"],
         32: ["Annulation en cours", "Annulée partiellement", "Terminée"],
         28: ["Suivi stock", "Disponibilité manuelle", "indépendante", "côté serveur"],
         29: ["Activer le suivi du stock", "Quantité disponible", "Minimum", "Maximum", "obligatoire", "facultatif"],
-        33: ["Confirmer l’arrêt de la préparation", "Confirmer la reprise des articles restants", "Transmettre la preuve corrigée", "motif est transmis", "Notification dans l’application", "4 000 FCFA", "aucun SMS ni e-mail", "Libérer la réservation active", "accord explicite", "remplacement", "cancellation_pending", "proof_submitted", "verified", "rejected"],
+        33: ["Confirmer l’arrêt de la préparation", "Confirmer la reprise des articles restants", "Transmettre la preuve corrigée", "Motif transmis", "Notification dans l’application", "2 700 FCFA", "aucun SMS ni e-mail", "append-only", "sans limite arbitraire", "expiration automatique", "cancellation_pending", "proof_submitted", "rejected"],
         35: ["stock réservé", "consomme le stock", "refus"],
         39: ["remboursements", "vérifier manuellement"],
         46: ["Annulation en cours", "Annulée partiellement", "Terminée"],
-        47: ["Motif obligatoire en cas de rejet", "transmis au commerçant", "Vérifier à nouveau", "Nouvelle vérification", "aucun SMS ni e-mail", "cancellation_pending", "proof_submitted", "rejected", "verified", "Annulation totale", "Annulation partielle", "frais partagés"],
+        47: ["Motif obligatoire en cas de rejet", "transmis au commerçant", "Vérifier à nouveau", "Après renvoi d’une preuve corrigée", "aucun SMS ni e-mail", "cancellation_pending", "proof_submitted", "rejected", "verified", "Annulation totale", "Annulation partielle", "frais partagés", "Historique append-only", "Auteur", "Montant", "Référence", "Preuve", "Motif de rejet", "aucune limite arbitraire"],
     }
+    notification_checks = [
+        "pending_payment", "Paiement en attente", "confirmed", "Commande confirmée",
+        "preparing", "Préparation commencée", "cancellation_pending", "Annulation en cours",
+        "partially_cancelled", "Annulation partielle finalisée", "cancelled", "Commande annulée",
+        "completed", "Commande terminée", "À vérifier", "Paiement à vérifier", "Validé", "Paiement validé",
+        "Refusé", "Paiement refusé", "pending_customer_approval", "Réponse du client attendue",
+        "accepted", "Modification acceptée", "rejected", "Modification refusée", "not_required",
+        "Remboursement non requis", "pending", "Remboursement attendu", "proof_submitted",
+        "Preuve de remboursement transmise", "verified", "Remboursement vérifié",
+        "Preuve de remboursement rejetée", "active", "Réservation de stock active", "consumed",
+        "Réservation de stock consommée", "released", "Réservation de stock libérée",
+        "Arrêt de préparation confirmé", "Reprise de préparation confirmée", "montant concerné",
+        "action propre à son destinataire", "brouillon ou une modification sans transition",
+    ]
     with sync_playwright() as p:
         browser = p.chromium.launch(
             headless=True,
@@ -110,6 +159,10 @@ def main():
             for required in rule_checks.get(number, []):
                 if required.casefold() not in body_text:
                     failures.append(f"{screen_id}: élément métier absent du rendu: {required}")
+            if number == 16:
+                for required in notification_checks:
+                    if required.casefold() not in body_text:
+                        failures.append(f"{screen_id}: déclencheur/libellé de notification absent: {required}")
             path = OUT / f"{screen_id}-{slug(title_text)}.png"
             page.screenshot(path=str(path), full_page=True, animations="disabled")
             images.append(path)

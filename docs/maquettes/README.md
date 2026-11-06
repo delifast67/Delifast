@@ -8,20 +8,22 @@ Cette galerie est le livrable de conception statique de la phase en cours. Elle 
 - Un écran individuel s’ouvre avec `index.html?ecran=01` à `index.html?ecran=53`.
 - Le [carnet PDF](rendus/Delifast-maquettes-53-ecrans.pdf) rassemble une interface par page ; les PNG individuels sont dans `rendus/`.
 - La [planche des états communs](rendus/etats-communs.png) accompagne la source consultable `etats.html`.
+- Pour recréer les rendus et exécuter leurs contrôles documentaires, lancer `python3 scripts/render-maquettes.py` depuis la racine du dépôt.
 
 ## Référence métier et écrans concernés
 
-Les maquettes suivent le [registre officiel des règles métier v2.1 du 6 novembre 2026](../REGLES_METIER.md). Le cahier reste à **53 écrans** : les parcours d’annulation, de remboursement et de notification sont intégrés aux vues déjà prévues, sans ajouter de page.
+Les maquettes suivent le [registre officiel des règles métier v2.2 du 6 novembre 2026](../REGLES_METIER.md). Le cahier reste à **53 écrans** : les parcours d’annulation, de remboursement et de notification restent dans les vues déjà prévues, sans ajouter de page ni de statut.
 
-- Les écrans **15, 32 et 46** affichent les états de commande définis par le registre, dont annulation en cours, annulation partielle, annulation totale finalisée et commande terminée.
+- Les écrans **15, 32 et 46** affichent les états de commande définis par le registre.
 - L’écran **16** (client) montre qu’après son refus le client choisit l’annulation totale ou celle des seuls articles concernés ; le choix est inscrit dans la demande d’annulation.
 - L’écran **33** (commerçant) montre la confirmation de l’arrêt si la préparation a commencé, le remboursement direct et le dépôt d’une référence et d’une preuve. Après finalisation partielle, le commerçant confirme la reprise des articles restants ; après une annulation totale, rien ne reprend.
-- L’écran **47** (administration) montre la vérification de la preuve, le motif obligatoire transmis au commerçant lors d’un rejet et une nouvelle vérification après réception d’une preuve corrigée. Le rejet ne finalise pas l’annulation : elle reste en attente de régularisation, statut également visible pour le client sur l’écran **16**.
-- Le remboursement total correspond au montant complet payé. Le remboursement partiel utilise les prix historiques des articles annulés et leurs suppléments directement associés ; les frais partagés restent inchangés.
-- Les changements d’état importants sont associés à une notification dans l’application pour le client et le commerçant, indiquant le nouveau statut, le montant et l’action attendue. Aucun SMS ni e-mail n’est prévu en première version.
-- La preuve de stock reste distincte : réservation sans expiration automatique, consommation après validation du paiement, libération avant consommation et restitution après consommation seulement si l’annulation précède la préparation ou la remise au client.
+- L’écran **47** (administration) montre la vérification par l’administrateur, le motif obligatoire en cas de rejet, le renvoi corrigé et une nouvelle vérification. Les dépôts et décisions gardent un historique append-only complet, sans limite de tentatives ni expiration automatique.
+- Une ligne de commande est un produit avec ses options. Le prix net historique unitaire comprend suppléments, ajustements propres à la ligne et part des ajustements monétaires globaux (remises et autres ajustements hors frais communs) attribuée au snapshot ; annuler `n` unités rembourse ce prix unitaire multiplié par `n`.
+- Les remises et autres ajustements monétaires globaux hors frais communs sont répartis au prorata entre les lignes après ajustements propres à l’article, puis enregistrés dans le snapshot. Les frais communs ne sont pas remboursés lors d’une annulation partielle ; une annulation totale rembourse le montant effectivement payé, frais compris.
+- Chaque transition réelle d’un état prévu de commande, paiement, modification, annulation, remboursement ou réservation qui affecte la commande déclenche une notification dans l’application aux deux parties. Les confirmations d’arrêt et de reprise de préparation déclenchent aussi une notification. Chaque message indique le statut atteint, le montant concerné et l’action attendue du destinataire ; aucun SMS/e-mail en v1, aucune notification pour un brouillon ou une modification sans transition.
+- Les réservations de stock restent distinctes : elles n’expirent pas automatiquement, sont consommées après validation du paiement, libérées avant consommation et restituées après consommation seulement si l’annulation précède la préparation ou la remise au client.
 
-Les statuts affichés sont ceux du registre (`pending_customer_approval`, `accepted`, `rejected`, `cancellation_pending`, `partially_cancelled`, `cancelled`, `completed`, `not_required`, `pending`, `proof_submitted`, `verified`, `rejected`). Les vues les présentent comme états successifs d’un parcours, pas comme des opérations réelles ni comme des statuts supplémentaires. Les détails métier encore non décidés sont consignés séparément dans le registre.
+Les états affichés réutilisent ceux déjà prévus dans le registre (`pending_customer_approval`, `accepted`, `rejected`, `pending_payment`, `confirmed`, `preparing`, `cancellation_pending`, `partially_cancelled`, `cancelled`, `completed`, `not_required`, `pending`, `proof_submitted`, `verified`, `active`, `consumed`, `released`) ainsi que les libellés de paiement déjà présents dans les interfaces. Les vues les présentent comme les étapes d’un parcours, pas comme des opérations réelles ni comme des statuts supplémentaires. Aucun sujet métier des quatre arbitrages délégués ne reste ouvert.
 
 ## Choix de conception et limites
 

@@ -51,7 +51,7 @@ Les dossiers vides ne préjugent pas de l’implémentation des écrans. Chaque 
 
 Les segments `client`, `commercant`, `administration` et `api` sont des emplacements d’architecture. Aucun écran, endpoint ou contrôle de rôle métier n’est livré à ce stade.
 
-## Exigences du registre officiel v2.1 — 6 novembre 2026
+## Exigences du registre officiel v2.2 — 6 novembre 2026
 
 Les points ci-dessous traduisent les règles métier en exigences d’architecture. Ils ne constituent ni un schéma PostgreSQL final, ni des tables déjà créées, ni des contrôles opérationnels : ces choix de structure seront précisés lors de la phase d’implémentation.
 
@@ -78,10 +78,12 @@ Les points ci-dessous traduisent les règles métier en exigences d’architectu
 ### Annulations, remboursements et notifications
 
 - Après refus d’une modification, le client choisit l’annulation totale ou les seuls articles concernés ; la demande conserve le périmètre et les articles sélectionnés.
-- Un remboursement total couvre l’intégralité du montant payé. Pour une annulation partielle, le montant est calculé depuis les prix historiques des articles annulés et leurs suppléments directement associés ; les frais partagés restent inchangés.
+- Une ligne correspond à un produit avec ses options. Le prix net historique unitaire comprend les suppléments, remises propres à la ligne et part de remise globale attribuée au snapshot ; annuler `n` unités rembourse ce prix unitaire multiplié par `n`.
+- Toute remise ou tout ajustement monétaire global hors frais communs est réparti au prorata entre les lignes après ajustements propres à l’article, au plus petit centime/unité par plus grands restes (égalité départagée par ordre de ligne puis d’unité) ; les allocations sont figées dans le snapshot et ne sont pas redistribuées.
+- En annulation partielle, les frais communs restent inchangés et non remboursés ; les suppléments et ajustements propres à l’article suivent l’article. Une annulation totale rembourse le montant intégral effectivement payé, frais compris.
 - Si la préparation a commencé, le commerçant confirme son arrêt à l’ouverture de l’annulation. Après finalisation partielle, il confirme la reprise des articles restants ; une annulation totale n’est pas reprise.
-- Le rejet d’une preuve exige un motif transmis au commerçant. L’annulation reste `cancellation_pending`, le client voit qu’elle attend une régularisation, le commerçant peut renvoyer une preuve corrigée et l’administrateur la vérifie à nouveau. Aucun statut métier supplémentaire n’est ajouté.
-- À chaque changement d’état important, client et commerçant reçoivent dans l’application le nouveau statut, le montant concerné et l’action attendue. Aucun SMS ni e-mail n’est prévu dans la première version. Le détail de ce qui qualifie un changement d’état d’important reste à préciser.
+- Après rejet motivé, l’annulation reste `cancellation_pending`. Le commerçant peut renvoyer des preuves corrigées sans limite arbitraire ni expiration automatique ; chaque dépôt et décision conserve auteur, date, montant, référence, preuve et motif de rejet dans un historique append-only. Seul l’administrateur vérifie les preuves. Les statuts existants sont réutilisés, sans ajout.
+- Chaque transition réelle d’un état de commande, paiement, modification, annulation, remboursement ou réservation affectant la commande déclenche une notification dans l’application au client et au commerçant ; les confirmations d’arrêt/reprise de préparation aussi. Le message porte le statut atteint, le montant concerné et l’action propre au destinataire. Aucun SMS/e-mail en v1 et aucune notification pour brouillon ou modification sans transition.
 
 ### Autorisations et tests
 

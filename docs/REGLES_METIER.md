@@ -1,10 +1,13 @@
 # Registre officiel des règles métier Delifast
 
-**Version consolidée : 2.0 — 6 novembre 2026**
+**Version consolidée : 2.1 — 6 novembre 2026**
 
 Ce document intègre le registre consolidé transmis le 6 novembre 2026. Il remplace toute formulation antérieure incompatible. Les règles validées sont distinguées des conventions techniques recommandées et des questions restant à décider. Aucune règle ne doit être déduite d’un exemple de maquette.
-
 Le présent dossier est une conception statique : les validations côté serveur, les transitions opérationnelles, les preuves privées, les paiements et remboursements réels, les API, les migrations et les transactions de base de données ne sont pas implémentés par cette mise à jour.
+
+## Notifications dans l’application
+
+À chaque changement d’état important, le client et le commerçant reçoivent une notification dans l’application. Elle indique le nouveau statut, le montant concerné et l’action attendue. Pour la première version, cette règle ne prévoit ni SMS ni e-mail. Le détail des changements considérés comme « importants » reste à préciser avant l’implémentation ; il ne modifie pas la règle de notification ci-dessus.
 
 ## Marché, commerces et comptes
 
@@ -71,8 +74,8 @@ Le présent dossier est une conception statique : les validations côté serveur
 ### Déclenchement et périmètre
 
 - Lorsque le client refuse une proposition, la demande de modification passe à `rejected` et une demande d’annulation est créée.
-- Le périmètre enregistré est soit la commande entière, soit les articles concernés par la proposition. Les articles concernés sont identifiés et isolés pour une annulation partielle.
-- Si la préparation a commencé, le commerçant doit l’arrêter. La commande ou les articles concernés restent suspendus pendant le traitement de l’annulation et du remboursement. Après vérification positive d’une annulation partielle, les articles restants peuvent reprendre leur traitement.
+- Après ce refus, le client choisit l’annulation totale de la commande ou celle des seuls articles concernés par la proposition. Ce choix et, pour une annulation partielle, les articles visés sont enregistrés dans la demande d’annulation.
+- Si la préparation a commencé, le commerçant confirme son arrêt à l’ouverture de l’annulation. La commande ou les articles concernés restent suspendus pendant le traitement de l’annulation et du remboursement. Après finalisation d’une annulation partielle, le commerçant confirme la reprise des articles restants ; une annulation totale ne donne lieu à aucune reprise.
 
 ### Statuts de commande
 
@@ -91,15 +94,15 @@ Le présent dossier est une conception statique : les validations côté serveur
 ### Annulation totale
 
 - Avant validation du paiement : `pending_payment` → `cancellation_pending` → `cancelled`. Aucun remboursement n’est requis si aucun paiement n’a été validé. Les réservations actives concernées sont libérées, l’annulation est historisée et le client ainsi que le commerçant sont notifiés.
-- Après validation du paiement : `confirmed` ou `preparing` → `cancellation_pending` → `cancelled`. Si la préparation a commencé, le commerçant l’arrête. Il rembourse directement au client le montant intégral payé pour la commande, puis transmet la référence de transaction et la preuve. Delifast vérifie le remboursement ; la commande ne passe à `cancelled` qu’après vérification positive. Le client et le commerçant sont notifiés du résultat.
+- Après validation du paiement : `confirmed` ou `preparing` → `cancellation_pending` → `cancelled`. Si la préparation a commencé, le commerçant confirme son arrêt lors de l’ouverture de l’annulation. Il rembourse directement au client le montant intégral payé pour la commande, puis transmet la référence de transaction et la preuve. Delifast vérifie le remboursement ; la commande ne passe à `cancelled` qu’après vérification positive. Le client et le commerçant sont notifiés des changements d’état importants selon la règle des notifications ci-dessus. Une annulation totale n’entraîne pas de reprise de préparation.
 
 ### Annulation partielle
 
-1. Les articles concernés sont identifiés et isolés dans la demande d’annulation ; la préparation est arrêtée pendant le traitement.
+1. Le client choisit les articles concernés après son refus ; ce périmètre est enregistré et les articles visés sont isolés dans la demande d’annulation. Si la préparation a commencé, le commerçant confirme son arrêt à l’ouverture de l’annulation.
 2. Les quantités et montants sont calculés depuis les données historiques de la commande, jamais depuis les prix actuels du catalogue.
 3. Si aucun paiement n’a été validé, les réservations correspondantes sont libérées et les articles concernés sont annulés sans remboursement fictif.
-4. Si le paiement a été validé, le commerçant rembourse intégralement le montant payé pour les articles annulés, y compris les montants additionnels directement associés. Il transmet la référence et la preuve ; Delifast vérifie celle-ci.
-5. Après vérification positive, les articles concernés sont marqués comme annulés et le reste de la commande peut reprendre son traitement. La commande porte `partially_cancelled` tant qu’il reste des articles actifs.
+4. Si le paiement a été validé, le commerçant rembourse le prix historique des articles annulés et leurs suppléments directement associés. Les frais partagés restent inchangés. Il transmet la référence et la preuve ; Delifast vérifie celle-ci.
+5. Après vérification positive, l’annulation partielle est finalisée et les articles concernés sont marqués comme annulés. Le commerçant confirme alors la reprise du traitement des articles restants. La commande porte `partially_cancelled` tant qu’il reste des articles actifs.
 
 ### Statuts et finalisation du remboursement
 
@@ -113,8 +116,9 @@ Le présent dossier est une conception statique : les validations côté serveur
 
 - Une annulation sans paiement validé peut être finalisée après libération des réservations concernées et enregistrement de l’annulation.
 - Lorsqu’un remboursement est nécessaire, le dépôt d’une preuve ne suffit pas : la commande ne peut être finalisée qu’après passage du remboursement à `verified`.
-- Si le remboursement est `rejected`, l’annulation ne peut pas être finalisée et la commande reste en attente de régularisation ; le rejet n’introduit pas un nouveau statut de commande.
-- Pour une annulation partielle, seule la partie annulée est finalisée après vérification ; les autres articles restent actifs. Le client et le commerçant sont informés du résultat.
+- Un rejet de preuve exige un motif transmis au commerçant pour correction. Le client voit que l’annulation attend une régularisation.
+- Si le remboursement est `rejected`, l’annulation ne peut pas être finalisée et la commande reste `cancellation_pending` en attente de régularisation ; le rejet n’introduit pas un nouveau statut de commande. Le commerçant peut transmettre une preuve corrigée, que l’administrateur vérifie à nouveau selon le même parcours.
+- Pour une annulation partielle, seule la partie annulée est finalisée après vérification ; les autres articles restent actifs jusqu’à la confirmation de reprise par le commerçant. Le client et le commerçant reçoivent dans l’application les notifications de changements d’état importants, avec le statut, le montant concerné et l’action attendue ; aucun SMS ni e-mail n’est prévu pour la première version.
 
 ## Modèles de données recommandés
 
@@ -126,7 +130,7 @@ Les noms et champs ci-dessous sont des conventions recommandées dans le registr
 - Panier et commande : `carts`, `cart_items`, `cart_item_options`, `orders`, `order_items`, `order_item_options`. La commande conserve des snapshots de noms, prix, options et quantités au moment de l’achat.
 - Réservations et mouvements : `stock_reservations`, `stock_reservation_items`, `stock_movements`. Les statuts recommandés pour `stock_reservations.status` sont `active`, `consumed` et `released`. Les informations recommandées comprennent `reserved_at`, `consumed_at`, `released_at`, `released_by` et `release_reason`. Les mouvements gardent l’historique de réservation, consommation, libération, restitution et ajustement.
 - Modifications : `order_change_requests` conserve notamment `order_id`, `requested_by`, `reason`, `old_total`, `new_total`, `status`, `customer_response_at` et `created_at`. `order_change_items` détaille les articles ajoutés, retirés ou modifiés, les quantités et prix anciens/nouveaux, et les options anciennes/nouvelles.
-- Annulations : `order_cancellations` conserve notamment `order_id`, `requested_by`, `reason`, `source`, `scope` (totale ou partielle), `status`, `created_at` et `completed_at`. Une liaison ou des lignes de détail identifient exactement les `order_items` annulés. Le registre ne définit pas de liste distincte de valeurs de statut pour `order_cancellations.status`.
+- Annulations : `order_cancellations` conserve notamment `order_id`, `requested_by`, `reason`, `source`, `scope` (totale ou partielle, choisi par le client après le refus), `status`, `created_at` et `completed_at`. Une liaison ou des lignes de détail identifient exactement les `order_items` annulés. Le registre ne définit pas de liste distincte de valeurs de statut pour `order_cancellations.status`.
 - Remboursements : `refunds` peut conserver `order_id`, `amount`, `operator`, `transaction_reference`, `proof_file_path`, `status`, `reviewed_by` et `reviewed_at`. Un remboursement partiel est lié aux articles ou au périmètre d’annulation correspondant. Le montant payé initialement et celui remboursé sont conservés sans écraser les données historiques.
 
 ## Sécurité, validation et tests futurs
@@ -134,18 +138,15 @@ Les noms et champs ci-dessous sont des conventions recommandées dans le registr
 - Les validations métier doivent être exécutées côté serveur. Les opérations de réservation, consommation, libération et restitution sont atomiques en base ; des transactions PostgreSQL et des verrouillages adaptés empêchent les doubles réservations et les stocks négatifs.
 - Le commerçant ne gère que ses propres produits, commandes et réservations ; l’administrateur peut intervenir sur toutes les commandes et vérifier les remboursements.
 - Les montants remboursés sont calculés à partir des snapshots de commande. Les preuves de paiement et de remboursement sont stockées de manière sécurisée et ne sont jamais considérées validées automatiquement par simple dépôt d’image.
-- Les tests avant mise en production doivent couvrir : panier mono-commerçant avec confirmation avant remplacement ; commande d’un produit sans suivi de stock s’il est disponible ; refus d’un produit indisponible ; minimums et maximums d’options ; réservations concurrentes sans dépassement du stock ; libération après paiement refusé ; impossibilité de libérer comme active une réservation consommée ; restitution du stock dans les seuls cas prévus ; absence de modification unilatérale et réponse explicite du client ; annulation totale ou partielle après refus ; absence de faux remboursement avant validation du paiement ; remboursement intégral du périmètre payé ; preuve non vérifiée qui ne finalise pas ; rejet qui laisse l’annulation en attente ; préservation des articles restants ; arrêt de la préparation si commencée ; cohérence de stock sur les articles annulés ; notifications et historique pour les personnes concernées.
+- Les tests avant mise en production doivent couvrir : panier mono-commerçant avec confirmation avant remplacement ; commande d’un produit sans suivi de stock s’il est disponible ; refus d’un produit indisponible ; minimums et maximums d’options ; réservations concurrentes sans dépassement du stock ; libération après paiement refusé ; impossibilité de libérer comme active une réservation consommée ; restitution du stock dans les seuls cas prévus ; absence de modification unilatérale et réponse explicite du client ; choix du client (annulation totale ou articles concernés) conservé dans la demande ; remboursement total du montant payé ou remboursement partiel des prix historiques et suppléments directement associés avec frais partagés inchangés ; absence de faux remboursement avant validation du paiement ; preuve non vérifiée qui ne finalise pas ; rejet motivé transmis au commerçant et visible comme attente de régularisation côté client ; renvoi d’une preuve corrigée et nouvelle vérification par l’administrateur ; arrêt confirmé par le commerçant si la préparation a commencé et reprise confirmée après finalisation partielle, sans reprise après annulation totale ; notifications dans l’application avec statut, montant et action attendue ; cohérence de stock sur les articles annulés.
 
-## Ambiguïtés à soumettre à décision
+## Détails restant à préciser
 
-Ces points ne sont pas tranchés dans le registre ; aucune interface ou implémentation ne doit présumer une réponse :
+Ces détails ne sont pas tranchés par les décisions actuelles et restent séparés des règles métier déjà validées :
 
-1. Qui choisit ou confirme le périmètre total ou partiel créé après le refus d’une modification, et à quelle étape de l’interface ?
-2. Pour une annulation partielle, comment traiter les frais de livraison, remises ou autres montants partagés qui ne sont pas directement rattachés à un article ?
-3. Comment calculer le remboursement si une seule quantité d’une ligne avec plusieurs unités, options ou suppléments est annulée ?
-4. Après un remboursement `rejected`, qui régularise, peut-on transmettre une nouvelle preuve, comment les tentatives sont-elles historisées et quelle action relance la vérification ? Le registre ne définit pas ce parcours.
-5. Quelle action et quel rôle constatent l’arrêt de la préparation et la reprise du reste après vérification positive ? Le registre fixe les obligations et l’ordre, pas le contrôle d’interface.
-6. Un rejet de remboursement doit-il comporter un motif, et à qui ce motif est-il communiqué ? Le registre ne rend pas ce motif obligatoire, contrairement au motif d’une libération manuelle de réservation.
-7. Quel canal, contenu et moment précis s’appliquent aux notifications requises ?
+1. Comment décomposer une annulation portant sur une partie seulement des unités d’une même ligne, notamment lorsque ses options ou suppléments sont facturés par unité ? Les montants restent fondés sur l’historique de commande.
+2. Comment répartir les remises ou autres ajustements partagés qui ne sont pas des frais ? Les frais partagés, eux, restent inchangés.
+3. Quels changements d’état sont qualifiés d’« importants » pour appliquer la règle générale de notification, et quelle formulation d’action convient à chaque cas ? Les destinataires, le canal dans l’application, les champs de contenu et l’absence de SMS/e-mail en v1 sont déjà décidés.
+4. Les limites ou délais de renvoi des preuves corrigées et le niveau de détail de l’historique des tentatives ne sont pas définis ; ils ne changent pas le parcours validé de renvoi puis de nouvelle vérification.
 
 Les 53 écrans, dont les vues existantes de détail de commande client, commerçant et administration, matérialisent ces règles sans créer de nouvel écran, de nouveau statut ou de comportement opérationnel non validé. Voir le [cahier des charges](CAHIER_DES_CHARGES.md) et les [maquettes](maquettes/README.md).

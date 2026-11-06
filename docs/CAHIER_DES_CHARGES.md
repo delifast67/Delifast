@@ -125,15 +125,16 @@ Ce sommaire reprend le périmètre du document fourni. Il décrit la couverture 
 Les maquettes doivent prévoir les états initial, chargement, vide, succès, erreur, désactivé, en attente, validé et refusé. Quand un paiement est refusé, le motif doit être visible et le parcours doit permettre une nouvelle preuve lorsque c’est prévu.
 
 
-## Règles métier transversales — version officielle v2.0, 6 novembre 2026
+## Règles métier transversales — version officielle v2.1, 6 novembre 2026
 
-Le périmètre reste de **53 écrans**. Le registre complet des décisions validées, y compris le cycle de réservation/libération du stock et le traitement des articles indisponibles en préparation, se trouve dans [`REGLES_METIER.md`](REGLES_METIER.md). Les règles sont matérialisées dans les interfaces existantes concernées, sans ajouter ni supprimer d’écran. La galerie, le carnet PDF et un rendu PNG individuel par écran sont disponibles dans [`maquettes/`](maquettes/README.md). Aucune règle non validée n’est déduite des exemples.
-
+Le périmètre reste de **53 écrans**. Le registre complet des décisions validées, y compris le cycle de réservation/libération du stock, le traitement des articles indisponibles en préparation et les règles d’annulation, remboursement et notification, se trouve dans [`REGLES_METIER.md`](REGLES_METIER.md). Les règles sont matérialisées dans les interfaces existantes concernées, sans ajouter ni supprimer d’écran. La galerie, le carnet PDF et un rendu PNG individuel par écran sont disponibles dans [`maquettes/`](maquettes/README.md). Aucune règle non validée n’est déduite des exemples.
 
 ## Couverture des workflows intégrés au dossier statique
 
-Le registre officiel v2.0 décrit les demandes de modification, les annulations et les remboursements. Les vues existantes portent ce parcours sans nouvel écran : les listes de commandes 15, 32 et 46 montrent les états de commande ; le détail client 16 et le détail commerçant 33 montrent la proposition, son refus et les périmètres total/partiel ; le détail administration 47 illustre la vérification de la preuve.
+Le registre officiel v2.1 décrit les demandes de modification, les annulations, les remboursements et les notifications dans l’application. Les vues existantes portent ce parcours sans nouvel écran : les listes de commandes 15, 32 et 46 montrent les états de commande ; le détail client 16 montre le choix entre annulation totale et seuls articles concernés, enregistré dans la demande ; le détail commerçant 33 montre l’arrêt confirmé si la préparation a commencé et la reprise confirmée des articles restants après finalisation partielle ; le détail administration 47 illustre la vérification des preuves, le motif obligatoire en cas de rejet et une nouvelle vérification après renvoi d’une preuve corrigée.
 
-Les rendus représentent l’arrêt de préparation si elle a commencé, la suspension des articles concernés, le remboursement direct par le commerçant, les statuts `not_required`, `pending`, `proof_submitted`, `verified` et `rejected`, ainsi que la reprise possible des articles restants après vérification positive d’une annulation partielle. Une preuve déposée ou rejetée ne finalise pas l’annulation. Les questions métier non décidées sont listées dans [`REGLES_METIER.md`](REGLES_METIER.md).
+Les montants partiels viennent des prix historiques des articles annulés et de leurs suppléments directement associés ; les frais partagés restent inchangés. Une annulation totale rembourse tout le montant payé. Un rejet motivé laisse l’annulation en attente de régularisation : le commerçant peut renvoyer une preuve corrigée et l’administrateur la vérifie à nouveau. Une preuve déposée ou rejetée ne finalise pas l’annulation.
 
-Les 53 écrans et les états communs sont conservés. Ce travail actualise uniquement les sources et rendus de conception ; il n’ajoute ni backend, ni API, ni migration, ni paiement ou remboursement réel.
+À chaque changement d’état important, client et commerçant reçoivent dans l’application le nouveau statut, le montant concerné et l’action attendue. Cette règle n’ajoute ni SMS ni e-mail en première version. Seuls les détails encore indéterminés du registre restent à préciser.
+
+Les 53 écrans et les états communs sont conservés. Ce travail actualise uniquement les sources et rendus de conception ; il n’ajoute ni backend, ni API, ni migration, ni paiement, remboursement ou notification réel.

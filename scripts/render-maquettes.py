@@ -63,15 +63,15 @@ def main():
         13: ["réservé", "sans expiration automatique"],
         14: ["consommé après validation", "libérée"],
         15: ["Annulation en cours", "Annulée partiellement", "Terminée"],
-        16: ["Proposition du commerce", "Accepter", "Refuser", "nouvelle composition", "pending_customer_approval", "rejected", "cancellation_pending", "not_required", "proof_submitted", "verified", "partially_cancelled", "completed"],
+        16: ["Proposition du commerce", "Après votre refus", "Annulation totale", "Annulation partielle", "enregistré dans la demande", "4 000 FCFA", "frais partagés", "Notification dans l’application", "Action attendue", "aucun SMS ni e-mail", "cancellation_pending", "rejected", "proof_submitted", "verified", "partially_cancelled", "completed"],
         32: ["Annulation en cours", "Annulée partiellement", "Terminée"],
         28: ["Suivi stock", "Disponibilité manuelle", "indépendante", "côté serveur"],
         29: ["Activer le suivi du stock", "Quantité disponible", "Minimum", "Maximum", "obligatoire", "facultatif"],
-        33: ["Motif obligatoire", "Libérer la réservation active", "accord explicite", "remplacement", "cancellation_pending", "proof_submitted", "verified", "rejected", "arrêt de préparation", "preuve"],
+        33: ["Confirmer l’arrêt de la préparation", "Confirmer la reprise des articles restants", "Transmettre la preuve corrigée", "motif est transmis", "Notification dans l’application", "4 000 FCFA", "aucun SMS ni e-mail", "Libérer la réservation active", "accord explicite", "remplacement", "cancellation_pending", "proof_submitted", "verified", "rejected"],
         35: ["stock réservé", "consomme le stock", "refus"],
         39: ["remboursements", "vérifier manuellement"],
         46: ["Annulation en cours", "Annulée partiellement", "Terminée"],
-        47: ["Motif obligatoire", "réservation active", "Historique", "Quantité : 2", "administrateur", "pending_customer_approval", "rejected", "cancellation_pending", "not_required", "proof_submitted", "verified", "partially_cancelled", "cancelled", "completed"],
+        47: ["Motif obligatoire en cas de rejet", "transmis au commerçant", "Vérifier à nouveau", "Nouvelle vérification", "aucun SMS ni e-mail", "cancellation_pending", "proof_submitted", "rejected", "verified", "Annulation totale", "Annulation partielle", "frais partagés"],
     }
     with sync_playwright() as p:
         browser = p.chromium.launch(
@@ -86,6 +86,7 @@ def main():
             screen_id = f"{number:02d}"
             page.set_viewport_size(VIEWPORT)
             page.goto(f"{base}?ecran={screen_id}&capture=1", wait_until="load", timeout=30000)
+            page.evaluate("() => document.fonts.ready.then(() => true)")
             page.evaluate("() => Promise.all([...document.images].map(img => img.decode().catch(() => null)))")
             if number == 1:
                 catalog_ids = page.evaluate("window.DELIFAST_SCREENS.map(screen => screen.id)")

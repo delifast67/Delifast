@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { HomeBrand } from "../../../components/public-home/site-header";
 import { GoogleDemoButton } from "./google-demo-button";
 import styles from "./login.module.css";
@@ -37,6 +38,9 @@ export default function LoginDemoPage() {
           <p className={styles.termsNote}>
             À terme, l’authentification sera limitée à Google OAuth avec PKCE.
           </p>
+          <Link className={styles.nextDemoLink} href="/choix-type-compte">
+            Prévisualiser l’écran suivant · démo uniquement
+          </Link>
         </div>
       </section>
       <aside

@@ -9,6 +9,7 @@ Le dépôt de référence `main` contient le cahier des 53 écrans, les règles 
 - Une maquette statique distincte est produite pour chacun des 53 écrans du cahier, avec un rendu PNG individuel et un carnet PDF de 53 pages.
 - Les neuf états communs (initial, chargement, vide, succès, erreur, désactivé, en attente, validé et refusé) disposent d’une planche de référence.
 - Les maquettes reflètent le registre officiel v2.0 du 6 novembre 2026 : panier mono-commerçant, suivi de stock facultatif et disponibilité indépendante, cycle de réservation et libération manuelle, groupes d’options avec règles de sélection, proposition de retrait/remplacement et accord explicite du client.
+- Les vues de commande existantes illustrent également le refus d’une modification, les périmètres d’annulation total ou partiel, l’arrêt de préparation si elle a commencé, la preuve de remboursement, sa vérification ou son rejet, et la reprise du reste après vérification positive.
 - Les interfaces restent statiques : elles ne créent ni routes métier Next.js, ni composants React réutilisables, ni comptes, commandes, réservations, preuves ou paiements opérationnels.
 - Les noms, commerces, prix, références, coordonnées et preuves illustrés sont des données fictives.
 

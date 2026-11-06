@@ -128,3 +128,12 @@ Les maquettes doivent prévoir les états initial, chargement, vide, succès, er
 ## Règles métier transversales — version officielle v2.0, 6 novembre 2026
 
 Le périmètre reste de **53 écrans**. Le registre complet des décisions validées, y compris le cycle de réservation/libération du stock et le traitement des articles indisponibles en préparation, se trouve dans [`REGLES_METIER.md`](REGLES_METIER.md). Les règles sont matérialisées dans les interfaces existantes concernées, sans ajouter ni supprimer d’écran. La galerie, le carnet PDF et un rendu PNG individuel par écran sont disponibles dans [`maquettes/`](maquettes/README.md). Aucune règle non validée n’est déduite des exemples.
+
+
+## Couverture des workflows intégrés au dossier statique
+
+Le registre officiel v2.0 décrit les demandes de modification, les annulations et les remboursements. Les vues existantes portent ce parcours sans nouvel écran : les listes de commandes 15, 32 et 46 montrent les états de commande ; le détail client 16 et le détail commerçant 33 montrent la proposition, son refus et les périmètres total/partiel ; le détail administration 47 illustre la vérification de la preuve.
+
+Les rendus représentent l’arrêt de préparation si elle a commencé, la suspension des articles concernés, le remboursement direct par le commerçant, les statuts `not_required`, `pending`, `proof_submitted`, `verified` et `rejected`, ainsi que la reprise possible des articles restants après vérification positive d’une annulation partielle. Une preuve déposée ou rejetée ne finalise pas l’annulation. Les questions métier non décidées sont listées dans [`REGLES_METIER.md`](REGLES_METIER.md).
+
+Les 53 écrans et les états communs sont conservés. Ce travail actualise uniquement les sources et rendus de conception ; il n’ajoute ni backend, ni API, ni migration, ni paiement ou remboursement réel.

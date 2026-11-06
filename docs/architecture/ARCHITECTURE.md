@@ -50,3 +50,15 @@ Les dossiers vides ne préjugent pas de l’implémentation des écrans. Chaque 
 ## Routes réservées
 
 Les segments `client`, `commercant`, `administration` et `api` sont des emplacements d’architecture. Aucun écran, endpoint ou contrôle de rôle métier n’est livré à ce stade.
+
+
+## Complément validé le 6 novembre 2026 — panier, stock et options
+
+Les points ci-dessous sont des exigences pour l’architecture à implémenter, pas des tables ou contrôles déjà livrés dans cette phase de conception.
+
+- **Panier et commandes mono-commerçant :** associer le panier à un commerçant et contrôler côté serveur que chaque ligne ajoutée, puis chaque ligne de commande, appartient à ce même commerçant. Le backend ne se fie pas à la confirmation frontend pour faire respecter cette contrainte.
+- **Stock facultatif par produit :** prévoir `stock_tracking_enabled` (booléen), `stock_quantity` (entier nullable) et `is_available` (booléen) sur le produit. Lorsque le suivi est actif, le service de commande doit contrôler la quantité disponible de façon cohérente côté serveur et rendre un produit indisponible à zéro ; lorsque le suivi est inactif, la disponibilité est gérée manuellement par le commerçant.
+- **Options et prix conservés :** prévoir des groupes et choix d’options distincts pour les produits, ainsi que des lignes d’options de commande contenant une copie du libellé et du supplément appliqué. Le serveur calcule le prix à partir du catalogue validé et conserve le résultat avec la commande ; une modification future du catalogue ne réécrit pas l’historique.
+- **Tests futurs obligatoires :** couvrir les paniers et commandes d’un seul commerçant, le rejet serveur d’un produit d’un autre commerçant, les commandes avec suivi de stock actif et inactif, le stock à zéro et les quantités excédentaires, les produits sans options ou avec plusieurs groupes, et la stabilité des suppléments copiés dans l’historique. Ces tests seront écrits avec les services et migrations ultérieurs.
+
+Le moment de déduction ou de restitution du stock, le caractère obligatoire d’un groupe et les limites ou la cardinalité de sélection restent à valider séparément. Aucune migration ni décision complémentaire n’est créée par cette note.

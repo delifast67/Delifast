@@ -123,3 +123,8 @@ Ce sommaire reprend le périmètre du document fourni. Il décrit la couverture 
 ## États communs
 
 Les maquettes doivent prévoir les états initial, chargement, vide, succès, erreur, désactivé, en attente, validé et refusé. Quand un paiement est refusé, le motif doit être visible et le parcours doit permettre une nouvelle preuve lorsque c’est prévu.
+
+
+## Décisions transversales validées — 6 novembre 2026
+
+Le périmètre reste de **53 écrans**. Les règles officielles de panier mono-commerçant, de suivi de stock facultatif par produit et d’options de produit facultatives sont décrites dans [`REGLES_METIER.md`](REGLES_METIER.md) et matérialisées dans les maquettes des écrans 04, 05, 11, 12, 16, 28, 29, 33 et 47. La galerie des interfaces et un rendu individuel par écran sont disponibles dans [`maquettes/`](maquettes/README.md). Les propositions encore ouvertes ne sont pas appliquées comme règles.

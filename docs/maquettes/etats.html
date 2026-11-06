@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Delifast — États communs</title>
+  <link rel="stylesheet" href="maquettes.css">
+</head>
+<body>
+  <header class="gallery-header"><a class="brand" href="index.html"><span class="brand-mark">➤</span><span>DELI<span>FAST</span></span></a><span class="gallery-title">États communs des interfaces</span><a class="text-link" href="index.html">← Retour aux 53 écrans</a></header>
+  <main class="state-board">
+    <span class="eyebrow">Bibliothèque d’états</span>
+    <h1>Un même langage pour les <em>moments clés.</em></h1>
+    <p class="subtle">Exemples statiques à appliquer selon le contexte d’écran. Les états métier restent distincts des états de chargement et d’erreur technique.</p>
+    <div class="state-grid">
+      <article class="state-card"><h2>Initial</h2><div class="panel" style="padding:10px"><strong style="font-size:9px">Vos commandes</strong><p class="subtle" style="margin:4px 0 0">Voici les dernières commandes.</p></div><p>Contenu prêt à consulter.</p></article>
+      <article class="state-card"><h2>Chargement</h2><div class="skeleton wide"></div><div class="skeleton"></div><div class="skeleton short"></div><p>Placeholders calmes, sans faux statut métier.</p></article>
+      <article class="state-card"><h2>Vide</h2><div class="state-blank">Aucun résultat pour le moment</div><p>Prochaine action clairement visible si elle existe.</p></article>
+      <article class="state-card"><h2>Succès</h2><div class="list-row"><span class="success-icon" style="width:27px;height:27px;font-size:13px;margin:0">✓</span><span class="row-copy"><strong>Action effectuée</strong><small>Confirmation de démonstration</small></span></div><p>Retour positif et lisible.</p></article>
+      <article class="state-card"><h2>Erreur</h2><div class="banner-notice" style="margin:0;border-color:#f2cbc7;background:#fff5f3;color:#9f332d"><span>!</span><span>Une erreur est survenue. Réessayez.</span></div><p>Message explicite et possibilité de reprise.</p></article>
+      <article class="state-card"><h2>Désactivé</h2><div class="disabled-demo"><button class="btn btn-primary" disabled>Action indisponible</button></div><p>Le contrôle et son état sont perceptibles.</p></article>
+      <article class="state-card"><h2>En attente</h2><div style="padding:5px 0"><span class="pill pill-warn">À vérifier</span></div><p>État distinct d’une validation automatique.</p></article>
+      <article class="state-card"><h2>Validé</h2><div style="padding:5px 0"><span class="pill pill-success">Validé</span></div><p>Décision manuelle confirmée lorsque le flux l’exige.</p></article>
+      <article class="state-card"><h2>Refusé</h2><div style="padding:5px 0"><span class="pill pill-danger">Refusé</span></div><div class="field"><label>Motif visible</label><div class="input-look">Référence introuvable · exemple</div></div><p>Un motif de refus est présenté.</p></article>
+    </div>
+    <p class="footer-note">Bibliothèque visuelle de conception · exemples fictifs, aucun état ou paiement réel n’est déclenché.</p>
+  </main>
+</body>
+</html>

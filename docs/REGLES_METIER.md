@@ -38,3 +38,28 @@ Ces règles proviennent des documents de référence et des choix confirmés du 
 
 - Les données et photos de la maquette sont des exemples, pas des partenaires ou enregistrements réels.
 - Les données de démonstration resteront séparées des vraies données et des migrations de production.
+
+
+## Panier, stock et options — décisions validées le 6 novembre 2026
+
+### Panier mono-commerçant
+
+- Un panier et la commande qui en résulte ne contiennent que des produits d’un seul commerçant.
+- Si le client tente d’ajouter un produit d’un autre commerçant, l’interface demande confirmation avant de remplacer le panier existant. En cas d’annulation, le panier existant est conservé ; en cas d’accord, il est remplacé par le panier du nouveau commerçant et le nouvel article y est ajouté.
+- Le panier, chaque ligne et la commande sont contrôlés côté serveur ; cette règle ne repose pas uniquement sur le frontend.
+
+### Gestion facultative du stock, produit par produit
+
+- Chaque commerçant peut activer ou désactiver individuellement le suivi du stock pour chacun de ses produits.
+- Si le suivi est activé, le système contrôle la quantité disponible, rend le produit indisponible à zéro et empêche côté serveur une commande supérieure à la quantité disponible.
+- Si le suivi est désactivé, le commerçant gère manuellement la disponibilité du produit.
+
+### Options de produits facultatives
+
+- Un produit peut être vendu sans options ou proposer plusieurs groupes d’options (par exemple taille, suppléments ou accompagnements).
+- Chaque option peut avoir un supplément de prix.
+- Les choix d’options et leurs prix sont copiés dans les lignes de commande au moment de la commande ; une modification ultérieure du catalogue ne change donc pas le détail ni le prix enregistré de cette commande.
+
+### Détails qui restent ouverts
+
+Ces décisions ne tranchent pas les propositions encore ouvertes dans le registre transmis : moment de déduction ou de restitution du stock, caractère obligatoire d’un groupe d’options, limites de sélection ou cardinalité des choix. Aucune de ces propositions n’est transformée en règle dans les maquettes. Toute évolution de ces points nécessite une validation métier explicite.

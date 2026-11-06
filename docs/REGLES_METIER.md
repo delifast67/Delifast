@@ -7,7 +7,7 @@ Le présent dossier est une conception statique : les validations côté serveur
 
 ## Notifications dans l’application
 
-Chaque transition réelle vers un autre état déclenche une notification dans l’application au client et au commerçant, pour les états de commande, paiement, modification, annulation, remboursement et réservation qui affectent cette commande. L’arrêt et la reprise de préparation confirmés déclenchent également une notification. Aucun SMS ni e-mail n’est envoyé en v1. Une création de brouillon ou une modification qui ne change aucun état n’en déclenche pas.
+Chaque transition réelle vers un autre état déclenche une notification dans l’application au client et au commerçant pour les états de commande, modification, annulation, remboursement et réservation qui affectent cette commande. Pour les paiements, les destinataires sont ceux du circuit défini dans « Paiements de commande et abonnements » : preuve soumise au bénéficiaire, décision au payeur. L’arrêt et la reprise de préparation confirmés déclenchent également une notification. Aucun SMS ni e-mail n’est envoyé en v1. Une création de brouillon ou une modification qui ne change aucun état n’en déclenche pas.
 
 Les états déjà prévus et leurs libellés exacts sont :
 
@@ -20,7 +20,7 @@ Les états déjà prévus et leurs libellés exacts sont :
 | Commande / annulation | `partially_cancelled` | Annulation partielle finalisée |
 | Commande / annulation | `cancelled` | Commande annulée |
 | Commande | `completed` | Commande terminée |
-| Paiement de commande (libellés déjà utilisés) | À vérifier ; Validé ; Refusé | Paiement à vérifier ; Paiement validé ; Paiement refusé |
+| Paiements de commande et d’abonnement | En attente ; Validé ; Refusé | Paiement en attente ; Paiement validé ; Paiement refusé |
 | Modification | `pending_customer_approval` | Réponse du client attendue |
 | Modification | `accepted` | Modification acceptée |
 | Modification | `rejected` | Modification refusée |
@@ -35,7 +35,7 @@ Les états déjà prévus et leurs libellés exacts sont :
 | Préparation (confirmation, pas un statut nouveau) | Arrêt confirmé | Arrêt de préparation confirmé |
 | Préparation (confirmation, pas un statut nouveau) | Reprise confirmée | Reprise de préparation confirmée |
 
-Les transitions d’annulation utilisent uniquement les statuts de commande ci-dessus ; aucun statut distinct d’annulation n’est ajouté. Chaque notification indique le statut atteint, le montant concerné (montant du paiement, du remboursement ou des articles touchés ; sinon montant de la commande) et la prochaine action propre au destinataire. En l’absence d’action, le libellé est « Aucune action requise ». Par exemple, après le rejet d’une preuve, le client attend la correction et la vérification, tandis que le commerçant corrige et renvoie la preuve. Les deux destinataires reçoivent les trois champs, même si leurs actions diffèrent.
+Les transitions d’annulation utilisent uniquement les statuts de commande ci-dessus ; aucun statut distinct d’annulation n’est ajouté. Chaque notification indique le statut atteint, le montant concerné (montant du paiement, du remboursement ou des articles touchés ; sinon montant de la commande) et la prochaine action propre au destinataire. En l’absence d’action, le libellé est « Aucune action requise ». Par exemple, après le rejet d’une preuve, le client attend la correction et la vérification, tandis que le commerçant corrige et renvoie la preuve. Quand une transition concerne les deux parties, chacune reçoit les trois champs même si leurs actions diffèrent ; les notifications de paiement suivent les destinataires propres à leur circuit.
 
 ## Marché, commerces et comptes
 
@@ -47,11 +47,49 @@ Les transitions d’annulation utilisent uniquement les statuts de commande ci-d
 
 ## Paiements de commande et abonnements
 
-- Le client paie directement le commerçant par l’opérateur et au numéro que celui-ci a configurés, notamment Orange Money ou Telmob.
-- Seuls les opérateurs pour lesquels le commerçant a renseigné un numéro de paiement sont affichés au client. Celui-ci transmet la référence de transaction et une capture du SMS de paiement ; le commerçant compare les éléments au SMS reçu sur son téléphone, puis valide ou refuse manuellement le paiement. Un refus comporte un motif. Le client peut renvoyer une preuve lorsque le parcours le permet ; le dépôt d’une image ne valide jamais un paiement automatiquement.
-- Le paiement d’abonnement est adressé à Delifast et vérifié manuellement par l’administrateur à partir de la référence, de la preuve et du SMS reçu sur le numéro de Delifast. Les états documentés sont en attente, validé et refusé ; un refus est expliqué.
-- Format USSD documenté : `14421{numero}*{montant}#`. Les espaces sont retirés du numéro ; dans un lien téléphonique, `#` est encodé en `%23`, par exemple `tel:1442156893460*4500%23`.
-- Les justificatifs de paiement sont privés et les décisions sont historisées. Aucune intégration ne doit présenter Delifast comme exécutant automatiquement un paiement ou un remboursement Mobile Money.
+Delifast utilise un paiement manuel Mobile Money par USSD et transmission d’une preuve. Le paiement est effectué hors de Delifast : l’utilisateur ouvre le clavier téléphonique avec le code prérempli, lance et confirme lui-même la transaction, puis revient dans l’application pour soumettre la preuve. Les paiements de commande et d’abonnement sont deux circuits indépendants : leurs bénéficiaires, destinataires de preuves et responsables de validation ne sont jamais interchangeables.
+
+### Principes communs
+
+- La référence de transaction et la capture du SMS de confirmation sont obligatoires. La preuve ne peut être téléversée qu’après le paiement effectué sur le téléphone. Une capture seule ne valide jamais un paiement et ne déclenche jamais l’activation d’un abonnement.
+- Delifast n’exécute automatiquement ni les paiements ni les remboursements Mobile Money.
+- Les deux circuits utilisent les mêmes statuts : **En attente**, **Validé** et **Refusé**. « En attente » signifie que la preuve a été soumise et attend la vérification du bénéficiaire ; « Validé » signifie que le bénéficiaire a retrouvé et confirmé la transaction ; « Refusé » signifie que la transaction n’a pas été retrouvée ou que la preuve ne correspond pas. Tout refus exige un motif. Après un refus, le payeur peut effectuer une nouvelle transaction et soumettre une nouvelle preuve.
+- Les informations financières utiles sont conservées au moment de la création du paiement : montant, opérateur et numéro bénéficiaire. Une modification ultérieure d’un numéro de paiement ou du prix d’un produit ne réécrit pas l’historique de la transaction.
+
+### Circuit A — Abonnement du restaurant, payé à Delifast
+
+- **Payeur :** restaurant. **Bénéficiaire :** Delifast. **Destinataire de la preuve et décideur :** administration Delifast.
+- Le restaurant choisit le forfait Découverte ou Professionnel. Le montant et la durée proviennent de la configuration du forfait. Delifast utilise le numéro Mobile Money qu’il a configuré pour l’opérateur correspondant ; le restaurant ne saisit ni le bénéficiaire ni le montant.
+- Le restaurant choisit un opérateur proposé, ouvre le code USSD prérempli, effectue et confirme le paiement sur son téléphone, revient dans Delifast, puis transmet la capture du SMS et la référence de transaction à Delifast.
+- L’administrateur examine le restaurant, le forfait, le montant attendu, l’opérateur, le numéro bénéficiaire, la référence, la capture et la date de soumission ; il compare ces éléments au SMS de transaction reçu sur le numéro Mobile Money de Delifast.
+- Si la transaction est confirmée, l’administrateur valide le paiement, le statut devient **Validé**, l’abonnement est activé et le restaurant reçoit une notification. En cas de refus, l’administrateur saisit obligatoirement un motif ; le statut devient **Refusé** et le restaurant reçoit une notification indiquant le motif. Le restaurant peut effectuer une nouvelle transaction et soumettre une nouvelle preuve. Le restaurant ne peut pas valider son propre abonnement.
+
+### Circuit B — Commande du client, payée au restaurant choisi
+
+- **Payeur :** client. **Bénéficiaire :** restaurant choisi pour la commande. **Destinataire de la preuve et décideur :** ce restaurant.
+- Delifast calcule le total de la commande à partir des règles applicables. Le code utilise le numéro Mobile Money du restaurant et le montant total calculé côté serveur ; le client ne saisit ni numéro bénéficiaire ni montant.
+- Le restaurant peut configurer Orange Money, Telmob, ou les deux. Seuls les opérateurs activés et dont le numéro bénéficiaire est renseigné sont proposés au client. Le même principe d’opérateur actif et de numéro renseigné s’applique à l’affichage des options de paiement d’abonnement disponibles chez Delifast.
+- Le client choisit un opérateur proposé, ouvre le code USSD prérempli, effectue et confirme le paiement sur son téléphone, revient dans Delifast, puis soumet la capture du SMS de confirmation et la référence. La preuve est transmise au restaurant bénéficiaire, qui reçoit une notification.
+- Le commerçant consulte le nom du client, le numéro de commande, le montant attendu, l’opérateur, le numéro bénéficiaire, la référence, la capture et la date de soumission. Il compare les informations au SMS réellement reçu sur son propre numéro Mobile Money. S’il confirme la réception, il valide le paiement et le client est notifié. S’il refuse, il doit saisir un motif ; le statut devient **Refusé**, le client reçoit le motif et peut effectuer une nouvelle transaction puis soumettre une nouvelle preuve.
+- L’administrateur peut consulter les paiements de commande à des fins de supervision, mais ne valide ni ne refuse à la place du restaurant. Le client ne peut pas valider son propre paiement.
+
+### Génération des codes USSD
+
+- Les syntaxes Orange Money et Telmob sont configurées séparément. Exemples Orange Money : `*144*2*1*{NUMERO_BENEFICIAIRE}*{MONTANT}#` ou `*144*10*{NUMERO_BENEFICIAIRE}*{MONTANT}#`. Exemple Telmob : `*555*2*1*{NUMERO_BENEFICIAIRE}*{MONTANT}#`.
+- Avant génération, les numéros sont nettoyés pour retirer les espaces, tirets et caractères inutiles. Le code est construit dynamiquement à partir de l’opérateur choisi, du bénéficiaire propre au circuit et du montant exact (forfait configuré pour un abonnement ; total de commande calculé côté serveur pour une commande).
+- Dans un lien téléphonique, le caractère `#` est encodé en `%23`. Exemple de lien Orange documenté : `tel:1442156893460*4500%23`. Les deux formats d’opérateur doivent être configurables indépendamment et testés sur les téléphones utilisés avant le lancement.
+
+### Historique, permissions et notifications
+
+- Chaque soumission de preuve crée une entrée historique distincte et append-only ; une preuve nouvelle ne supprime ni ne remplace une preuve antérieure, y compris refusée. Chaque entrée conserve la capture, la référence de transaction, la date de soumission, le statut de traitement, le motif de refus s’il y en a un et l’identité du vérificateur. Les décisions de vérification sont également historisées.
+- Le client consulte uniquement ses propres preuves. Le restaurant consulte les preuves des paiements de commande qui lui sont destinés. L’administrateur consulte les preuves des abonnements destinés à Delifast et peut superviser les paiements de commande sans prendre la décision du restaurant.
+- Pour un abonnement, la preuve soumise notifie Delifast / l’administration ; une validation ou un refus notifie le restaurant, avec le motif en cas de refus. Pour une commande, la preuve soumise notifie le restaurant bénéficiaire ; une validation ou un refus notifie le client, avec le motif en cas de refus. Les notifications portent le statut atteint, le montant concerné et l’action propre au destinataire conformément à la règle générale de notification.
+
+### Contrôles techniques requis pour l’implémentation future
+
+Les contrôles suivants sont obligatoires : validation côté serveur du montant attendu, du numéro bénéficiaire et de l’opérateur ; conservation du numéro bénéficiaire historique ; référence de transaction obligatoire ; vérification du type et de la taille des fichiers ; limitation du nombre de soumissions ; prévention des transactions en double ; motif obligatoire au refus ; conservation de l’historique des validations ; protection contre les validations simultanées ; accès privé aux captures. Les captures sont stockées dans un espace privé Supabase Storage et consultées via des liens temporaires sécurisés. Les permissions doivent distinguer les paiements de commande et d’abonnement.
+
+Conventions d’architecture de référence, sans constituer une implémentation : frontend dans `features/payments/`, avec `PaymentMethodSelector.tsx`, `PaymentInstructions.tsx`, `UsSDPaymentButton.tsx`, `TransactionReferenceInput.tsx`, `PaymentProofUpload.tsx`, `PaymentStatus.tsx`, `PaymentDetails.tsx`, `MerchantPaymentList.tsx`, `MerchantPaymentReview.tsx` et `PaymentDecisionDialog.tsx` ; routes `POST /api/payments`, `GET /api/payments/[id]`, `POST /api/payments/[id]/proof` et `POST /api/payments/[id]/review` ; tables principales `payments`, `payment_proofs`, `subscriptions`, `subscription_plans`, `orders`, `business_payment_methods`, `notifications` et `audit_logs`.
 
 ## Panier, produits et options
 

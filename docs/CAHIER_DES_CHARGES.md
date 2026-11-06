@@ -125,6 +125,34 @@ Ce sommaire reprend le périmètre du document fourni. Il décrit la couverture 
 Les maquettes doivent prévoir les états initial, chargement, vide, succès, erreur, désactivé, en attente, validé et refusé. Quand un paiement est refusé, le motif doit être visible et le parcours doit permettre une nouvelle preuve lorsque c’est prévu.
 
 
+### Critères et flux des écrans de paiement existants
+
+Ces critères complètent les écrans numérotés ci-dessus ; ils n’ajoutent aucun écran.
+
+#### Espace client
+
+- **14. Paiement de commande :** afficher le total calculé côté serveur et uniquement les opérateurs activés et renseignés par le restaurant choisi. Le client choisit un opérateur, ouvre le code USSD prérempli et effectue puis confirme le paiement sur son téléphone. À son retour, il téléverse la capture du SMS et saisit la référence de transaction obligatoire ; aucun paiement n’est exécuté dans Delifast et aucun bénéficiaire ni montant n’est saisi par le client.
+- **17. Liste des paiements :** présenter les paiements de commande propres au client avec leurs statuts communs **En attente**, **Validé** ou **Refusé** ; permettre l’accès à leur détail et à l’historique des preuves du client.
+- **18. Détail d’un paiement :** afficher le montant, l’opérateur, le numéro bénéficiaire historique, la référence, les dates, les captures privées, le statut et l’historique append-only. Un refus affiche son motif et le parcours autorise une nouvelle transaction et une nouvelle preuve.
+
+#### Espace commerçant
+
+- **22. Configuration des paiements à l’inscription** et **26. Gestion des moyens de paiement :** permettre de renseigner et d’activer séparément Orange Money et Telmob. Pour le paiement d’une commande, le client ne voit qu’un opérateur actif avec un numéro bénéficiaire renseigné.
+- **34. Liste des paiements :** montrer au commerçant les paiements de commande qui lui sont destinés, avec leur statut ; une preuve soumise lui est signalée. Ne pas exposer les preuves d’abonnement destinées à Delifast.
+- **35. Détail et vérification d’un paiement :** afficher le nom du client, le numéro de commande, le montant attendu, l’opérateur, le numéro bénéficiaire, la référence de transaction, la capture privée du SMS et la date de soumission. Le commerçant compare la preuve au SMS reçu sur son propre numéro, puis valide ou refuse manuellement ; le refus exige un motif. Le client est notifié de la décision et peut déposer une nouvelle preuve après refus. Aucun contrôle de paiement d’abonnement n’est proposé au commerçant.
+- **36. Gestion de l’abonnement :** présenter les forfaits Découverte et Professionnel ; leur montant et leur durée proviennent de la configuration des forfaits. Le choix ouvre le paiement de l’abonnement.
+- **37. Paiement de l’abonnement :** afficher le montant du forfait et les opérateurs actifs disposant d’un numéro Delifast configuré. Le restaurant ouvre le code USSD, effectue et confirme le paiement sur son téléphone, revient dans l’application puis transmet la capture du SMS et la référence à Delifast. Le statut reste en attente jusqu’à la décision de l’administrateur ; le restaurant ne peut pas valider son abonnement. En cas de refus, afficher le motif et permettre une nouvelle transaction et une nouvelle preuve.
+
+#### Administration
+
+- **49. Vérification d’un abonnement :** afficher le restaurant, le forfait, le montant attendu, l’opérateur, le numéro bénéficiaire Delifast, la référence, la capture privée du SMS et la date de soumission. L’administrateur compare ces éléments au SMS réellement reçu sur le numéro Delifast ; il valide (ce qui active l’abonnement) ou refuse avec un motif obligatoire. Le restaurant reçoit la décision et, le cas échéant, le motif.
+- **50. Liste des paiements** et **51. Détail d’un paiement :** distinguer les paiements d’abonnement destinés à Delifast des paiements de commande destinés aux restaurants et afficher leurs statuts et leur historique. L’administrateur peut vérifier les abonnements ; pour les commandes, son accès est de supervision seulement et aucun contrôle ne lui permet de remplacer la décision du restaurant.
+
+#### Génération USSD commune aux écrans 14 et 37
+
+Les formats opérateur sont distincts : Orange Money `*144*2*1*{NUMERO_BENEFICIAIRE}*{MONTANT}#` ou `*144*10*{NUMERO_BENEFICIAIRE}*{MONTANT}#` ; Telmob `*555*2*1*{NUMERO_BENEFICIAIRE}*{MONTANT}#`. Nettoyer le numéro des espaces, tirets et caractères inutiles. Dans le lien téléphonique, encoder `#` en `%23`. Le code emploie le bénéficiaire du circuit et le montant exact (forfait configuré ou total de commande calculé côté serveur) ; les syntaxes doivent être testées séparément sur les téléphones utilisés avant le lancement.
+
+
 ## Règles métier transversales — version officielle v2.2, 6 novembre 2026
 
 Le périmètre reste de **53 écrans**. Le registre complet des décisions validées, y compris le cycle de réservation/libération du stock, le traitement des articles indisponibles en préparation et les règles d’annulation, remboursement et notification, se trouve dans [`REGLES_METIER.md`](REGLES_METIER.md). Les règles sont matérialisées dans les interfaces existantes concernées, sans ajouter ni supprimer d’écran. La galerie, le carnet PDF et un rendu PNG individuel par écran sont disponibles dans [`maquettes/`](maquettes/README.md). Les exemples restent fictifs et illustrent les règles décidées.

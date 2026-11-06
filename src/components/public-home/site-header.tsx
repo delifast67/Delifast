@@ -5,7 +5,7 @@ const navigation = [
   { label: "Restaurants", href: "#restaurants" },
   { label: "Catégories", href: "#categories" },
   { label: "Commerces", href: "#commerces" },
-  { label: "Aide", href: "#aide" },
+  { label: "Aide", href: "/aide" },
 ] as const;
 
 export function HomeBrand({ href = "#accueil" }: { href?: string }) {

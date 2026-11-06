@@ -4,14 +4,14 @@ import { PUBLIC_DEMO_NOTICE } from "../../lib/demo-data/public-catalog";
 import { HomeBrand } from "../public-home/site-header";
 import homeStyles from "../public-home/home.module.css";
 
-type PublicSection = "catalogue" | "restaurants";
+type PublicSection = "catalogue" | "restaurants" | "help";
 
 const links = [
   { label: "Restaurants", href: "/restaurants" },
   { label: "Recherche", href: "/recherche" },
   { label: "Catégories", href: "/catalogue#categories" },
   { label: "Commerces", href: "/commerces/epicerie-du-quartier" },
-  { label: "Aide", href: "/#aide" },
+  { label: "Aide", href: "/aide" },
 ] as const;
 
 export function PublicHeader() {

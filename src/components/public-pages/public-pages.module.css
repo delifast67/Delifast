@@ -813,3 +813,26 @@
     transition-duration: 0.01ms;
   }
 }
+
+.deliveryNotice {
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border: 1px solid #f0ded6;
+  border-radius: 13px;
+  background: #fff8f3;
+  color: #5f5149;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.deliveryNotice strong {
+  color: #9b3e30;
+}
+
+@media (max-width: 680px) {
+  .deliveryNotice {
+    margin-bottom: 15px;
+    padding: 11px 12px;
+    font-size: 11px;
+  }
+}

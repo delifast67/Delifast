@@ -1,6 +1,7 @@
 import styles from "./home.module.css";
 
 const navigation = [
+  { label: "Recherche", href: "/recherche" },
   { label: "Restaurants", href: "#restaurants" },
   { label: "Catégories", href: "#categories" },
   { label: "Commerces", href: "#commerces" },

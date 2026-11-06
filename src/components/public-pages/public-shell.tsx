@@ -8,8 +8,9 @@ type PublicSection = "catalogue" | "restaurants";
 
 const links = [
   { label: "Restaurants", href: "/restaurants" },
+  { label: "Recherche", href: "/recherche" },
   { label: "Catégories", href: "/catalogue#categories" },
-  { label: "Commerces", href: "/catalogue#categories" },
+  { label: "Commerces", href: "/commerces/epicerie-du-quartier" },
   { label: "Aide", href: "/#aide" },
 ] as const;
 
@@ -83,8 +84,9 @@ function PublicFooter() {
             <h2 className={homeStyles.footerHeading}>Découvrir</h2>
             <div className={homeStyles.footerLinks}>
               <Link href="/restaurants">Restaurants</Link>
+              <Link href="/recherche">Recherche</Link>
               <Link href="/catalogue">Catalogue</Link>
-              <Link href="/catalogue#categories">Catégories</Link>
+              <Link href="/commerces/epicerie-du-quartier">Fiche commerce · démo</Link>
             </div>
           </div>
           <div>

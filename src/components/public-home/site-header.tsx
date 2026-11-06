@@ -41,8 +41,7 @@ export function HomeHeader() {
           <div className={styles.actions}>
             <a
               className={`${styles.button} ${styles.buttonOutline}`}
-              href="#compte"
-              aria-describedby="compte-note"
+              href="/connexion"
             >
               Connexion
             </a>
@@ -88,7 +87,7 @@ export function MobileNavigation() {
       <a href="#categories">
         <span aria-hidden="true">▦</span>Explorer
       </a>
-      <a href="#compte">
+      <a href="/connexion">
         <span aria-hidden="true">♙</span>Compte
       </a>
     </nav>

@@ -33,7 +33,7 @@ export function PublicHeader() {
           <div className={homeStyles.actions}>
             <Link
               className={`${homeStyles.button} ${homeStyles.buttonOutline}`}
-              href="/#compte-note"
+              href="/connexion"
             >
               Connexion
             </Link>
@@ -57,7 +57,7 @@ export function PublicHeader() {
                     {item.label}
                   </Link>
                 ))}
-                <Link href="/#compte-note">Connexion et compte</Link>
+                <Link href="/connexion">Connexion et compte</Link>
               </nav>
             </details>
           </div>
@@ -126,7 +126,7 @@ function PublicMobileNavigation({ active }: { active: PublicSection }) {
       >
         <span aria-hidden="true">▦</span>Explorer
       </Link>
-      <Link href="/#compte-note">
+      <Link href="/connexion">
         <span aria-hidden="true">♙</span>Compte
       </Link>
     </nav>

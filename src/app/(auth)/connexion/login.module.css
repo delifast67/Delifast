@@ -1,0 +1,268 @@
+.screen {
+  display: grid;
+  min-height: 100vh;
+  min-height: 100svh;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.98fr);
+  overflow: clip;
+  background: #fff;
+  color: var(--df-ink);
+}
+
+.skipLink {
+  position: absolute;
+  z-index: 5;
+  top: 12px;
+  left: 12px;
+  padding: 10px 14px;
+  transform: translateY(-160%);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--df-ink);
+  box-shadow: var(--df-shadow);
+}
+
+.skipLink:focus {
+  transform: translateY(0);
+}
+
+.formPanel {
+  display: flex;
+  min-width: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  align-items: center;
+  justify-content: center;
+  padding: 56px clamp(28px, 7vw, 92px);
+}
+
+.formContent {
+  width: min(100%, 440px);
+}
+
+.welcomeMark {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  margin: 34px 0 23px;
+  place-items: center;
+  border-radius: 13px;
+  background: #fff0eb;
+  color: var(--df-red);
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.eyebrow,
+.visualEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  color: var(--df-red-dark);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.eyebrow::before,
+.visualEyebrow::before {
+  width: 21px;
+  height: 2px;
+  background: currentColor;
+  content: "";
+}
+
+.title {
+  max-width: 420px;
+  margin: 12px 0 10px;
+  font-size: clamp(32px, 3.3vw, 45px);
+  font-weight: 820;
+  letter-spacing: -0.055em;
+  line-height: 1.06;
+}
+
+.description {
+  max-width: 390px;
+  margin: 0 0 24px;
+  color: #77736f;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.actionGroup {
+  width: 100%;
+}
+
+.googleButton {
+  display: inline-flex;
+  width: 100%;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  padding: 12px 18px;
+  border: 1px solid #292522;
+  border-radius: 13px;
+  background: #292522;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 760;
+  transition: background-color 160ms ease, border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.googleButton:hover {
+  transform: translateY(-1px);
+  border-color: #443d38;
+  background: #443d38;
+}
+
+.googleButton:active {
+  transform: translateY(0);
+}
+
+.googleMark {
+  color: #8ab4f8;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.demoNote {
+  margin: 18px 0 0;
+  color: #716b66;
+  font-size: 12px;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.termsNote {
+  margin: 11px 0 0;
+  color: #8d8781;
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.actionStatus {
+  margin: 12px 0 0;
+  padding: 0;
+  color: #8b3428;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.actionStatus:empty {
+  display: none;
+}
+
+.visualPanel {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #392c24;
+  color: #fff;
+}
+
+.foodImage {
+  object-fit: cover;
+  object-position: center;
+}
+
+.imageShade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+      180deg,
+      rgb(22 18 15 / 12%) 0%,
+      rgb(22 18 15 / 16%) 42%,
+      rgb(22 18 15 / 78%) 100%
+    ),
+    rgb(22 18 15 / 18%);
+}
+
+.visualCopy {
+  position: absolute;
+  z-index: 1;
+  right: clamp(24px, 5vw, 60px);
+  bottom: clamp(32px, 6vw, 66px);
+  left: clamp(24px, 5vw, 60px);
+  max-width: 560px;
+}
+
+.visualEyebrow {
+  color: #ff9b87;
+  font-size: 10px;
+}
+
+.visualCopy h2 {
+  max-width: 500px;
+  margin: 10px 0 8px;
+  font-size: clamp(26px, 3vw, 39px);
+  font-weight: 820;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.visualCopy > p:last-child {
+  margin: 0;
+  color: rgb(255 255 255 / 82%);
+  font-size: 11px;
+}
+
+@media (max-width: 760px) {
+  .screen {
+    grid-template-columns: minmax(0, 1fr);
+    overflow: visible;
+  }
+
+  .formPanel {
+    min-height: auto;
+    padding: 42px 24px 38px;
+  }
+
+  .formContent {
+    width: min(100%, 460px);
+  }
+
+  .welcomeMark {
+    margin-top: 26px;
+  }
+
+  .title {
+    font-size: clamp(32px, 9vw, 42px);
+  }
+
+  .visualPanel {
+    min-height: 270px;
+    min-height: 36svh;
+    max-height: 420px;
+  }
+
+  .visualCopy {
+    right: 24px;
+    bottom: 25px;
+    left: 24px;
+  }
+}
+
+@media (max-width: 380px) {
+  .formPanel {
+    padding-inline: 18px;
+  }
+
+  .googleButton {
+    min-height: 52px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .googleButton {
+    transition: none;
+  }
+}

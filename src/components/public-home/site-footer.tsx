@@ -28,7 +28,7 @@ export function HomeFooter() {
           <div id="compte">
             <h2 className={styles.footerHeading}>Votre compte</h2>
             <div className={styles.footerLinks}>
-              <a href="#compte-note">Connexion</a>
+              <a href="/connexion">Connexion</a>
               <a href="#compte-note">Créer un compte</a>
               <a href="#compte-note">Espace commerçant</a>
             </div>

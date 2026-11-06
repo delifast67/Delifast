@@ -141,16 +141,16 @@ export default function ClientOrderConfirmationPage() {
             </div>
 
             <div className={styles.actions}>
-              <button className={styles.primaryButton} disabled type="button">
+              <Link className={styles.primaryButton} href="/client/paiement-commande">
                 Passer au paiement
-              </button>
+              </Link>
               <button className={styles.secondaryButton} disabled type="button">
                 Voir la commande
               </button>
             </div>
             <p className={styles.actionNote}>
-              Les écrans suivants ne sont pas inclus ici : ces commandes sont inactives et ne
-              déclenchent aucune transaction.
+              L’écran de paiement est une maquette ; ses champs et boutons ne déclenchent aucune
+              transaction.
             </p>
           </section>
 

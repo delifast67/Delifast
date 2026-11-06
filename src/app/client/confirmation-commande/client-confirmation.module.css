@@ -220,18 +220,20 @@
   font: inherit;
   font-size: 9px;
   font-weight: 800;
-  cursor: not-allowed;
 }
 
 .primaryButton {
   background: var(--df-red);
   color: #fff;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .secondaryButton {
   border-color: #eee9e4;
   background: #fff;
   color: #39342f;
+  cursor: not-allowed;
 }
 
 .actionNote {

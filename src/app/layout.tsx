@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Delifast — Les bonnes adresses de Ouagadougou",
+  title: "Delifast — Le meilleur de vos envies, au même endroit",
   description:
-    "Le socle technique de Delifast, une marketplace pour découvrir les restaurants et commerces de Ouagadougou.",
+    "Découvrez les restaurants, les plats et les commerces de Ouagadougou avec Delifast.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

@@ -27,6 +27,15 @@
   color: #827b75;
 }
 
+.steps a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.steps a:hover {
+  text-decoration: underline;
+}
+
 .currentStep > span,
 .futureStep > span {
   display: grid;
@@ -250,6 +259,22 @@
   font-weight: 750;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+
+.nextStepLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  color: #514a44;
+  font-size: 11px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.nextStepLink:hover {
+  color: #a84433;
+  text-decoration: underline;
 }
 
 .nextStep strong {

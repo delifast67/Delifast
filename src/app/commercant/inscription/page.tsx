@@ -98,8 +98,10 @@ export default function MerchantRegistrationPage() {
               </p>
               <div className={styles.nextStep}>
                 <span className={styles.nextStepLabel}>Prochaine étape du cahier</span>
-                <strong>Localisation du restaurant</strong>
-                <small>Écran 21 · non implémenté dans cette étape</small>
+                <Link className={styles.nextStepLink} href="/commercant/inscription/localisation">
+                  Localisation du restaurant <span aria-hidden="true">→</span>
+                </Link>
+                <small>Écran 21 · étape 2 sur 3</small>
               </div>
             </aside>
           </div>

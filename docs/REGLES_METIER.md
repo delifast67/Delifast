@@ -53,6 +53,8 @@ Delifast utilise un paiement manuel Mobile Money par USSD et transmission d’un
 
 L’ordre est impératif : génération du code, paiement confirmé par le payeur sur son téléphone, retour dans Delifast, dépôt de la capture et de la référence, transmission au bénéficiaire, comparaison avec le SMS réellement reçu, puis décision. La capture seule n’est jamais une confirmation automatique.
 
+Dans les maquettes et prototypes, les boutons USSD peuvent être cliquables pour choisir l’opérateur/la variante et afficher un code d’exemple calculé avec des valeurs fictives; ce clic ne doit ni ouvrir le composeur, ni créer de paiement, ni présenter la transaction comme effectuée. Lors du développement, le bouton ouvrira réellement le composeur avec le code prérempli. L’utilisateur effectuera et confirmera lui-même la transaction; le clic, l’ouverture ou le retour de l’application ne remplace jamais la preuve ni la vérification humaine.
+
 ### Principes communs
 
 - La référence de transaction et la capture du SMS de confirmation sont obligatoires. La preuve ne peut être téléversée qu’après le paiement effectué sur le téléphone. Une capture seule ne valide jamais un paiement et ne déclenche jamais l’activation d’un abonnement.
@@ -90,7 +92,8 @@ L’ordre est impératif : génération du code, paiement confirmé par le payeu
 
 - Les syntaxes Orange Money et Telmob sont configurées séparément. Exemples Orange Money : `*144*2*1*{NUMERO_BENEFICIAIRE}*{MONTANT}#` ou `*144*10*{NUMERO_BENEFICIAIRE}*{MONTANT}#`. Exemple Telmob : `*555*2*1*{NUMERO_BENEFICIAIRE}*{MONTANT}#`.
 - Avant génération, les numéros sont nettoyés pour retirer les espaces, tirets et caractères inutiles. Le code est construit dynamiquement à partir de l’opérateur choisi, du bénéficiaire propre au circuit et du montant exact (forfait configuré pour un abonnement ; total de commande calculé côté serveur pour une commande).
-- Dans un lien téléphonique, le caractère `#` est encodé en `%23`. Forme textuelle fictive, non appelable : `tel:*144*2*1*NUMERO_FICTIF*MONTANT_FICTIF%23`. Les deux formats d’opérateur doivent être configurables indépendamment et testés sur les téléphones utilisés avant le lancement. Aucune valeur réelle de numéro ou de montant n’est donnée ici.
+- Lors du développement, un lien téléphonique `tel:` ouvrira le composeur avec le code complet; le caractère `#` sera encodé en `%23`. Forme textuelle fictive, non appelable : `tel:*144*2*1*NUMERO_FICTIF*MONTANT_FICTIF%23`. Les numéros d’abonnement Delifast sont obtenus uniquement depuis une configuration serveur sécurisée; le numéro de commande provient du bénéficiaire validé et le total est recalculé côté serveur. Aucune valeur réelle ne figure dans le dépôt, les maquettes, le code client ou l’aperçu.
+- Avant la mise en production, vérifier séparément les deux formats Orange Money et le format Telmob sur les appareils Android concernés. Un clic ou une ouverture de composeur ne constitue pas une transaction; le payeur doit confirmer manuellement, puis le bénéficiaire humain vérifie la preuve.
 
 ### Historique, permissions et notifications
 

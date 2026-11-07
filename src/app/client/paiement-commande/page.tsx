@@ -3,6 +3,7 @@ import Link from "next/link";
 import { HomeBrand } from "../../../components/public-home/site-header";
 import dashboard from "../client-dashboard.module.css";
 import styles from "./client-payment.module.css";
+import { UssdDemoSelector } from "./ussd-demo-selector";
 
 export const metadata: Metadata = {
   title: "Paiement de commande (démo) | Delifast",
@@ -16,21 +17,6 @@ const clientNavigation = [
   { label: "Commandes", icon: "▤" },
   { label: "Paiements", icon: "◆" },
   { label: "Profil client", icon: "♙" },
-] as const;
-
-const paymentMethods = [
-  {
-    name: "Orange Money",
-    mark: "O",
-    exampleNumber: "+226 70 XX XX XX XX · fictif",
-    code: "*144*2*1*NUMERO_FICTIF*MONTANT_FICTIF#",
-  },
-  {
-    name: "Telmob",
-    mark: "T",
-    exampleNumber: "+226 60 XX XX XX XX · fictif",
-    code: "*555*2*1*NUMERO_FICTIF*MONTANT_FICTIF#",
-  },
 ] as const;
 
 const paymentSteps = [
@@ -135,32 +121,7 @@ export default function ClientOrderPaymentPage() {
                 avec un numéro du restaurant configuré sont proposés; le montant exact est inséré automatiquement.
               </p>
 
-              <div className={styles.methods} aria-label="Opérateurs fictifs">
-                {paymentMethods.map((method, index) => (
-                  <article className={styles.methodCard} key={method.name}>
-                    <span className={styles.operatorMark} aria-hidden="true">
-                      {method.mark}
-                    </span>
-                    <div className={styles.methodCopy}>
-                      <strong>{method.name} · EXEMPLE FICTIF</strong>
-                      <small>Numéro du restaurant · {method.exampleNumber}</small>
-                      <code className={styles.ussdCode}>{method.code}</code>
-                      <small className={styles.codeWarning}>Code d’illustration · NON APPELABLE</small>
-                      <div className={styles.demoActions}>
-                        <button className={styles.demoButton} disabled type="button">
-                          Ouvrir le code de paiement
-                        </button>
-                        <button className={styles.secondaryDemoButton} disabled type="button">
-                          Copier le numéro
-                        </button>
-                      </div>
-                    </div>
-                    <span className={styles.configuredBadge}>
-                      <span aria-hidden="true">●</span> {index === 0 ? "Option · démo" : "Option · fictive"}
-                    </span>
-                  </article>
-                ))}
-              </div>
+              <UssdDemoSelector />
 
               <ol className={styles.steps} aria-label="Étapes du paiement prévu">
                 {paymentSteps.map((step, index) => (

@@ -1,13 +1,14 @@
 # Maquettes Delifast — 53 écrans
 
-Cette galerie est le livrable de conception statique de la phase en cours. Elle comprend une maquette par écran du cahier des charges, les sources HTML/CSS/JavaScript, une planche des états communs, 53 rendus PNG individuels, des aperçus mobiles des écrans d’abonnement ciblés et un carnet PDF de 53 pages.
+Cette galerie est le livrable de conception statique de la phase en cours. Elle comprend une maquette par écran du cahier des charges, les sources HTML/CSS/JavaScript, une planche des états communs, 53 rendus PNG individuels, des aperçus mobiles ciblés et un carnet PDF de 53 pages.
 
 ## Ouvrir les interfaces
 
 - Ouvrir `index.html` dans un navigateur pour parcourir les 53 écrans.
 - Un écran individuel s’ouvre avec `index.html?ecran=01` à `index.html?ecran=53`.
 - Le [carnet PDF](rendus/Delifast-maquettes-53-ecrans.pdf) rassemble une interface par page ; les PNG individuels sont dans `rendus/`.
-- Les aperçus mobiles des écrans **23, 36, 37 et 49** (largeur de 390 px) sont dans [`rendus/mobile/`](rendus/mobile/).
+- Les aperçus mobiles des écrans **14, 23, 36, 37 et 49** (largeur de 390 px) sont dans [`rendus/mobile/`](rendus/mobile/).
+- L’aperçu bureau de la page React client de paiement (écran 14) est [`rendus/14-paiement-commande-react.png`](rendus/14-paiement-commande-react.png); sa version mobile (390 px) est [`rendus/mobile/14-paiement-commande-react-mobile.png`](rendus/mobile/14-paiement-commande-react-mobile.png).
 - La [planche des états communs](rendus/etats-communs.png) accompagne la source consultable `etats.html`.
 - Pour recréer les rendus et exécuter leurs contrôles documentaires, lancer `python3 scripts/render-maquettes.py` depuis la racine du dépôt.
 
@@ -25,12 +26,12 @@ Les maquettes suivent le [registre officiel des règles métier](../REGLES_METIE
 - Chaque transition réelle d’un état prévu de commande, paiement, modification, annulation, remboursement ou réservation qui affecte la commande déclenche une notification dans l’application aux deux parties. Les confirmations d’arrêt et de reprise de préparation déclenchent aussi une notification. Chaque message indique le statut atteint, le montant concerné et l’action attendue du destinataire ; aucun SMS/e-mail en v1, aucune notification pour un brouillon ou une modification sans transition.
 - Les réservations de stock restent distinctes : elles n’expirent pas automatiquement, sont consommées après validation du paiement, libérées avant consommation et restituées après consommation seulement si l’annulation précède la préparation ou la remise au client.
 
-Les paiements Mobile Money utilisent uniquement **En attente**, **Validé** et **Refusé**; **Non soumis** est un état de présentation avant dépôt de preuve. Ces états restent distincts du statut de commande. Les autres états d’interface réutilisent ceux déjà prévus au registre. Les vues présentent les parcours sans déclencher d’opération réelle ni créer de statut supplémentaire.
+Les paiements Mobile Money utilisent uniquement **En attente**, **Validé** et **Refusé**; **Non soumis** est un état de présentation avant dépôt de preuve. Ces états restent distincts du statut de commande. Les autres états d’interface réutilisent ceux déjà prévus au registre. Sur les écrans 14 et 37, les choix d’opérateur/forfait et les boutons USSD sont cliquables uniquement pour révéler un code fictif calculé; cela ne déclenche aucune opération réelle et ne crée aucun statut supplémentaire.
 
 ## Choix de conception et limites
 
 Le système visuel reprend la référence existante : rouge `#ef4935`, rouge foncé `#d93625`, fond crème `#fff8f3`, encre `#20201f`, bordures discrètes, cartes arrondies et mise en page responsive. Les espaces public, client, commerçant et administration conservent leurs navigations distinctes.
 
-Les noms, photos, prix, références, montants, coordonnées, statuts et justificatifs illustrés sont fictifs. Aucun compte, service de paiement, envoi de commande, réservation, remboursement, base de données ou rôle réel n’est connecté. Les boutons et formulaires sont des représentations visuelles et ne déclenchent aucune action.
+Les noms, photos, prix, références, montants, coordonnées, statuts et justificatifs illustrés sont fictifs. Aucun compte, service de paiement, envoi de commande, réservation, remboursement, base de données ou rôle réel n’est connecté. Les boutons de démo USSD choisissent l’opérateur/le forfait, affichent un code fictif et expliquent l’étape prévue; ils n’ouvrent jamais le composeur et ne signifient pas qu’un paiement a eu lieu. Les champs et actions de preuve restent désactivés.
 
-La maquette ne déclenche pas de transfert Mobile Money ni d’envoi réel de notification : le commerçant rembourse directement le client et Delifast vérifie la preuve. Aucune API, migration, base de données ou logique de backend n’est ajoutée dans cette mise à jour.
+La maquette ne déclenche pas de transfert Mobile Money ni d’envoi réel de notification : le payeur effectue et confirme lui-même la transaction, puis le bénéficiaire vérifie manuellement la preuve. L’activation réelle du composeur avec un lien `tel:` et `#` encodé en `%23` est prévue à la phase de développement; les formats Orange Money et Telmob devront être testés sur les appareils Android concernés avant production. Aucune API, migration, base de données ou logique de backend n’est ajoutée dans cette mise à jour.

@@ -17,7 +17,7 @@ HTML = DESIGN / "index.html"
 PDF = OUT / "Delifast-maquettes-53-ecrans.pdf"
 VIEWPORT = {"width": 1440, "height": 760}
 MOBILE_OUT = OUT / "mobile"
-MOBILE_SCREEN_IDS = {23, 36, 37, 49}
+MOBILE_SCREEN_IDS = {14, 23, 36, 37, 49}
 
 
 def slug(text):

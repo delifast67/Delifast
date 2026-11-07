@@ -133,6 +133,13 @@ export default function MerchantPaymentSetupPage() {
           <p className={pageStyles.footerNote}>
             Les valeurs saisies restent dans cette page et disparaissent en la quittant.
           </p>
+          <div className={styles.nextStep}>
+            <span className={styles.nextStepLabel}>Écran suivant · 23</span>
+            <Link className={styles.nextStepLink} href="/commercant">
+              Tableau de bord commerçant <span aria-hidden="true">→</span>
+            </Link>
+            <small>Cette navigation n’enregistre aucun moyen de paiement.</small>
+          </div>
           <Link className={styles.backLink} href="/commercant/inscription/localisation">
             <span aria-hidden="true">←</span> Retour à la localisation
           </Link>

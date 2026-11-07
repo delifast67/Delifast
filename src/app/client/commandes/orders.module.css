@@ -1,0 +1,366 @@
+.statusRule {
+  display: flex;
+  min-height: 39px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 13px;
+  padding: 8px 13px;
+  border: 1px solid #ecd9cd;
+  border-radius: 12px;
+  background: #fffaf6;
+  color: #7d4437;
+  font-size: 9px;
+}
+
+.statusRule strong {
+  font-weight: 820;
+}
+
+.statusRule span {
+  color: #897e75;
+  text-align: right;
+}
+
+.ordersPanel {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #eee9e4;
+  border-radius: 15px;
+  background: #fff;
+}
+
+.panelHeading {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 15px;
+  border-bottom: 1px solid #f0ece8;
+}
+
+.panelHeading h2 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 820;
+}
+
+.panelHeading > span {
+  flex: none;
+  color: #89827d;
+  font-size: 8px;
+}
+
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 10px 15px 4px;
+}
+
+.filterButton,
+.filterButtonActive {
+  min-height: 29px;
+  padding: 6px 11px;
+  border: 1px solid #e8e2dc;
+  border-radius: 999px;
+  background: #fff;
+  color: #68615c;
+  cursor: pointer;
+  font: inherit;
+  font-size: 8px;
+  font-weight: 750;
+}
+
+.filterButtonActive {
+  border-color: #f1d4c9;
+  background: #fff0e9;
+  color: #a84433;
+}
+
+.filterButton:hover {
+  border-color: #edc5b9;
+  color: #a84433;
+}
+
+.filterHint {
+  margin: 0;
+  padding: 3px 15px 8px;
+  color: #928980;
+  font-size: 7px;
+}
+
+.tableViewport {
+  width: 100%;
+  overflow-x: auto;
+  border-top: 1px solid #f0ece8;
+  scrollbar-color: #d8cec5 #fff;
+  scrollbar-width: thin;
+}
+
+.orderTable {
+  width: 100%;
+  min-width: 930px;
+  border-collapse: collapse;
+  color: #504a45;
+  font-size: 8px;
+  text-align: left;
+}
+
+.orderTable th {
+  padding: 10px 9px;
+  background: #fcfbfa;
+  color: #8b837b;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.orderTable td {
+  padding: 12px 9px;
+  border-top: 1px solid #f1eeeb;
+  vertical-align: middle;
+}
+
+.orderTable th:first-child,
+.orderTable td:first-child {
+  padding-left: 13px;
+}
+
+.orderTable th:last-child,
+.orderTable td:last-child {
+  padding-right: 13px;
+}
+
+.referenceCell {
+  color: #302b27;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.statusPill {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 7px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.statusPill::before {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+}
+
+.statusWarning {
+  background: #fff5dc;
+  color: #8d6118;
+}
+
+.statusSuccess {
+  background: #edf7f0;
+  color: #287a55;
+}
+
+.statusDanger {
+  background: #fff0ee;
+  color: #b73a2f;
+}
+
+.mobileOrderList {
+  display: none;
+}
+
+.panelFootnote {
+  padding: 9px 13px;
+  border-top: 1px solid #f0ece8;
+  color: #8a837d;
+  font-size: 7px;
+}
+
+.emptyState {
+  margin: 0;
+  padding: 20px 15px;
+  color: #77716b;
+  font-size: 9px;
+}
+
+.demoNotice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 13px;
+  padding: 11px 13px;
+  border: 1px solid #efe5dc;
+  border-radius: 12px;
+  background: #fffaf5;
+  color: #776e68;
+}
+
+.demoNotice > span {
+  flex: none;
+  color: #9e4a38;
+  font-size: 11px;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.demoNotice p {
+  margin: 0;
+  font-size: 8px;
+  line-height: 1.55;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 760px) {
+  .statusRule {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .statusRule span {
+    text-align: left;
+  }
+
+  .orderTable,
+  .tableViewport {
+    display: none;
+  }
+
+  .mobileOrderList {
+    display: grid;
+    gap: 9px;
+    padding: 10px;
+    border-top: 1px solid #f0ece8;
+  }
+
+  .mobileOrderCard {
+    display: grid;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid #eee9e4;
+    border-radius: 12px;
+    background: #fff;
+  }
+
+  .mobileOrderHeading {
+    display: grid;
+    gap: 3px;
+  }
+
+  .mobileOrderHeading strong {
+    color: #302b27;
+    font-size: 9px;
+    font-weight: 820;
+  }
+
+  .mobileOrderHeading > span {
+    color: #766e67;
+    font-size: 8px;
+  }
+
+  .mobileFacts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 12px;
+    margin: 0;
+  }
+
+  .mobileFacts > div {
+    display: grid;
+    min-width: 0;
+    gap: 2px;
+  }
+
+  .mobileFacts dt {
+    color: #90877f;
+    font-size: 7px;
+  }
+
+  .mobileFacts dd {
+    margin: 0;
+    color: #403a35;
+    font-size: 8px;
+    font-weight: 700;
+  }
+
+  .mobileStatuses {
+    display: grid;
+    gap: 8px;
+    padding-top: 9px;
+    border-top: 1px solid #f1eeeb;
+  }
+
+  .mobileStatuses > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .mobileStatuses > div > span:first-child {
+    flex: none;
+    color: #756d66;
+    font-size: 7px;
+    font-weight: 750;
+  }
+
+  .mobileStatuses .statusPill {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .demoNotice {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 440px) {
+  .panelHeading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px;
+  }
+
+  .filterBar {
+    padding-inline: 12px;
+  }
+
+  .filterHint {
+    padding-inline: 12px;
+  }
+
+  .mobileOrderList {
+    padding: 8px;
+  }
+
+  .mobileOrderCard {
+    padding: 10px;
+  }
+
+  .mobileFacts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

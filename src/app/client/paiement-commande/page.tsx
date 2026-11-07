@@ -239,6 +239,9 @@ export default function ClientOrderPaymentPage() {
           <Link className={styles.backLink} href="/client/confirmation-commande">
             ← Retour à la confirmation de commande
           </Link>
+          <Link className={styles.backLink} href="/client/commandes">
+            Consulter les commandes · aperçu
+          </Link>
         </main>
       </div>
     </div>

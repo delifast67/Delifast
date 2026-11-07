@@ -147,6 +147,14 @@ Ces critères complètent les écrans numérotés ci-dessus ; ils n’ajoutent a
 - **36. Gestion de l’abonnement :** présenter Découverte et Professionnel avec prix, durée, fonctions, avantages et disponibilité provenant de la configuration; leur sélection ouvre l’écran 37.
 - **37. Paiement de l’abonnement :** afficher le prix configuré et les seuls opérateurs actifs ayant un numéro Delifast configuré. Le restaurant choisit son opérateur, consulte le code USSD prérempli, effectue et confirme le paiement sur son téléphone puis, à son retour, transmet la capture du SMS et la référence à l’administration. Le montant n’est pas modifiable par le restaurant; le statut reste en attente jusqu’à la décision de l’administrateur. Un refus motivé permet une nouvelle transaction et une nouvelle preuve; le restaurant ne valide jamais son abonnement.
 
+#### État d’interface — compte marchand suspendu pour défaut d’abonnement
+
+Cet état s’applique aux écrans commerçants existants **23, 36 et 37**; il ne crée aucun écran ni statut métier supplémentaire.
+
+- **23. Tableau de bord commerçant :** quand l’abonnement est impayé ou expiré, afficher « Votre compte marchand est temporairement désactivé » et le motif « Votre abonnement n'est pas actif ou est arrivé à expiration ». Montrer le nom du forfait concerné, sa date d’expiration lorsqu’elle s’applique et le statut du paiement ou du renouvellement en cours. Masquer ou rendre inaccessibles les fonctionnalités commerciales jusqu’à validation; conserver l’accès aux écrans de gestion/renouvellement de l’abonnement et à son historique.
+- **36. Gestion de l’abonnement :** conserver l’accès aux forfaits, afficher une action pour les consulter et renouveler l’abonnement, et permettre de consulter l’historique des abonnements et des paiements.
+- **37. Paiement de l’abonnement :** si la preuve est en attente de vérification, afficher explicitement « Votre paiement est en cours de vérification. Votre compte sera réactivé après validation. » En cas de refus, afficher le motif et permettre au marchand d’effectuer une nouvelle transaction puis de soumettre une nouvelle preuve, conformément au circuit de validation existant. Après validation par l’administration, indiquer que le compte est réactivé et que les fonctionnalités autorisées sont de nouveau accessibles. Ce message de succès décrit l’effet de la validation; il n’ajoute pas de statut de paiement.
+
 #### Administration
 
 - **48. Gestion des abonnements :** afficher restaurant, commerçant, formule, montant, dates de début et d’expiration, statut et paiement associé; filtres Découverte, Professionnel, En attente, Actif, Expiré et Refusé; recherche, filtrage, consultation du commerçant et examen vers 49.

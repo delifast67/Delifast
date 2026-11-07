@@ -25,14 +25,16 @@
   }
   function btn(text, kind='btn-primary', href='#') { return `<a class="btn ${kind}" href="${href}">${esc(text)}</a>`; }
   function pageHeading(s) {
-    return `<div class="page-heading"><div><div class="crumb-label">${esc(s.area)} · Démonstration</div><h1>${esc(s.title)}</h1><p>${esc(s.description || '')}</p></div>${s.action ? `<div class="heading-actions">${btn(s.action)}</div>` : ''}</div>`;
+    const actionLabel=s.id===36?'Consulter les forfaits':s.action;
+    const actionHref=s.id===36?'#subscription-plans':'#';
+    return `<div class="page-heading"><div><div class="crumb-label">${esc(s.area)} · Démonstration</div><h1>${esc(s.title)}</h1><p>${esc(s.description || '')}</p></div>${s.action ? `<div class="heading-actions">${btn(actionLabel,'btn-primary',actionHref)}</div>` : ''}</div>`;
   }
   function notice(text, icon='i') { return text ? `<div class="banner-notice"><span class="notice-icon">${icon}</span><span>${esc(text)}</span></div>` : ''; }
   function publicHeader(active='') {
     return `<div class="public-topline">Bienvenue sur Delifast — <strong>les bonnes adresses de Ouagadougou</strong></div><header class="public-header">${brand}<nav class="public-links"><a href="?ecran=03">Restaurants</a><a href="?ecran=02">Catégories</a><a href="?ecran=05">Commerces</a><a href="?ecran=07">Aide</a></nav><div class="public-actions">${btn('Connexion','btn-outline','?ecran=08')}${btn('Créer un compte ↗','btn-primary','?ecran=08')}</div></header>`;
   }
   function appSidebar(s) {
-    let ids = s.area==='Client' ? [10,11,15,17,19] : s.area==='Commerçant' ? [23,24,25,26,27,28,30,32,34,36] : [39,40,42,44,46,48,50];
+    let ids = s.area==='Client' ? [10,11,15,17,19] : s.area==='Commerçant' ? ([23,36,37].includes(s.id) ? [23,36,37] : [23,24,25,26,27,28,30,32,34,36]) : [39,40,42,44,46,48,50];
     const screen = (id) => screens.find(x=>x.id===id);
     return `<aside class="sidebar"><div class="side-brand">${brand}<div class="side-label">Espace ${esc(s.area.toLowerCase())}</div></div><nav class="side-nav">${ids.map(id=>{const item=screen(id); if(!item)return ''; const active=(item.id===s.id || (s.area==='Client' && [12,13,14,16,18].includes(s.id) && id===10) || (s.area==='Commerçant' && [20,21,22,29,31,33,35,37].includes(s.id) && id===23) || (s.area==='Administration' && [41,43,45,47,49,51].includes(s.id) && id===39)); return `<a class="side-item ${active?'active':''}" href="${navHref(item)}"><span class="ico">${icons[item.title]||'·'}</span>${esc(item.title.replace('Tableau de bord ','').replace('Liste des ',''))}</a>`;}).join('')}</nav><div class="side-bottom">● Mode démonstration<br><span class="subtle">Aucune donnée réelle</span></div></aside>`;
   }
@@ -265,6 +267,23 @@ function renderPaymentReview(s) {
     const is404=s.id===53;
     return `<div class="error-state"><div><div class="error-illustration">${is404?'404':'!'}</div><span class="eyebrow">${is404?'Page introuvable':'Un problème est survenu'}</span><h1>${is404?'Cette page n’existe pas.':'Impossible d’afficher cette page.'}</h1><p>${esc(s.description)}</p>${btn(s.action||'Retour','btn-primary','?ecran=01')}<div class="footer-note">Écran système de démonstration · aucune panne réelle</div></div></div>`;
   }
+
+  function renderSubscriptionSuspensionNotice() {
+    return `<section class="subscription-lock-card" role="alert"><div class="subscription-lock-icon" aria-hidden="true">!</div><div class="subscription-lock-content"><span class="eyebrow">Accès commerçant limité</span><h2>Votre compte marchand est temporairement désactivé</h2><p class="subscription-lock-reason">Votre abonnement n'est pas actif ou est arrivé à expiration</p><div class="subscription-lock-facts"><div><small>Forfait concerné</small><strong>Professionnel · exemple fictif</strong></div><div><small>Date d’expiration</small><strong>05 novembre 2026 · fictive</strong></div><div><small>Paiement / renouvellement</small><strong>Renouvellement en attente de vérification</strong></div></div><p class="subscription-waiting-message">Votre paiement est en cours de vérification. Votre compte sera réactivé après validation.</p><div class="subscription-lock-actions"><a class="btn btn-primary" href="?ecran=36">Consulter les forfaits et renouveler</a><a class="btn btn-outline" href="?ecran=36#subscription-history">Historique des abonnements et des paiements</a></div></div></section>`;
+  }
+
+  function renderMerchantSuspensionDashboard() {
+    return `<div class="subscription-suspended-dashboard">${renderSubscriptionSuspensionNotice()}<section class="panel subscription-access-panel"><div class="panel-title"><h2>Fonctionnalités commerciales</h2><span class="pill pill-danger">Accès suspendu</span></div><p>Les commandes, produits, paiements de commande et réglages commerciaux sont masqués ou inaccessibles jusqu’à la validation de l’abonnement.</p><div class="subscription-lock-actions"><a class="btn btn-primary" href="?ecran=36">Voir les forfaits</a><a class="btn btn-outline" href="?ecran=37">Renouveler l’abonnement</a></div></section></div>`;
+  }
+
+  function renderMerchantSubscription() {
+    return `<div class="payment-demo-banner"><strong>État de suspension · exemples fictifs</strong><span>Écrans 23, 36 et 37 · aucun paiement réel.</span></div>${renderSubscriptionSuspensionNotice()}<section class="panel subscription-plans-access" id="subscription-plans"><div class="panel-title"><h2>Forfaits et renouvellement</h2><span class="subtle">Tarifs et avantages issus de la configuration</span></div><div class="subscription-plan-grid"><article class="subscription-plan-card"><div class="panel-title"><h3>Découverte</h3><span class="pill">Forfait disponible · démo</span></div><p>Prix, durée et fonctions définis par la configuration du forfait.</p><a class="btn btn-outline" href="?ecran=37">Choisir Découverte · aperçu</a></article><article class="subscription-plan-card"><div class="panel-title"><h3>Professionnel</h3><span class="pill pill-success">Forfait concerné · démo</span></div><p>Prix, durée et fonctions définis par la configuration du forfait.</p><a class="btn btn-primary" href="?ecran=37">Renouveler Professionnel · aperçu</a></article></div></section><section class="panel subscription-history-panel" id="subscription-history"><div class="panel-title"><h2>Historique des abonnements et des paiements</h2><span class="subtle">Données fictives</span></div><div class="table-scroll"><table><thead><tr><th>Forfait</th><th>Paiement</th><th>Date / période</th><th>Statut</th></tr></thead><tbody><tr><td>Professionnel · exemple fictif</td><td>PAY-DEMO-0001 · fictif</td><td>Renouvellement · date fictive</td><td><span class="pill pill-warn">En attente</span></td></tr><tr><td>Découverte · exemple fictif</td><td>PAY-DEMO-0000 · fictif</td><td>Période passée · date fictive</td><td><span class="pill pill-danger">Refusé · exemple</span></td></tr></tbody></table></div><p class="footer-note">Chaque ligne est un exemple fictif; les paiements d’abonnement restent vérifiés par l’administration Delifast.</p></section>`;
+  }
+
+  function renderSubscriptionPaymentOutcomes() {
+    return `<section class="subscription-outcomes"><div class="panel-title"><div><h2>États possibles du renouvellement</h2><div class="panel-sub">Issues successives possibles · elles ne sont pas simultanées</div></div><span class="pill pill-warn">Exemples fictifs</span></div><article class="subscription-outcome-card subscription-outcome-pending"><div class="panel-title"><h3>Preuve en attente de vérification</h3><span class="pill pill-warn">En attente</span></div><p><strong>Votre paiement est en cours de vérification. Votre compte sera réactivé après validation.</strong></p><small>L’accès commercial reste suspendu jusqu’à la décision de l’administration.</small></article><div class="subscription-outcome-grid"><article class="subscription-outcome-card subscription-outcome-rejected"><div class="panel-title"><h3>Après un refus · exemple alternatif</h3><span class="pill pill-danger">Refusé</span></div><p><strong>Motif du refus · exemple fictif :</strong> capture illisible.</p><p>Le marchand peut effectuer une nouvelle transaction puis soumettre une nouvelle preuve.</p><div class="subscription-lock-actions"><button class="btn btn-outline" type="button" disabled>Effectuer une nouvelle transaction · aperçu</button><button class="btn btn-primary" type="button" disabled>Soumettre une nouvelle preuve · aperçu</button></div></article><article class="subscription-outcome-card subscription-outcome-validated"><div class="panel-title"><h3>Après validation · exemple alternatif</h3><span class="pill pill-success">Validé</span></div><p><strong>Compte réactivé</strong></p><p>Votre paiement a été validé par l’administration. Les fonctionnalités autorisées sont de nouveau accessibles.</p></article></div></section>`;
+  }
+
   function renderContent(s) {
     switch(s.kind){
       case 'home':return renderHome(s);
@@ -275,7 +294,7 @@ function renderPaymentReview(s) {
       case 'help':return renderHelp(s);
       case 'auth':return renderAuth(s);
       case 'role':return renderRole(s);
-      case 'dashboard':return renderDashboard(s);
+      case 'dashboard':return s.id===23?renderMerchantSuspensionDashboard():renderDashboard(s);
       case 'cart':return renderCart(s);
       case 'checkout':return renderCheckout(s);
       case 'confirmation':return renderConfirmation(s);
@@ -293,8 +312,8 @@ function renderPaymentReview(s) {
       case 'record-detail':return renderRecordDetail(s);
       case 'payment-review':return renderPaymentReview(s);
       case 'subscription-review':return renderPaymentReview(s);
-      case 'subscription':return renderSubscription();
-      case 'subscription-payment':return renderSubscriptionPayment();
+      case 'subscription':return renderMerchantSubscription();
+      case 'subscription-payment':return renderSubscriptionPaymentOutcomes()+renderSubscriptionPayment();
       case 'admin-login':return renderAdminLogin(s);
       case 'system-error':case 'system-404':return renderSystem(s);
       default:return `<div class="empty-state"><h3>${esc(s.title)}</h3><p>Maquette en cours.</p></div>`;

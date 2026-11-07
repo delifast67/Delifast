@@ -34,7 +34,7 @@ const clientNavigation = [
   { label: "Panier", icon: "▣", href: "/client/panier" },
   { label: "Commandes", icon: "▤" },
   { label: "Paiements", icon: "◆" },
-  { label: "Profil client", icon: "♙" },
+  { label: "Profil client", icon: "♙", href: "/client/profil" },
 ] as const;
 
 function DemoButton({

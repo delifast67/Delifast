@@ -139,7 +139,7 @@ const clientNavigation = [
   { label: "Panier", icon: "▣", href: "/client/panier" },
   { label: "Commandes", icon: "▤", href: "/client/commandes" },
   { label: "Paiements", icon: "◆", href: "/client/paiements", active: true },
-  { label: "Profil client", icon: "♙" },
+  { label: "Profil client", icon: "♙", href: "/client/profil" },
 ] as const;
 
 function PaymentStatus({ status }: { status: PaymentStatus }) {
@@ -235,7 +235,7 @@ export function ClientPaymentDetail({ reference }: { reference: string }) {
                 <span>{item.label}</span>
               </>
             );
-            return "href" in item ? (
+            return (
               <Link
                 aria-current={"active" in item && item.active ? "page" : undefined}
                 className={className}
@@ -244,10 +244,6 @@ export function ClientPaymentDetail({ reference }: { reference: string }) {
               >
                 {label}
               </Link>
-            ) : (
-              <span className={className} key={item.label}>
-                {label}
-              </span>
             );
           })}
         </nav>

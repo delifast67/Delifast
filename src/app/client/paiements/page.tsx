@@ -16,7 +16,7 @@ const clientNavigation = [
   { label: "Panier", icon: "▣", href: "/client/panier" },
   { label: "Commandes", icon: "▤", href: "/client/commandes" },
   { label: "Paiements", icon: "◆", href: "/client/paiements", active: true },
-  { label: "Profil client", icon: "♙" },
+  { label: "Profil client", icon: "♙", href: "/client/profil" },
 ] as const;
 
 export default function ClientPaymentsPage() {
@@ -36,7 +36,7 @@ export default function ClientPaymentsPage() {
               </>
             );
 
-            return "href" in item ? (
+            return (
               <Link
                 aria-current={"active" in item && item.active ? "page" : undefined}
                 className={className}
@@ -45,10 +45,6 @@ export default function ClientPaymentsPage() {
               >
                 {label}
               </Link>
-            ) : (
-              <span className={className} key={item.label}>
-                {label}
-              </span>
             );
           })}
         </nav>

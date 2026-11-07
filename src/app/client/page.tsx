@@ -19,7 +19,7 @@ const clientNavigation = [
   { label: "Panier", icon: "▣" },
   { label: "Commandes", icon: "▤" },
   { label: "Paiements", icon: "◆" },
-  { label: "Profil client", icon: "♙" },
+  { label: "Profil client", icon: "♙", href: "/client/profil" },
 ] as const;
 
 const shortcuts = ["Mes commandes", "Mes paiements", "Mon profil"] as const;
@@ -36,10 +36,10 @@ export default function ClientDashboardPage() {
             <span>Client</span>
           </Link>
           {clientNavigation.map((item) =>
-            item.label === "Panier" ? (
+            item.label === "Panier" || item.label === "Profil client" ? (
               <Link
                 className={styles.navItem}
-                href="/client/panier"
+                href={item.label === "Profil client" ? item.href : "/client/panier"}
                 key={item.label}
               >
                 <span aria-hidden="true">{item.icon}</span>
@@ -154,7 +154,13 @@ export default function ClientDashboardPage() {
                         <strong>{label}</strong>
                         <small>Ouvrir la section</small>
                       </span>
-                      <span className={styles.shortcutAction}>Voir →</span>
+                      {label === "Mon profil" ? (
+                        <Link className={styles.shortcutAction} href="/client/profil">
+                          Voir →
+                        </Link>
+                      ) : (
+                        <span className={styles.shortcutAction}>Voir →</span>
+                      )}
                     </li>
                   ))}
                 </ul>

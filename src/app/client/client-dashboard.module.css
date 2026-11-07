@@ -395,6 +395,11 @@
   font-size: 8px;
   font-weight: 800;
   white-space: nowrap;
+  text-decoration: none;
+}
+
+.shortcutAction:hover {
+  text-decoration: underline;
 }
 
 .demoNote {

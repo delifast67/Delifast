@@ -8,6 +8,7 @@ type ProfileValues = {
   email: string;
   city: string;
   phone: string;
+  mapLink: string;
 };
 
 const initialProfile: ProfileValues = {
@@ -15,6 +16,7 @@ const initialProfile: ProfileValues = {
   email: "aminata@example.test",
   city: "Ouagadougou",
   phone: "",
+  mapLink: "",
 };
 
 export function ClientProfileForm() {
@@ -85,6 +87,38 @@ export function ClientProfileForm() {
           />
           <small>Facultatif · aucune vérification ni notification n’est envoyée.</small>
         </label>
+
+        <label className={`${styles.field} ${styles.fieldWide}`} htmlFor="profile-map-link">
+          <span>Lien Google Maps</span>
+          <input
+            autoComplete="url"
+            id="profile-map-link"
+            inputMode="url"
+            maxLength={2048}
+            onChange={(event) => updateField("mapLink", event.target.value)}
+            placeholder="https://maps.app.goo.gl/exemple-lieu-fictif"
+            spellCheck={false}
+            type="url"
+            value={profile.mapLink}
+          />
+          <small>
+            Exemple fictif : https://maps.app.goo.gl/exemple-lieu-fictif. Le lien reste
+            dans cet aperçu : il n’est ni envoyé, ni enregistré, ni ouvert.
+          </small>
+        </label>
+
+        {showLocalUpdate && profile.mapLink.trim() ? (
+          <div
+            aria-label="Aperçu local du lien Google Maps"
+            className={`${styles.mapPreview} ${styles.fieldWide}`}
+          >
+            <div className={styles.mapPreviewHeading}>
+              <strong>Aperçu local</strong>
+              <span>Non enregistré</span>
+            </div>
+            <p>{profile.mapLink}</p>
+          </div>
+        ) : null}
       </div>
 
       <div className={styles.formFooter}>

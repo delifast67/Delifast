@@ -96,6 +96,43 @@
   grid-column: 1 / -1;
 }
 
+.mapPreview {
+  display: grid;
+  min-width: 0;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px dashed #ead8ce;
+  border-radius: 10px;
+  background: #fffaf6;
+}
+
+.mapPreviewHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mapPreviewHeading strong {
+  color: #5d514a;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.mapPreviewHeading span {
+  color: #7b6358;
+  font-size: 7px;
+  font-weight: 750;
+}
+
+.mapPreview p {
+  overflow-wrap: anywhere;
+  margin: 0;
+  color: #665d57;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
 .formFooter {
   display: flex;
   align-items: center;

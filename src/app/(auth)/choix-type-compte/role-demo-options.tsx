@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import styles from "./roles.module.css";
 
 const roleOptions = [
@@ -29,26 +30,46 @@ export function RoleDemoOptions() {
       role="group"
       aria-label="Espaces proposés dans cette maquette"
     >
-      {roleOptions.map((option) => (
-        <button
-          className={styles.option}
-          type="button"
-          aria-describedby="role-demo-note"
-          key={option.label}
-          onClick={() => setMessage(option.message)}
-        >
-          <span className={styles.roleIcon} aria-hidden="true">
-            {option.icon}
-          </span>
-          <span className={styles.roleCopy}>
-            <strong>{option.label}</strong>
-            <small>{option.description}</small>
-          </span>
-          <span className={styles.arrow} aria-hidden="true">
-            →
-          </span>
-        </button>
-      ))}
+      {roleOptions.map((option) =>
+        option.label === "Commerçant" ? (
+          <Link
+            aria-describedby="role-demo-note"
+            className={styles.option}
+            href="/commercant/inscription"
+            key={option.label}
+          >
+            <span className={styles.roleIcon} aria-hidden="true">
+              {option.icon}
+            </span>
+            <span className={styles.roleCopy}>
+              <strong>{option.label}</strong>
+              <small>{option.description}</small>
+            </span>
+            <span className={styles.arrow} aria-hidden="true">
+              →
+            </span>
+          </Link>
+        ) : (
+          <button
+            aria-describedby="role-demo-note"
+            className={styles.option}
+            key={option.label}
+            onClick={() => setMessage(option.message)}
+            type="button"
+          >
+            <span className={styles.roleIcon} aria-hidden="true">
+              {option.icon}
+            </span>
+            <span className={styles.roleCopy}>
+              <strong>{option.label}</strong>
+              <small>{option.description}</small>
+            </span>
+            <span className={styles.arrow} aria-hidden="true">
+              →
+            </span>
+          </button>
+        ),
+      )}
       <p
         className={styles.status}
         role="status"

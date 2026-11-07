@@ -171,6 +171,9 @@ export default function MerchantDashboardPage() {
               <Link className={styles.textLink} href="/commercant/inscription/paiements">
                 Revenir à l’écran 22 <ArrowRight aria-hidden="true" size={14} />
               </Link>
+              <Link className={styles.textLink} href="/commercant/boutique">
+                Prévisualiser l’écran 24 · Gestion de la boutique <ArrowRight aria-hidden="true" size={14} />
+              </Link>
             </div>
           </section>
 

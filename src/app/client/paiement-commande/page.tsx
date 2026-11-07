@@ -19,14 +19,25 @@ const clientNavigation = [
 ] as const;
 
 const paymentMethods = [
-  { name: "Orange Money", mark: "O", exampleNumber: "+226 70 XX XX XX XX" },
-  { name: "Telmob", mark: "T", exampleNumber: "+226 60 XX XX XX XX" },
+  {
+    name: "Orange Money",
+    mark: "O",
+    exampleNumber: "+226 70 XX XX XX XX · fictif",
+    code: "*144*2*1*NUMERO_FICTIF*MONTANT_FICTIF#",
+  },
+  {
+    name: "Telmob",
+    mark: "T",
+    exampleNumber: "+226 60 XX XX XX XX · fictif",
+    code: "*555*2*1*NUMERO_FICTIF*MONTANT_FICTIF#",
+  },
 ] as const;
 
 const paymentSteps = [
-  "Dans le parcours prévu, le paiement est adressé directement au commerçant par un opérateur qu’il a configuré.",
-  "Le client transmet la référence de transaction et la capture du SMS de paiement.",
-  "Le commerçant compare les éléments au SMS reçu sur son téléphone et vérifie le paiement manuellement.",
+  "Choisir un opérateur actif avec le numéro bénéficiaire du restaurant renseigné; le code reprend le montant exact enregistré.",
+  "Sur son propre téléphone, le client ouvre le code, effectue et confirme la transaction, puis revient dans Delifast.",
+  "Le client transmet la référence de transaction obligatoire et la capture du SMS de confirmation.",
+  "Le restaurant bénéficiaire compare la preuve au SMS réellement reçu, puis décide manuellement.",
 ] as const;
 
 export default function ClientOrderPaymentPage() {
@@ -93,39 +104,65 @@ export default function ClientOrderPaymentPage() {
             </p>
           </div>
 
+          <section className={styles.orderSummary} aria-label="Résumé de commande fictif">
+            <div>
+              <small>Restaurant bénéficiaire · fictif</small>
+              <strong>Restaurant Démo</strong>
+            </div>
+            <div>
+              <small>Référence commande · fictive</small>
+              <strong>CMD-DEMO-0001</strong>
+            </div>
+            <div>
+              <small>Total enregistré · exemple fictif</small>
+              <strong>9 500 FCFA · FICTIF</strong>
+            </div>
+          </section>
+
           <div className={styles.paymentLayout}>
             <section
               className={`${dashboard.panel} ${styles.paymentPanel}`}
               aria-labelledby="merchant-payment-title"
             >
               <div className={dashboard.panelHeading}>
-                <h2 id="merchant-payment-title">Payer le commerçant directement</h2>
+                <h2 id="merchant-payment-title">Payer le restaurant bénéficiaire</h2>
                 <span className={dashboard.statusBadge}>
-                  <span aria-hidden="true">●</span> En attente · démo
+                  <span aria-hidden="true">●</span> Non soumis · démo
                 </span>
               </div>
               <p className={styles.panelIntro}>
-                Seuls les opérateurs configurés par ce commerce seraient proposés. Numéros fictifs.
+                Les cartes ci-dessous sont des exemples fictifs. Dans le parcours prévu, seuls les opérateurs actifs
+                avec un numéro du restaurant configuré sont proposés; le montant exact est inséré automatiquement.
               </p>
 
-              <div className={styles.methods} aria-label="Opérateurs de démonstration">
-                {paymentMethods.map((method) => (
-                  <div className={styles.methodCard} key={method.name}>
+              <div className={styles.methods} aria-label="Opérateurs fictifs">
+                {paymentMethods.map((method, index) => (
+                  <article className={styles.methodCard} key={method.name}>
                     <span className={styles.operatorMark} aria-hidden="true">
                       {method.mark}
                     </span>
-                    <span className={styles.methodCopy}>
-                      <strong>{method.name}</strong>
-                      <small>Numéro du commerce · {method.exampleNumber}</small>
-                    </span>
+                    <div className={styles.methodCopy}>
+                      <strong>{method.name} · EXEMPLE FICTIF</strong>
+                      <small>Numéro du restaurant · {method.exampleNumber}</small>
+                      <code className={styles.ussdCode}>{method.code}</code>
+                      <small className={styles.codeWarning}>Code d’illustration · NON APPELABLE</small>
+                      <div className={styles.demoActions}>
+                        <button className={styles.demoButton} disabled type="button">
+                          Ouvrir le code de paiement
+                        </button>
+                        <button className={styles.secondaryDemoButton} disabled type="button">
+                          Copier le numéro
+                        </button>
+                      </div>
+                    </div>
                     <span className={styles.configuredBadge}>
-                      <span aria-hidden="true">●</span> Configuré · démo
+                      <span aria-hidden="true">●</span> {index === 0 ? "Option · démo" : "Option · fictive"}
                     </span>
-                  </div>
+                  </article>
                 ))}
               </div>
 
-              <ol className={styles.steps}>
+              <ol className={styles.steps} aria-label="Étapes du paiement prévu">
                 {paymentSteps.map((step, index) => (
                   <li className={styles.step} key={step}>
                     <span className={styles.stepNumber} aria-hidden="true">
@@ -140,7 +177,7 @@ export default function ClientOrderPaymentPage() {
                 <strong>Stock suivi réservé · exemple du parcours</strong>
                 <p>
                   Dans le parcours prévu, une réservation n’expire pas automatiquement. Elle est consommée après
-                  vérification manuelle du paiement par le commerçant ; en cas de refus ou d’annulation avant
+                  vérification manuelle du paiement par le commerçant; en cas de refus ou d’annulation avant
                   consommation, elle est libérée.
                 </p>
                 <small>Aucune commande ni réservation réelle n’existe dans cette maquette.</small>
@@ -152,26 +189,30 @@ export default function ClientOrderPaymentPage() {
               aria-labelledby="proof-title"
             >
               <div className={dashboard.panelHeading}>
-                <h2 id="proof-title">Envoyer une preuve</h2>
+                <h2 id="proof-title">Envoyer une preuve après paiement</h2>
+                <span className={dashboard.statusBadge}>
+                  <span aria-hidden="true">●</span> Non soumis · fictif
+                </span>
               </div>
 
               <div className={styles.fieldGroup}>
                 <label className={styles.fieldLabel} htmlFor="transaction-reference">
-                  Référence de transaction · exemple
+                  Référence de transaction · obligatoire · fictive
                 </label>
                 <input
                   autoComplete="off"
                   className={styles.textInput}
                   disabled
                   id="transaction-reference"
-                  placeholder="Ex. TXN-DEMO-123456"
+                  placeholder="TXN-DEMO-0001 · EXEMPLE FICTIF"
                   type="text"
                 />
+                <small className={styles.fieldHint}>La référence serait requise après le paiement confirmé sur téléphone.</small>
               </div>
 
               <div className={styles.fieldGroup}>
                 <span className={styles.fieldLabel} id="proof-upload-label">
-                  Capture du SMS de paiement · exemple
+                  Capture du SMS de confirmation · obligatoire
                 </span>
                 <button
                   aria-describedby="proof-upload-note"
@@ -180,34 +221,57 @@ export default function ClientOrderPaymentPage() {
                   disabled
                   type="button"
                 >
-                  <span aria-hidden="true">＋</span> Ajouter un justificatif
+                  <span aria-hidden="true">＋</span> Sélectionner une image · désactivé
                 </button>
                 <small className={styles.fieldHint} id="proof-upload-note">
-                  Aucun fichier n’est joint, envoyé ou conservé dans cette maquette.
+                  La capture serait contrôlée avant l’envoi. Aucun fichier n’est sélectionné, envoyé ou conservé ici.
                 </small>
               </div>
 
+              <div className={styles.proofPreview}>
+                <span aria-hidden="true">▧</span>
+                <div>
+                  <strong>Aucun aperçu réel</strong>
+                  <small>Prévisualiser, retirer ou remplacer seraient des commandes inactives.</small>
+                </div>
+              </div>
+              <div className={styles.demoActions}>
+                <button className={styles.secondaryDemoButton} disabled type="button">Prévisualiser</button>
+                <button className={styles.secondaryDemoButton} disabled type="button">Retirer l’image</button>
+                <button className={styles.secondaryDemoButton} disabled type="button">Remplacer</button>
+              </div>
+
               <div className={styles.amountRow}>
-                <span>Montant d’exemple</span>
-                <strong>9 500 FCFA</strong>
+                <span>Montant exact enregistré · exemple fictif</span>
+                <strong>9 500 FCFA · FICTIF</strong>
               </div>
               <button className={styles.submitButton} disabled type="button">
-                Envoyer la preuve
+                Envoyer la preuve · désactivé
               </button>
               <p className={styles.proofNote}>
-                Aucune validation automatique par capture. Le commerçant vérifie manuellement les éléments en les
-                comparant au SMS reçu sur son téléphone.
+                La preuve serait transmise au restaurant, qui compare la référence au SMS reçu puis valide ou refuse
+                manuellement. Le paiement et le statut de commande restent distincts.
               </p>
             </aside>
           </div>
 
+          <section className={styles.statesPanel} aria-label="États de paiement à concevoir">
+            <strong>États du parcours · exemples statiques</strong>
+            <div className={styles.stateGrid}>
+              <span>Non soumis</span><span>En attente</span><span>Validé</span><span>Refusé · motif requis</span>
+              <span>Chargement</span><span>Erreur de code</span><span>Erreur de téléversement</span>
+              <span>Erreur de soumission</span><span>Aucun opérateur disponible</span>
+              <span>Expiré · uniquement selon une règle définie</span>
+            </div>
+            <small>Une nouvelle preuve après refus conserve toutes les soumissions précédentes; aucune notification n’est envoyée ici.</small>
+          </section>
+
           <section className={styles.demoNotice} aria-label="Limites de la démonstration">
             <span aria-hidden="true">i</span>
             <p>
-              Montants, opérateurs, numéros et référence sont fictifs. N’effectuez aucun paiement réel depuis cet
-              aperçu : aucune transaction, preuve ou validation n’est réalisée. Le paiement réel est adressé
-              directement au commerçant, pas à Delifast. Si une livraison est proposée, elle est fournie par le
-              commerçant.
+              Montants, références, numéros et codes sont manifestement fictifs. Aucun code n’ouvre un composeur;
+              aucun lien tel:, paiement, téléversement, décision, stockage ou notification opérationnelle n’est actif.
+              Le bénéficiaire de ce circuit est le restaurant, pas Delifast.
             </p>
           </section>
 

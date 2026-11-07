@@ -1,9 +1,11 @@
 # Registre officiel des règles métier Delifast
 
-**Version consolidée : 2.2 — 6 novembre 2026**
+**Version consolidée : 2.3 — 6 novembre 2026**
 
 Ce document intègre les décisions consolidées du 6 novembre 2026, y compris les arbitrages délégués par Hilton. Il remplace toute formulation antérieure incompatible. Les règles validées sont distinguées des conventions techniques recommandées et des seuls arbitrages métier réellement encore ouverts. Aucune règle ne doit être déduite d’un exemple de maquette.
 Le présent dossier est une conception statique : les validations côté serveur, les transitions opérationnelles, les preuves privées, les paiements et remboursements réels, les API, les migrations et les transactions de base de données ne sont pas implémentés par cette mise à jour.
+
+La référence fonctionnelle complète du module Paiements est [Paiements par preuve (Mobile Money)](PAIEMENTS_MOBILE_MONEY.md). Elle complète les règles ci-dessous sans modifier les décisions métier étrangères aux paiements ni l’inventaire des 53 écrans.
 
 ## Notifications dans l’application
 
@@ -49,12 +51,15 @@ Les transitions d’annulation utilisent uniquement les statuts de commande ci-d
 
 Delifast utilise un paiement manuel Mobile Money par USSD et transmission d’une preuve. Le paiement est effectué hors de Delifast : l’utilisateur ouvre le clavier téléphonique avec le code prérempli, lance et confirme lui-même la transaction, puis revient dans l’application pour soumettre la preuve. Les paiements de commande et d’abonnement sont deux circuits indépendants : leurs bénéficiaires, destinataires de preuves et responsables de validation ne sont jamais interchangeables.
 
+L’ordre est impératif : génération du code, paiement confirmé par le payeur sur son téléphone, retour dans Delifast, dépôt de la capture et de la référence, transmission au bénéficiaire, comparaison avec le SMS réellement reçu, puis décision. La capture seule n’est jamais une confirmation automatique.
+
 ### Principes communs
 
 - La référence de transaction et la capture du SMS de confirmation sont obligatoires. La preuve ne peut être téléversée qu’après le paiement effectué sur le téléphone. Une capture seule ne valide jamais un paiement et ne déclenche jamais l’activation d’un abonnement.
 - Delifast n’exécute automatiquement ni les paiements ni les remboursements Mobile Money.
 - Les deux circuits utilisent les mêmes statuts : **En attente**, **Validé** et **Refusé**. « En attente » signifie que la preuve a été soumise et attend la vérification du bénéficiaire ; « Validé » signifie que le bénéficiaire a retrouvé et confirmé la transaction ; « Refusé » signifie que la transaction n’a pas été retrouvée ou que la preuve ne correspond pas. Tout refus exige un motif. Après un refus, le payeur peut effectuer une nouvelle transaction et soumettre une nouvelle preuve.
 - Les informations financières utiles sont conservées au moment de la création du paiement : montant, opérateur et numéro bénéficiaire. Une modification ultérieure d’un numéro de paiement ou du prix d’un produit ne réécrit pas l’historique de la transaction.
+- **Non soumis** est un état de présentation seulement, lorsqu’aucune preuve n’a été transmise; les statuts métier restent En attente, Validé et Refusé. Le statut de paiement est indépendant de celui de la commande : une preuve transmise ne signifie pas que la commande est payée, et un refus de paiement n’annule pas automatiquement la commande.
 
 ### Circuit A — Abonnement du restaurant, payé à Delifast
 
@@ -77,13 +82,13 @@ Delifast utilise un paiement manuel Mobile Money par USSD et transmission d’un
 
 - Les syntaxes Orange Money et Telmob sont configurées séparément. Exemples Orange Money : `*144*2*1*{NUMERO_BENEFICIAIRE}*{MONTANT}#` ou `*144*10*{NUMERO_BENEFICIAIRE}*{MONTANT}#`. Exemple Telmob : `*555*2*1*{NUMERO_BENEFICIAIRE}*{MONTANT}#`.
 - Avant génération, les numéros sont nettoyés pour retirer les espaces, tirets et caractères inutiles. Le code est construit dynamiquement à partir de l’opérateur choisi, du bénéficiaire propre au circuit et du montant exact (forfait configuré pour un abonnement ; total de commande calculé côté serveur pour une commande).
-- Dans un lien téléphonique, le caractère `#` est encodé en `%23`. Exemple de lien Orange documenté : `tel:1442156893460*4500%23`. Les deux formats d’opérateur doivent être configurables indépendamment et testés sur les téléphones utilisés avant le lancement.
+- Dans un lien téléphonique, le caractère `#` est encodé en `%23`. Forme textuelle fictive, non appelable : `tel:*144*2*1*NUMERO_FICTIF*MONTANT_FICTIF%23`. Les deux formats d’opérateur doivent être configurables indépendamment et testés sur les téléphones utilisés avant le lancement. Aucune valeur réelle de numéro ou de montant n’est donnée ici.
 
 ### Historique, permissions et notifications
 
-- Chaque soumission de preuve crée une entrée historique distincte et append-only ; une preuve nouvelle ne supprime ni ne remplace une preuve antérieure, y compris refusée. Chaque entrée conserve la capture, la référence de transaction, la date de soumission, le statut de traitement, le motif de refus s’il y en a un et l’identité du vérificateur. Les décisions de vérification sont également historisées.
+- Chaque soumission de preuve crée une entrée historique distincte et append-only ; une preuve nouvelle ne supprime ni ne remplace une preuve antérieure, y compris refusée. Chaque entrée conserve l’identifiant du paiement, le chemin du fichier, la référence de transaction, la date de soumission, la date de vérification, le statut de traitement, l’identité du vérificateur, le motif de refus s’il y en a un et le numéro de soumission. Les décisions de vérification sont également historisées.
 - Le client consulte uniquement ses propres preuves. Le restaurant consulte les preuves des paiements de commande qui lui sont destinés. L’administrateur consulte les preuves des abonnements destinés à Delifast et peut superviser les paiements de commande sans prendre la décision du restaurant.
-- Pour un abonnement, la preuve soumise notifie Delifast / l’administration ; une validation ou un refus notifie le restaurant, avec le motif en cas de refus. Pour une commande, la preuve soumise notifie le restaurant bénéficiaire ; une validation ou un refus notifie le client, avec le motif en cas de refus. Les notifications portent le statut atteint, le montant concerné et l’action propre au destinataire conformément à la règle générale de notification.
+- Pour un abonnement, la preuve soumise notifie Delifast / l’administration ; une validation ou un refus notifie le restaurant, avec le motif en cas de refus. Pour une commande, la preuve soumise notifie le restaurant bénéficiaire ; une validation ou un refus notifie le client, avec le motif en cas de refus. Une nouvelle preuve notifie à nouveau le bénéficiaire. Les notifications portent une référence ouvrant directement le paiement, le statut atteint, le montant concerné et l’action propre au destinataire conformément à la règle générale de notification. Aucun SMS ni e-mail opérationnel n’est activé par cette conception.
 
 ### Contrôles techniques requis pour l’implémentation future
 

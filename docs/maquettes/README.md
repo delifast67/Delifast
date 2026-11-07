@@ -12,7 +12,7 @@ Cette galerie est le livrable de conception statique de la phase en cours. Elle 
 
 ## Référence métier et écrans concernés
 
-Les maquettes suivent le [registre officiel des règles métier v2.2 du 6 novembre 2026](../REGLES_METIER.md). Le cahier reste à **53 écrans** : les parcours d’annulation, de remboursement et de notification restent dans les vues déjà prévues, sans ajouter de page ni de statut.
+Les maquettes suivent le [registre officiel des règles métier](../REGLES_METIER.md) et la [référence fonctionnelle du module Paiements par preuve (Mobile Money)](../PAIEMENTS_MOBILE_MONEY.md). Le cahier reste à **53 écrans** : aucun écran ni statut supplémentaire n’est ajouté.
 
 - Les écrans **15, 32 et 46** affichent les états de commande définis par le registre.
 - L’écran **16** (client) montre qu’après son refus le client choisit l’annulation totale ou celle des seuls articles concernés ; le choix est inscrit dans la demande d’annulation.
@@ -23,7 +23,7 @@ Les maquettes suivent le [registre officiel des règles métier v2.2 du 6 novemb
 - Chaque transition réelle d’un état prévu de commande, paiement, modification, annulation, remboursement ou réservation qui affecte la commande déclenche une notification dans l’application aux deux parties. Les confirmations d’arrêt et de reprise de préparation déclenchent aussi une notification. Chaque message indique le statut atteint, le montant concerné et l’action attendue du destinataire ; aucun SMS/e-mail en v1, aucune notification pour un brouillon ou une modification sans transition.
 - Les réservations de stock restent distinctes : elles n’expirent pas automatiquement, sont consommées après validation du paiement, libérées avant consommation et restituées après consommation seulement si l’annulation précède la préparation ou la remise au client.
 
-Les états affichés réutilisent ceux déjà prévus dans le registre (`pending_customer_approval`, `accepted`, `rejected`, `pending_payment`, `confirmed`, `preparing`, `cancellation_pending`, `partially_cancelled`, `cancelled`, `completed`, `not_required`, `pending`, `proof_submitted`, `verified`, `active`, `consumed`, `released`) ainsi que les libellés de paiement déjà présents dans les interfaces. Les vues les présentent comme les étapes d’un parcours, pas comme des opérations réelles ni comme des statuts supplémentaires. Aucun sujet métier des quatre arbitrages délégués ne reste ouvert.
+Les paiements Mobile Money utilisent uniquement **En attente**, **Validé** et **Refusé**; **Non soumis** est un état de présentation avant dépôt de preuve. Ces états restent distincts du statut de commande. Les autres états d’interface réutilisent ceux déjà prévus au registre. Les vues présentent les parcours sans déclencher d’opération réelle ni créer de statut supplémentaire.
 
 ## Choix de conception et limites
 

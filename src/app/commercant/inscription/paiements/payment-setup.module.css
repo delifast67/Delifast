@@ -1,0 +1,535 @@
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 0 0 14px;
+  padding: 11px 14px;
+  border: 1px solid #f0e3d9;
+  border-radius: 12px;
+  background: linear-gradient(105deg, #fffaf5, #fff7f4);
+  color: #63584f;
+}
+
+.noticeIcon {
+  display: grid;
+  width: 25px;
+  height: 25px;
+  flex: none;
+  place-items: center;
+  border: 1px solid #ead8cc;
+  border-radius: 50%;
+  color: #a84433;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.notice > div {
+  min-width: 0;
+  flex: 1;
+}
+
+.notice strong {
+  display: block;
+  color: #994634;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.notice p {
+  margin: 2px 0 0;
+  color: #83786f;
+  font-size: 9px;
+}
+
+.demoBadge {
+  flex: none;
+  padding: 5px 8px;
+  border: 1px solid #f0e6df;
+  border-radius: 999px;
+  background: #fff;
+  color: #857b73;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(260px, 0.95fr);
+  align-items: start;
+  gap: 14px;
+}
+
+.formPanel,
+.infoPanel {
+  min-width: 0;
+  border: 1px solid #eee9e4;
+  border-radius: 15px;
+  background: #fff;
+}
+
+.formPanel {
+  padding: 17px 18px 15px;
+}
+
+.panelHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.kicker {
+  margin: 0 0 4px;
+  color: #a64a37;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.panelHeading h2,
+.infoPanel h2 {
+  margin: 0;
+  color: #302b27;
+  font-size: 15px;
+  font-weight: 820;
+  letter-spacing: -0.02em;
+}
+
+.panelHeading > div > p:last-child {
+  margin: 4px 0 0;
+  color: #827b75;
+  font-size: 10px;
+}
+
+.operatorNames {
+  flex: none;
+  color: #999088;
+  font-size: 9px;
+}
+
+.form {
+  min-width: 0;
+}
+
+.operatorList {
+  display: grid;
+  gap: 10px;
+}
+
+.operatorCard {
+  padding: 12px 13px 11px;
+  border: 1px solid #eae5e0;
+  border-radius: 12px;
+  background: #fff;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.operatorCard:focus-within {
+  border-color: #e8c4b7;
+  background: #fffdfb;
+}
+
+.operatorTopline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.operatorMark {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  place-items: center;
+  border-radius: 10px;
+  background: #fff0e9;
+  color: #c94330;
+  font-size: 15px;
+  font-weight: 850;
+}
+
+.telmark {
+  background: #fff5eb;
+  color: #ba6033;
+}
+
+.operatorIdentity {
+  min-width: 0;
+  flex: 1;
+}
+
+.operatorIdentity h3 {
+  margin: 0;
+  color: #312e2b;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.operatorIdentity p {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 2px 0 0;
+  font-size: 9px;
+}
+
+.enabledText {
+  color: #4e8069;
+}
+
+.disabledText {
+  color: #8d8781;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #46a275;
+}
+
+.disabledText .statusDot {
+  background: #b5aea8;
+}
+
+.toggle {
+  position: relative;
+  display: inline-flex;
+  width: 39px;
+  height: 23px;
+  flex: none;
+  align-items: center;
+  padding: 3px;
+  border: 0;
+  border-radius: 999px;
+  background: #c9c4bf;
+  cursor: pointer;
+  transition: background-color 140ms ease;
+}
+
+.toggleOn {
+  background: #398967;
+}
+
+.toggleThumb {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 14%);
+  transition: transform 140ms ease;
+}
+
+.toggleOn .toggleThumb {
+  transform: translateX(16px);
+}
+
+.toggle:focus-visible {
+  outline: 3px solid rgb(197 74 61 / 25%);
+  outline-offset: 3px;
+}
+
+.numberField {
+  display: grid;
+  gap: 5px;
+  color: #514a44;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.numberField input {
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 11px;
+  border: 1px solid #e8e2dc;
+  border-radius: 9px;
+  outline: none;
+  background: #fff;
+  color: #514a44;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.numberField input:focus-visible {
+  border-color: #cb7664;
+  box-shadow: 0 0 0 3px rgb(197 74 61 / 12%);
+}
+
+.numberField input::placeholder {
+  color: #9a928a;
+  opacity: 1;
+}
+
+.fieldHint {
+  margin: 5px 0 0;
+  color: #968e86;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.offerPreview {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 11px;
+  padding: 11px;
+  border: 1px solid #f0e7e0;
+  border-radius: 11px;
+  background: #fffaf6;
+}
+
+.previewIcon {
+  display: grid;
+  width: 25px;
+  height: 25px;
+  flex: none;
+  place-items: center;
+  border-radius: 8px;
+  background: #fff0e8;
+  color: #a84433;
+  font-size: 12px;
+}
+
+.previewCopy {
+  min-width: 0;
+}
+
+.previewCopy > strong {
+  display: block;
+  color: #554b44;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.previewCopy > p {
+  margin: 3px 0 0;
+  color: #827a73;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.providerChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.providerChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border: 1px solid #d9ebe1;
+  border-radius: 999px;
+  background: #f3faf6;
+  color: #3d775d;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.providerChip > span {
+  font-size: 9px;
+}
+
+.formFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 13px;
+  padding-top: 12px;
+  border-top: 1px solid #f0ece8;
+}
+
+.formFooter p {
+  margin: 0;
+  color: #817971;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.submitButton {
+  display: inline-flex;
+  min-height: 40px;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 13px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--df-red);
+  color: #fff;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color 140ms ease;
+}
+
+.submitButton:hover {
+  background: var(--df-red-dark);
+}
+
+.submitButton:focus-visible {
+  outline: 3px solid rgb(197 74 61 / 24%);
+  outline-offset: 2px;
+}
+
+.localStatus {
+  margin: 8px 0 0;
+  color: #89827b;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.infoPanel {
+  padding: 16px 16px 15px;
+  border-color: #f0e4da;
+  background: linear-gradient(130deg, #fffaf5, #fff7f5);
+}
+
+.infoIcon {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  margin-bottom: 12px;
+  place-items: center;
+  border-radius: 9px;
+  background: #fff0e9;
+  color: #a84433;
+  font-size: 15px;
+}
+
+.infoPanel h2 {
+  margin-bottom: 13px;
+  font-size: 14px;
+}
+
+.flowItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 10px 0;
+  border-top: 1px solid #efe5dd;
+}
+
+.flowDot {
+  display: grid;
+  width: 23px;
+  height: 23px;
+  flex: none;
+  place-items: center;
+  border-radius: 7px;
+  background: #fff;
+  color: #a84433;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.flowItem p {
+  margin: 0;
+  color: #827971;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.flowItem strong {
+  display: block;
+  margin-bottom: 2px;
+  color: #4e4640;
+  font-size: 10px;
+}
+
+.infoFoot {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 7px;
+  padding: 10px;
+  border: 1px solid #efe4dc;
+  border-radius: 9px;
+  background: rgb(255 255 255 / 64%);
+  color: #786d64;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.infoFoot > span {
+  flex: none;
+  color: #3d8562;
+  font-weight: 900;
+}
+
+.footerNote {
+  margin: 12px 0 0;
+  padding: 9px 11px;
+  border: 1px solid #f0e8e1;
+  border-radius: 10px;
+  color: #827a73;
+  font-size: 9px;
+}
+
+@media (max-width: 980px) {
+  .contentGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .notice {
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .demoBadge {
+    display: none;
+  }
+
+  .formPanel {
+    padding: 15px 13px 13px;
+  }
+
+  .panelHeading {
+    align-items: flex-start;
+  }
+
+  .panelHeading h2 {
+    font-size: 14px;
+  }
+
+  .panelHeading > div > p:last-child {
+    font-size: 9px;
+  }
+
+  .operatorNames {
+    display: none;
+  }
+
+  .operatorCard {
+    padding: 11px;
+  }
+
+  .formFooter {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .submitButton {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .operatorCard,
+  .toggle,
+  .toggleThumb,
+  .submitButton {
+    transition: none;
+  }
+}

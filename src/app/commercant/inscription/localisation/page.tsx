@@ -74,9 +74,9 @@ export default function MerchantLocationPage() {
             <span aria-current="step" className={styles.currentStep}>
               <span>2</span> Localisation
             </span>
-            <span className={styles.futureStep}>
+            <Link className={styles.futureStep} href="/commercant/inscription/paiements">
               <span>3</span> Paiements
-            </span>
+            </Link>
           </nav>
 
           <div className={styles.registrationGrid}>
@@ -102,6 +102,10 @@ export default function MerchantLocationPage() {
                 <span className={styles.nextStepLabel}>Mode démonstration</span>
                 <strong>Aucune carte interactive</strong>
                 <small>Le lien n’est ni ouvert, ni transmis, ni enregistré.</small>
+                <Link className={styles.nextStepLink} href="/commercant/inscription/paiements">
+                  Configuration des paiements <span aria-hidden="true">→</span>
+                </Link>
+                <small>Écran 22 · étape 3 sur 3</small>
               </div>
             </aside>
           </div>

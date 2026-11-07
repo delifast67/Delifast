@@ -14,7 +14,7 @@ const clientNavigation = [
   { label: "Client", icon: "⌂", href: "/client" },
   { label: "Panier", icon: "▣", href: "/client/panier" },
   { label: "Commandes", icon: "▤", href: "/client/commandes", active: true },
-  { label: "Paiements", icon: "◆" },
+  { label: "Paiements", icon: "◆", href: "/client/paiements" },
   { label: "Profil client", icon: "♙" },
 ] as const;
 

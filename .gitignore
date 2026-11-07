@@ -18,7 +18,7 @@
 /playwright-report
 /test-results
 
-# Local environment files; commit only the empty template.
+# Local environment files and variants; commit only the fictional template.
 .env*
 !.env.example
 

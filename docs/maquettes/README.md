@@ -1,12 +1,13 @@
 # Maquettes Delifast — 53 écrans
 
-Cette galerie est le livrable de conception statique de la phase en cours. Elle comprend une maquette par écran du cahier des charges, les sources HTML/CSS/JavaScript, une planche des états communs, 53 rendus PNG individuels et un carnet PDF de 53 pages.
+Cette galerie est le livrable de conception statique de la phase en cours. Elle comprend une maquette par écran du cahier des charges, les sources HTML/CSS/JavaScript, une planche des états communs, 53 rendus PNG individuels, des aperçus mobiles des écrans d’abonnement ciblés et un carnet PDF de 53 pages.
 
 ## Ouvrir les interfaces
 
 - Ouvrir `index.html` dans un navigateur pour parcourir les 53 écrans.
 - Un écran individuel s’ouvre avec `index.html?ecran=01` à `index.html?ecran=53`.
 - Le [carnet PDF](rendus/Delifast-maquettes-53-ecrans.pdf) rassemble une interface par page ; les PNG individuels sont dans `rendus/`.
+- Les aperçus mobiles des écrans **23, 36, 37 et 49** (largeur de 390 px) sont dans [`rendus/mobile/`](rendus/mobile/).
 - La [planche des états communs](rendus/etats-communs.png) accompagne la source consultable `etats.html`.
 - Pour recréer les rendus et exécuter leurs contrôles documentaires, lancer `python3 scripts/render-maquettes.py` depuis la racine du dépôt.
 
@@ -18,7 +19,7 @@ Les maquettes suivent le [registre officiel des règles métier](../REGLES_METIE
 - L’écran **16** (client) montre qu’après son refus le client choisit l’annulation totale ou celle des seuls articles concernés ; le choix est inscrit dans la demande d’annulation.
 - L’écran **33** (commerçant) montre la confirmation de l’arrêt si la préparation a commencé, le remboursement direct et le dépôt d’une référence et d’une preuve. Après finalisation partielle, le commerçant confirme la reprise des articles restants ; après une annulation totale, rien ne reprend.
 - L’écran **47** (administration) montre la vérification par l’administrateur, le motif obligatoire en cas de rejet, le renvoi corrigé et une nouvelle vérification. Les dépôts et décisions gardent un historique append-only complet, sans limite de tentatives ni expiration automatique.
-- Les écrans **23, 36 et 37** (commerçant) représentent l’état de compte désactivé pour abonnement impayé ou expiré, l’accès aux forfaits et à l’historique, puis les issues d’une preuve en attente, refusée ou validée. Ce sont des états des écrans existants, pas de nouveaux écrans ou statuts.
+- Les écrans **23, 36 et 37** (commerçant) présentent le premier mois gratuit accordé une seule fois à chaque nouveau compte marchand, les tarifs Découverte (3 000 F CFA/mois) et Professionnel (4 500 F CFA/mois), la grâce de 72 heures après l’expiration d’un abonnement payant, puis la suspension et les issues d’une preuve. L’écran **49** (administration) rappelle que seule la validation réactive l’abonnement et qu’une suspension administrative indépendante demeure. Ce sont des états des écrans existants, pas de nouveaux écrans ou statuts.
 - Une ligne de commande est un produit avec ses options. Le prix net historique unitaire comprend suppléments, ajustements propres à la ligne et part des ajustements monétaires globaux (remises et autres ajustements hors frais communs) attribuée au snapshot ; annuler `n` unités rembourse ce prix unitaire multiplié par `n`.
 - Les remises et autres ajustements monétaires globaux hors frais communs sont répartis au prorata entre les lignes après ajustements propres à l’article, puis enregistrés dans le snapshot. Les frais communs ne sont pas remboursés lors d’une annulation partielle ; une annulation totale rembourse le montant effectivement payé, frais compris.
 - Chaque transition réelle d’un état prévu de commande, paiement, modification, annulation, remboursement ou réservation qui affecte la commande déclenche une notification dans l’application aux deux parties. Les confirmations d’arrêt et de reprise de préparation déclenchent aussi une notification. Chaque message indique le statut atteint, le montant concerné et l’action attendue du destinataire ; aucun SMS/e-mail en v1, aucune notification pour un brouillon ou une modification sans transition.

@@ -1,8 +1,8 @@
 # Registre officiel des règles métier Delifast
 
-**Version consolidée : 2.3 — 6 novembre 2026**
+**Version consolidée : 2.4 — 7 novembre 2026**
 
-Ce document intègre les décisions consolidées du 6 novembre 2026, y compris les arbitrages délégués par Hilton. Il remplace toute formulation antérieure incompatible. Les règles validées sont distinguées des conventions techniques recommandées et des seuls arbitrages métier réellement encore ouverts. Aucune règle ne doit être déduite d’un exemple de maquette.
+Ce document intègre les décisions consolidées des 6 et 7 novembre 2026, y compris les arbitrages délégués par Hilton. Il remplace toute formulation antérieure incompatible. Les règles validées sont distinguées des conventions techniques recommandées et des seuls arbitrages métier réellement encore ouverts. Aucune règle ne doit être déduite d’un exemple de maquette.
 Le présent dossier est une conception statique : les validations côté serveur, les transitions opérationnelles, les preuves privées, les paiements et remboursements réels, les API, les migrations et les transactions de base de données ne sont pas implémentés par cette mise à jour.
 
 La référence fonctionnelle complète du module Paiements est [Paiements par preuve (Mobile Money)](PAIEMENTS_MOBILE_MONEY.md). Elle complète les règles ci-dessous sans modifier les décisions métier étrangères aux paiements ni l’inventaire des 53 écrans.
@@ -64,10 +64,18 @@ L’ordre est impératif : génération du code, paiement confirmé par le payeu
 ### Circuit A — Abonnement du restaurant, payé à Delifast
 
 - **Payeur :** restaurant. **Bénéficiaire :** Delifast. **Destinataire de la preuve et décideur :** administration Delifast.
-- Le restaurant choisit le forfait Découverte ou Professionnel. Le montant et la durée proviennent de la configuration du forfait. Delifast utilise le numéro Mobile Money qu’il a configuré pour l’opérateur correspondant ; le restaurant ne saisit ni le bénéficiaire ni le montant.
+- Le restaurant choisit le forfait Découverte ou Professionnel : Découverte coûte **3 000 F CFA par mois** et Professionnel **4 500 F CFA par mois**. Le montant est calculé à partir du forfait choisi et n’est pas modifiable par le restaurant. Delifast utilise le numéro Mobile Money qu’il a configuré pour l’opérateur correspondant ; le restaurant ne saisit ni le bénéficiaire ni le montant.
 - Le restaurant choisit un opérateur proposé, ouvre le code USSD prérempli, effectue et confirme le paiement sur son téléphone, revient dans Delifast, puis transmet la capture du SMS et la référence de transaction à Delifast.
 - L’administrateur examine le restaurant, le forfait, le montant attendu, l’opérateur, le numéro bénéficiaire, la référence, la capture et la date de soumission ; il compare ces éléments au SMS de transaction reçu sur le numéro Mobile Money de Delifast.
 - Si la transaction est confirmée, l’administrateur valide le paiement, le statut devient **Validé**, l’abonnement est activé et le restaurant reçoit une notification. En cas de refus, l’administrateur saisit obligatoirement un motif ; le statut devient **Refusé** et le restaurant reçoit une notification indiquant le motif. Le restaurant peut effectuer une nouvelle transaction et soumettre une nouvelle preuve. Le restaurant ne peut pas valider son propre abonnement.
+
+### Tarifs, mois gratuit, renouvellement et suspension de l’abonnement
+
+- Chaque nouveau compte marchand bénéficie d’un premier mois gratuit, accordé une seule fois par compte marchand. À la fin de ce mois, le renouvellement devient payant au tarif du forfait choisi : **3 000 F CFA par mois** pour Découverte ou **4 500 F CFA par mois** pour Professionnel.
+- À l’expiration d’un abonnement payant, le compte marchand dispose d’un délai de grâce de **72 heures calendaires**. Pendant ce délai, le compte reste opérationnel pour recevoir et traiter les commandes; des notifications de rappel invitent au renouvellement.
+- Si aucun renouvellement n’a été validé par l’administration à la fin des 72 heures, le compte est automatiquement suspendu pour défaut d’abonnement. La suspension bloque les fonctions commerciales, notamment la réception et le traitement des commandes et la gestion du catalogue.
+- En état de suspension pour défaut d’abonnement, l’accès est limité à la consultation de l’abonnement, au paiement, au dépôt d’une preuve et au suivi de sa vérification. Le dépôt d’une preuve ne réactive pas le compte : seule la validation administrative effective du paiement réactive l’abonnement et rétablit les fonctions autorisées.
+- Une suspension administrative indépendante reste en vigueur même après validation du paiement d’abonnement. La période gratuite, l’expiration, le calcul des 72 heures et la suspension doivent être contrôlés côté serveur; cette règle ne crée aucun critère d’éligibilité autre que le mois gratuit unique indiqué ci-dessus.
 
 ### Circuit B — Commande du client, payée au restaurant choisi
 

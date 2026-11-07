@@ -16,6 +16,8 @@ OUT = DESIGN / "rendus"
 HTML = DESIGN / "index.html"
 PDF = OUT / "Delifast-maquettes-53-ecrans.pdf"
 VIEWPORT = {"width": 1440, "height": 760}
+MOBILE_OUT = OUT / "mobile"
+MOBILE_SCREEN_IDS = {23, 36, 37, 49}
 
 
 def slug(text):
@@ -89,6 +91,7 @@ def verify_documentary_examples():
 def main():
     verify_documentary_examples()
     OUT.mkdir(parents=True, exist_ok=True)
+    MOBILE_OUT.mkdir(parents=True, exist_ok=True)
     images = []
     failures = []
     rule_checks = {
@@ -99,9 +102,10 @@ def main():
         14: ["consommé après validation", "libérée"],
         15: ["Annulation en cours", "Annulée partiellement", "Terminée"],
         16: ["Proposition du commerce", "Après votre refus", "Annulation totale", "Annulation partielle", "enregistré dans la demande", "2 700 FCFA", "10 000 FCFA", "frais partagés", "Notification dans l’application", "Action attendue", "aucun SMS ni e-mail", "cancellation_pending", "rejected", "proof_submitted", "verified", "partially_cancelled", "completed"],
-        23: ["Votre compte marchand est temporairement désactivé", "Votre abonnement n'est pas actif ou est arrivé à expiration", "Renouvellement en attente de vérification", "Fonctionnalités commerciales"],
-        36: ["Forfaits et renouvellement", "Historique des abonnements et des paiements", "Votre compte marchand est temporairement désactivé"],
-        37: ["Votre paiement est en cours de vérification.", "Votre compte sera réactivé après validation.", "Motif du refus", "Effectuer une nouvelle transaction", "Soumettre une nouvelle preuve", "Compte réactivé"],
+        23: ["Votre compte marchand est temporairement désactivé", "Votre abonnement n'est pas actif ou est arrivé à expiration", "Renouvellement en attente de vérification", "Fonctionnalités commerciales", "72 heures de grâce", "reste opérationnel", "notifications de rappel", "automatiquement suspendu"],
+        36: ["Forfaits et renouvellement", "3 000 F CFA / mois", "4 500 F CFA / mois", "premier mois gratuit", "une seule fois par compte marchand", "Historique des abonnements et des paiements", "Votre compte marchand est temporairement désactivé"],
+        37: ["3 000 F CFA / mois", "premier mois gratuit", "une seule fois par compte marchand", "72 heures de grâce", "Votre paiement est en cours de vérification.", "Votre compte sera réactivé après validation.", "Motif du refus", "Effectuer une nouvelle transaction", "Soumettre une nouvelle preuve", "Compte réactivé"],
+        49: ["3 000 F CFA / mois", "4 500 F CFA par mois", "une seule fois par compte marchand", "72 heures", "seule la validation", "suspension administrative indépendante"],
         32: ["Annulation en cours", "Annulée partiellement", "Terminée"],
         28: ["Suivi stock", "Disponibilité manuelle", "indépendante", "côté serveur"],
         29: ["Activer le suivi du stock", "Quantité disponible", "Minimum", "Maximum", "obligatoire", "facultatif"],
@@ -173,6 +177,9 @@ def main():
             mobile_widths = page.evaluate("({viewport: document.documentElement.clientWidth, content: document.documentElement.scrollWidth})")
             if mobile_widths["content"] > mobile_widths["viewport"] + 1:
                 failures.append(f"{screen_id}: débordement horizontal mobile ({mobile_widths['content']} px > {mobile_widths['viewport']} px)")
+            if number in MOBILE_SCREEN_IDS:
+                mobile_path = MOBILE_OUT / f"{screen_id}-{slug(title_text)}-mobile.png"
+                page.screenshot(path=str(mobile_path), full_page=True, animations="disabled")
             if number % 10 == 0 or number == 53:
                 print(f"Rendu {number}/53 terminé", flush=True)
         page.set_viewport_size(VIEWPORT)
@@ -184,6 +191,7 @@ def main():
     if failures:
         raise SystemExit("Échecs de rendu :\n- " + "\n- ".join(failures))
     print(f"53 écrans rendus dans {OUT}")
+    print(f"Aperçus mobiles ciblés : {MOBILE_OUT}")
     print(f"Carnet PDF : {PDF}")
     print(f"Planche des états : {OUT / 'etats-communs.png'}")
 

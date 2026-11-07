@@ -1,6 +1,6 @@
 # Référence fonctionnelle — Paiements par preuve (Mobile Money)
 
-**Version :** Spécification fonctionnelle intégrée le 6 novembre 2026.
+**Version :** Spécification fonctionnelle intégrée le 7 novembre 2026.
 **Portée :** conception fonctionnelle et statique. Ce document ne constitue pas une implémentation.
 
 Cette référence complète le [registre officiel des règles métier](REGLES_METIER.md) et le [cahier des 53 écrans](CAHIER_DES_CHARGES.md). Elle ne change ni l’inventaire des 53 écrans ni les règles déjà validées qui ne sont pas contredites ici. Les deux circuits financiers ci-dessous restent distincts, même lorsque des éléments d’interface communs sont réutilisés.
@@ -39,11 +39,19 @@ Un numéro Delifast ne remplace jamais le numéro du restaurant dans le circuit 
 
 ### Circuit A — Abonnement du restaurant
 
-Le restaurant consulte les forfaits **Découverte** et **Professionnel**. Chaque forfait présente son nom, son prix, sa durée, ses fonctionnalités, ses avantages et sa disponibilité; prix et durée proviennent de la configuration du forfait et ne sont pas modifiables par le restaurant. Delifast insère automatiquement son propre numéro bénéficiaire et le prix configuré. Le payeur choisit un opérateur disponible, effectue et confirme la transaction sur son téléphone, revient, puis soumet la capture du SMS et la référence.
+Le restaurant consulte les forfaits **Découverte** à **3 000 F CFA par mois** et **Professionnel** à **4 500 F CFA par mois**. Chaque forfait présente son nom, son prix, sa durée, ses fonctionnalités, ses avantages et sa disponibilité; le prix est calculé à partir du forfait et n’est pas modifiable par le restaurant. Delifast insère automatiquement son propre numéro bénéficiaire et le prix du forfait choisi. Le payeur choisit un opérateur disponible, effectue et confirme la transaction sur son téléphone, revient, puis soumet la capture du SMS et la référence.
 
 La preuve va à l’administration, qui peut examiner le commerçant, le restaurant, le forfait, le montant attendu, l’opérateur, le numéro bénéficiaire Delifast, la référence de transaction, la capture, la date d’envoi et l’historique des soumissions. L’administrateur compare ces informations au SMS réellement reçu sur le numéro Mobile Money de Delifast.
 
 Après validation, le paiement passe à **Validé**, l’abonnement est activé et les dates de début et d’expiration sont enregistrées; le restaurant est notifié. Avant cette décision, l’abonnement reste inactif. Après refus, le paiement passe à **Refusé**, le motif saisi par l’administrateur est obligatoire, le restaurant est notifié avec ce motif et peut effectuer une nouvelle transaction puis soumettre une nouvelle preuve.
+
+#### Tarifs, mois gratuit, renouvellement et suspension
+
+Chaque nouveau compte marchand bénéficie d’un premier mois gratuit, une seule fois par compte marchand. À la fin de ce mois, le renouvellement est payant selon le forfait choisi : **3 000 F CFA par mois** pour Découverte ou **4 500 F CFA par mois** pour Professionnel. Aucun critère d’éligibilité supplémentaire n’est défini ici.
+
+À l’expiration d’un abonnement payant, un délai de grâce de **72 heures calendaires** commence. Pendant ces 72 heures, le compte marchand reste opérationnel pour recevoir et traiter les commandes, et le système envoie des rappels de renouvellement. Sans renouvellement validé par l’administration à la fin du délai, le compte est automatiquement suspendu pour défaut d’abonnement; la suspension bloque les fonctions commerciales, notamment la réception et le traitement des commandes et la gestion du catalogue.
+
+Le commerçant suspendu conserve un accès restreint à la consultation de son abonnement, au paiement, au dépôt d’une preuve et au suivi de vérification. Le dépôt d’une preuve n’active ni ne réactive le compte : seule la validation effective du paiement par l’administration le fait. Une suspension administrative indépendante n’est pas levée par la validation de l’abonnement. Le calcul de la période gratuite, des expirations et des 72 heures, ainsi que l’application des restrictions, relèvent du serveur.
 
 ### Circuit B — Commande du client
 
@@ -66,6 +74,10 @@ Formats de référence — les noms entre accolades sont des emplacements, jamai
 Avant génération, les espaces, tirets et caractères inutiles sont retirés du numéro. Le numéro inséré dépend du circuit; le montant provient du forfait configuré ou du total de commande enregistré, et non d’une saisie directe du client. Dans un lien téléphonique, `#` doit être encodé en `%23`. Forme textuelle fictive uniquement : `tel:*144*2*1*NUMERO_FICTIF*MONTANT_FICTIF%23`. Les syntaxes doivent être testées séparément sur les appareils Android et avec les opérateurs concernés avant tout lancement.
 
 Les exemples de numéros, montants, références et codes présentés dans les supports de conception sont explicitement fictifs et non appelables. Cette révision ne crée aucun lien `tel:` actif et n’ouvre aucun composeur.
+
+### Configuration des destinataires d’abonnement
+
+Dans une future implémentation, les destinataires Orange Money et Telmob réservés aux abonnements Delifast seront lus uniquement côté serveur depuis `DELIFAST_ORANGE_MONEY_RECIPIENT_NUMBER` et `DELIFAST_TELMOB_RECIPIENT_NUMBER`. Ces valeurs ne doivent jamais être préfixées par `NEXT_PUBLIC_`, incluses dans un bundle navigateur, inscrites dans le code ou commitées dans `.env`. Le dépôt fournit uniquement des libellés fictifs dans `.env.example`; `.gitignore` exclut `.env` et ses variantes tout en autorisant ce modèle. Les vraies valeurs ne seront renseignées que dans l’environnement serveur sécurisé de production. Cette mise à jour ne crée ni ne configure ces valeurs de production.
 
 ## 4. Statuts et cohérence commande/paiement
 

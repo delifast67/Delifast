@@ -195,6 +195,28 @@
   font-size: 9px;
 }
 
+.detailDemoLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 13px;
+  border-top: 1px solid #f0ece8;
+  color: #89827b;
+  font-size: 8px;
+}
+
+.detailDemoLink a {
+  color: #a84433;
+  font-size: 9px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.detailDemoLink a:hover {
+  text-decoration: underline;
+}
+
 .demoNotice {
   display: flex;
   align-items: flex-start;
@@ -362,5 +384,13 @@
 
   .mobileFacts {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .detailDemoLink {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
   }
 }

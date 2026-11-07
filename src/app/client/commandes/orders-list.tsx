@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import styles from "./orders.module.css";
 
 type PaymentState = "pending" | "validated" | "rejected";
@@ -196,6 +197,10 @@ export function ClientOrdersList() {
       ) : null}
       <div className={styles.panelFootnote}>
         Les statuts de commande et de paiement sont indépendants.
+      </div>
+      <div className={styles.detailDemoLink}>
+        <span>Le détail suivant est un exemple distinct des références listées ci-dessus.</span>
+        <Link href="/client/commandes/detail">Ouvrir le détail d’une commande · démo →</Link>
       </div>
     </section>
   );

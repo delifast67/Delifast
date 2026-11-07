@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import styles from "./order-detail.module.css";
 
@@ -89,9 +90,9 @@ export function ClientOrderDetailDemo() {
               <dd>Commencée · exemple</dd>
             </div>
           </dl>
-          <a className={styles.inlineLink} href="#payment-details">
+          <Link className={styles.inlineLink} href="/client/paiements/PAY-DEMO-0001">
             Consulter le paiement <span aria-hidden="true">→</span>
-          </a>
+          </Link>
         </section>
 
         <section className={styles.panel} aria-labelledby="snapshot-title">
@@ -485,7 +486,7 @@ export function ClientOrderDetailDemo() {
             preuve au SMS réellement reçu avant de valider ou de refuser avec un motif.
           </p>
           <p className={styles.footnote}>
-            L’écran 18 n’est pas inclus dans cette livraison; « Consulter le paiement » renvoie à ce résumé illustratif.
+            Le détail de paiement et son historique restent fictifs; seule une vérification humaine réelle du restaurant pourrait décider du statut.
           </p>
         </section>
 

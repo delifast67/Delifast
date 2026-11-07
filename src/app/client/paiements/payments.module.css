@@ -243,22 +243,26 @@
   color: #b73a2f;
 }
 
-.detailUnavailable {
+.detailLink {
+  display: inline-flex;
   min-height: 30px;
+  align-items: center;
   padding: 6px 9px;
   border: 1px solid #eee9e4;
   border-radius: 8px;
   background: #fcfbfa;
-  color: #817a73;
-  cursor: not-allowed;
+  color: #a84433;
+  cursor: pointer;
   font: inherit;
   font-size: 8px;
   font-weight: 750;
+  text-decoration: none;
   white-space: nowrap;
 }
 
-.detailUnavailable:disabled {
-  opacity: 0.8;
+.detailLink:hover {
+  border-color: #edc5b9;
+  background: #fff7f3;
 }
 
 .mobileList {

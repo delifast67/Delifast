@@ -187,14 +187,13 @@ export function ClientPaymentsList() {
                     <td>{payment.date}</td>
                     <td><PaymentStatus status={payment.status} /></td>
                     <td>
-                      <button
-                        className={styles.detailUnavailable}
-                        disabled
-                        title="L’écran 18 sera ajouté à l’étape suivante."
-                        type="button"
+                      <Link
+                        className={styles.detailLink}
+                        href={`/client/paiements/${payment.reference.split(" · ")[0]}`}
                       >
                         Détail · écran 18
-                      </button>
+                        <span className={styles.visuallyHidden}> — consulter le détail du paiement</span>
+                      </Link>
                     </td>
                   </tr>
                 ))}
@@ -217,14 +216,12 @@ export function ClientPaymentsList() {
                   <div><dt>Montant fictif</dt><dd>{payment.amount}</dd></div>
                   <div><dt>Date fictive</dt><dd>{payment.date}</dd></div>
                 </dl>
-                <button
-                  className={styles.detailUnavailable}
-                  disabled
-                  title="L’écran 18 sera ajouté à l’étape suivante."
-                  type="button"
+                <Link
+                  className={styles.detailLink}
+                  href={`/client/paiements/${payment.reference.split(" · ")[0]}`}
                 >
-                  Détail du paiement · écran 18 à venir
-                </button>
+                  Détail du paiement · écran 18
+                </Link>
               </article>
             ))}
           </div>

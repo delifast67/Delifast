@@ -256,6 +256,11 @@
   color: #89817a;
   font-size: 9px;
   line-height: 1.45;
+  text-decoration: none;
+}
+
+.upcomingAction:hover {
+  text-decoration: underline;
 }
 
 .featuresCard {

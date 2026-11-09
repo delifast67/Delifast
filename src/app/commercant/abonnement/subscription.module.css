@@ -1,0 +1,696 @@
+.demoNotice {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 0 0 15px;
+  padding: 12px 14px;
+  border: 1px solid #f0e4da;
+  border-radius: 13px;
+  background: linear-gradient(105deg, #fffaf5, #fff7f4);
+  color: #685d53;
+}
+
+.noticeIcon,
+.alertIcon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  border-radius: 10px;
+  background: #fff0e9;
+  color: #a84433;
+}
+
+.noticeIcon {
+  width: 33px;
+  height: 33px;
+}
+
+.demoNotice > p {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 3px;
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.demoNotice > p strong {
+  color: #8c4536;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.demoNotice > p span {
+  color: #7f746a;
+}
+
+.demoTag,
+.stateTag,
+.planTag {
+  flex: none;
+  padding: 6px 9px;
+  border: 1px solid #f0e6df;
+  border-radius: 999px;
+  background: #fff;
+  color: #82796f;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.suspensionCard,
+.plansSection,
+.historySection {
+  min-width: 0;
+  border: 1px solid #eae3dc;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.suspensionCard {
+  padding: 18px 19px 16px;
+  border-color: #ead9cf;
+  background: linear-gradient(135deg, #fffdfb 0%, #fff 70%);
+}
+
+.suspensionHeading {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+}
+
+.alertIcon {
+  width: 35px;
+  height: 35px;
+  background: #fff0eb;
+  color: #bd4f3d;
+}
+
+.suspensionHeading > div {
+  min-width: 0;
+  flex: 1;
+}
+
+.kicker {
+  margin: 1px 0 4px;
+  color: #b14b38;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.suspensionHeading h2 {
+  margin: 0;
+  color: #2d2926;
+  font-size: clamp(16px, 1.6vw, 19px);
+  font-weight: 820;
+  letter-spacing: -0.035em;
+  line-height: 1.28;
+}
+
+.reason {
+  margin: 5px 0 0;
+  color: #8a4f42;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.stateTag {
+  margin-top: 2px;
+  background: #fff3de;
+  color: #8c641f;
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  margin: 15px 0 11px 46px;
+}
+
+.detailItem {
+  display: grid;
+  min-width: 0;
+  min-height: 58px;
+  align-content: center;
+  gap: 5px;
+  padding: 10px 12px;
+  border: 1px solid #eee8e2;
+  border-radius: 11px;
+  background: #fff;
+}
+
+.detailItem dt {
+  color: #817970;
+  font-size: 9px;
+}
+
+.detailItem dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #39332e;
+  font-size: 10px;
+  font-weight: 780;
+  line-height: 1.4;
+}
+
+.pendingNotice {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: start;
+  gap: 5px 8px;
+  margin: 0 0 12px 46px;
+  padding: 10px 12px;
+  border: 1px solid #eddcb4;
+  border-radius: 11px;
+  background: #fff9e9;
+  color: #745e32;
+  font-size: 10px;
+  font-weight: 680;
+  line-height: 1.5;
+}
+
+.pendingNotice > svg {
+  margin-top: 1px;
+}
+
+.pendingNotice small {
+  display: block;
+  margin-top: 4px;
+  color: #8a7957;
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.suspensionActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  margin-left: 46px;
+}
+
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 13px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: center;
+  text-decoration: none;
+}
+
+.primaryAction {
+  border-color: #b64937;
+  background: #c94b37;
+  box-shadow: 0 3px 9px rgb(160 64 47 / 12%);
+  color: #fff;
+}
+
+.primaryAction:hover {
+  background: #a83e30;
+}
+
+.secondaryAction {
+  border-color: #e9e2dc;
+  background: #fff;
+  color: #625a54;
+}
+
+.secondaryAction:hover {
+  border-color: #d8b8ae;
+  color: #9b4434;
+}
+
+.primaryAction:focus-visible,
+.secondaryAction:focus-visible,
+.planButton:focus-visible,
+.selectedPlanButton:focus-visible,
+.screenNavigation a:focus-visible {
+  outline: 3px solid rgb(197 74 61 / 24%);
+  outline-offset: 3px;
+}
+
+.plansSection,
+.historySection {
+  margin-top: 14px;
+  padding: 15px 16px 14px;
+}
+
+.sectionHeading {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f0ece8;
+}
+
+.sectionHeading h2 {
+  margin: 0;
+  color: #302b27;
+  font-size: 12px;
+  font-weight: 820;
+  letter-spacing: -0.015em;
+}
+
+.sectionHeading p {
+  margin: 4px 0 0;
+  color: #8b837d;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.sectionHeading > span {
+  flex: none;
+  color: #8b837d;
+  font-size: 8px;
+}
+
+.planGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.planCard {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid #eee8e2;
+  border-radius: 13px;
+  background: #fff;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.selectedPlanCard {
+  border-color: #cd8b7b;
+  box-shadow: 0 0 0 2px rgb(197 74 61 / 9%);
+}
+
+.planHeading {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 9px;
+}
+
+.planHeading h3 {
+  margin: 0;
+  color: #302b27;
+  font-size: 12px;
+  font-weight: 820;
+}
+
+.planPrice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px;
+  margin: 7px 0 0;
+}
+
+.planPrice strong {
+  color: #292522;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.planPrice span {
+  color: #837b74;
+  font-size: 9px;
+}
+
+.planTag {
+  padding: 5px 8px;
+  font-size: 8px;
+}
+
+.planFeatures {
+  min-height: 28px;
+  margin: 0;
+  color: #817970;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.planButton,
+.selectedPlanButton {
+  display: inline-flex;
+  width: 100%;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px;
+  border: 1px solid #e9e2dc;
+  border-radius: 9px;
+  background: #fff;
+  color: #514a44;
+  font: inherit;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: center;
+  cursor: pointer;
+}
+
+.planButton:hover {
+  border-color: #d8b8ae;
+  background: #fff9f6;
+  color: #9b4434;
+}
+
+.selectedPlanButton {
+  border-color: #b64937;
+  background: #c94b37;
+  color: #fff;
+}
+
+.selectedPlanButton:hover {
+  background: #a83e30;
+}
+
+.freeMonthNote,
+.selectionNotice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 11px 0 0;
+  padding: 10px 11px;
+  border: 1px solid #f0e4da;
+  border-radius: 10px;
+  background: #fffaf5;
+  color: #756a61;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.freeMonthNote > span:first-child {
+  display: grid;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  place-items: center;
+  border: 1px solid #e9d8c8;
+  border-radius: 50%;
+  color: #9b5a48;
+  font-size: 9px;
+  font-weight: 850;
+}
+
+.selectionNotice {
+  border-color: #d9e9dd;
+  background: #f6fbf7;
+  color: #286747;
+}
+
+.selectionNotice > svg {
+  flex: none;
+  margin-top: 1px;
+}
+
+.headingIcon {
+  flex: none;
+  color: #a84433;
+}
+
+.historyHeader,
+.historyRow {
+  display: grid;
+  grid-template-columns: minmax(150px, 1.15fr) minmax(155px, 1.2fr) minmax(150px, 1.2fr) minmax(140px, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.historyHeader {
+  padding: 11px 8px 8px;
+  color: #8a837d;
+  font-size: 8px;
+  text-transform: uppercase;
+}
+
+.historyList {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.historyRow {
+  min-width: 0;
+  padding: 11px 8px;
+  border-top: 1px solid #f0ece8;
+}
+
+.historyRow > div {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.historyRow strong {
+  overflow-wrap: anywhere;
+  color: #39332e;
+  font-size: 9px;
+  font-weight: 760;
+  line-height: 1.4;
+}
+
+.historyLabel {
+  display: none;
+  color: #8b837d;
+  font-size: 8px;
+}
+
+.historyStatus {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.historyStatus > span {
+  font-size: 7px;
+}
+
+.statusPending {
+  background: #fff6df;
+  color: #86621b;
+}
+
+.statusRejected {
+  background: #fff0ee;
+  color: #a53d32;
+}
+
+.historyFootnote {
+  margin: 8px 0 0;
+  color: #817971;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.disclaimer {
+  margin: 12px 0 0;
+  color: #8a827b;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.screenNavigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #eee9e4;
+  color: #8a827b;
+  font-size: 9px;
+}
+
+.screenNavigation a {
+  color: #a84433;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.screenNavigation a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .historyHeader,
+  .historyRow {
+    grid-template-columns: minmax(130px, 1.05fr) minmax(145px, 1.2fr) minmax(140px, 1.15fr) minmax(135px, 1fr);
+    gap: 8px;
+  }
+}
+
+@media (max-width: 820px) {
+  .suspensionCard {
+    padding: 16px;
+  }
+
+  .detailGrid,
+  .pendingNotice,
+  .suspensionActions {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .demoNotice {
+    align-items: flex-start;
+    padding: 11px;
+  }
+
+  .noticeIcon {
+    width: 29px;
+    height: 29px;
+  }
+
+  .demoTag,
+  .stateTag {
+    display: none;
+  }
+
+  .suspensionCard,
+  .plansSection,
+  .historySection {
+    padding: 14px 12px;
+  }
+
+  .suspensionHeading {
+    gap: 9px;
+  }
+
+  .alertIcon {
+    width: 31px;
+    height: 31px;
+  }
+
+  .suspensionHeading h2 {
+    font-size: 16px;
+  }
+
+  .reason,
+  .pendingNotice {
+    font-size: 9px;
+  }
+
+  .detailGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 7px;
+    margin: 12px 0 10px;
+  }
+
+  .detailItem {
+    min-height: 49px;
+    padding: 8px 10px;
+  }
+
+  .pendingNotice {
+    padding: 9px 10px;
+  }
+
+  .suspensionActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .primaryAction,
+  .secondaryAction {
+    width: 100%;
+    min-height: 41px;
+  }
+
+  .sectionHeading {
+    gap: 8px;
+  }
+
+  .sectionHeading h2 {
+    font-size: 11px;
+  }
+
+  .sectionHeading > span {
+    max-width: 100px;
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  .planGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .planCard {
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .planFeatures {
+    min-height: 0;
+  }
+
+  .historyHeader {
+    display: none;
+  }
+
+  .historyList {
+    gap: 8px;
+    margin-top: 11px;
+  }
+
+  .historyRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 12px;
+    padding: 10px;
+    border: 1px solid #f0ece8;
+    border-radius: 10px;
+  }
+
+  .historyLabel {
+    display: block;
+  }
+
+  .historyRow strong {
+    font-size: 9px;
+  }
+
+  .historyStatus {
+    white-space: normal;
+  }
+
+  .screenNavigation {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .planCard {
+    transition: none;
+  }
+}

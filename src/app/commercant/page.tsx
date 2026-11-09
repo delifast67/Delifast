@@ -48,11 +48,10 @@ export default function MerchantDashboardPage() {
             <CreditCard aria-hidden="true" size={15} />
             <span>Configuration démo</span>
           </Link>
-          <span className={styles.futureNavItem} aria-disabled="true">
+          <Link className={dashboard.navItem} href="/commercant/abonnement">
             <Store aria-hidden="true" size={15} />
             <span>Gestion de l’abonnement</span>
-            <small>Écran non inclus</small>
-          </span>
+          </Link>
         </nav>
         <div className={dashboard.sidebarNote}>
           <span aria-hidden="true">●</span> Mode démonstration
@@ -149,12 +148,12 @@ export default function MerchantDashboardPage() {
             </p>
 
             <div className={styles.cardActions}>
-              <Link className={styles.primaryAction} href="/commercant/inscription/paiements">
-                Revoir la configuration fictive <ArrowRight aria-hidden="true" size={15} />
+              <Link className={styles.primaryAction} href="/commercant/abonnement">
+                Consulter les forfaits et renouveler <ArrowRight aria-hidden="true" size={15} />
               </Link>
-              <span className={styles.upcomingAction}>
-                Gestion et historique de l’abonnement · écran non inclus
-              </span>
+              <Link className={styles.upcomingAction} href="/commercant/abonnement#historique-abonnements">
+                Historique des abonnements et des paiements
+              </Link>
             </div>
           </section>
 
@@ -174,10 +173,10 @@ export default function MerchantDashboardPage() {
             <div className={styles.featureFooter}>
               <p>
                 Le parcours d’abonnement reste consultable dans les écrans 36 et 37 du cahier,
-                non implémentés dans ce lot.
+                en démonstration locale; seul l’écran 36 est inclus dans ce lot.
               </p>
-              <Link className={styles.textLink} href="/commercant/inscription/paiements">
-                Revenir à l’écran 22 <ArrowRight aria-hidden="true" size={14} />
+              <Link className={styles.textLink} href="/commercant/abonnement">
+                Ouvrir l’écran 36 · Gestion de l’abonnement <ArrowRight aria-hidden="true" size={14} />
               </Link>
               <Link className={styles.textLink} href="/commercant/boutique">
                 Prévisualiser l’écran 24 · Gestion de la boutique <ArrowRight aria-hidden="true" size={14} />

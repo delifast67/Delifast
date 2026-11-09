@@ -1,50 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { Info, Search } from "lucide-react";
+import { demoOrders, type OrderStatus } from "./orders-data";
 import styles from "./orders.module.css";
 
-type OrderStatus = "cancellation_pending" | "partially_cancelled" | "completed";
-type Order = {
-  reference: string;
-  customer: string;
-  date: string;
-  dateSort: string;
-  total: string;
-  status: OrderStatus;
-  statusLabel: string;
-};
 type Filter = "all" | "waiting" | "recent";
-
-const demoOrders: Order[] = [
-  {
-    reference: "#DF-24018",
-    customer: "Client Démo",
-    date: "06 nov. 2026",
-    dateSort: "2026-11-06",
-    total: "10 000 FCFA",
-    status: "cancellation_pending",
-    statusLabel: "Annulation en cours",
-  },
-  {
-    reference: "#DF-24016",
-    customer: "Client Exemple",
-    date: "06 nov. 2026",
-    dateSort: "2026-11-06",
-    total: "4 500 FCFA",
-    status: "partially_cancelled",
-    statusLabel: "Annulée partiellement",
-  },
-  {
-    reference: "#DF-24011",
-    customer: "Client Démo",
-    date: "04 nov. 2026",
-    dateSort: "2026-11-04",
-    total: "4 000 FCFA",
-    status: "completed",
-    statusLabel: "Terminée",
-  },
-];
 
 const filters: { id: Filter; label: string }[] = [
   { id: "all", label: "Tous" },
@@ -165,7 +127,13 @@ export function MerchantOrdersList() {
               {visibleOrders.map((order) => (
                 <tr key={order.reference}>
                   <td className={styles.referenceCell} data-label="Commande">
-                    {order.reference}
+                    <Link
+                      aria-label={`Ouvrir le détail fictif de la commande ${order.reference}`}
+                      className={styles.orderLink}
+                      href={`/commercant/commandes/${order.id}`}
+                    >
+                      {order.reference}
+                    </Link>
                   </td>
                   <td data-label="Client">{order.customer}</td>
                   <td data-label="Date">{order.date}</td>
@@ -180,7 +148,19 @@ export function MerchantOrdersList() {
               {visibleOrders.length === 0 ? (
                 <tr>
                   <td className={styles.emptyState} colSpan={5}>
-                    Aucune commande fictive ne correspond à cette recherche.
+                    <div className={styles.emptyStateContent} role="status">
+                      <strong>Aucune commande fictive ne correspond.</strong>
+                      <span>Modifiez la recherche ou réinitialisez les filtres.</span>
+                      <button
+                        onClick={() => {
+                          setQuery("");
+                          setFilter("all");
+                        }}
+                        type="button"
+                      >
+                        Effacer la recherche et les filtres
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ) : null}
@@ -192,7 +172,15 @@ export function MerchantOrdersList() {
           {visibleOrders.map((order) => (
             <article className={styles.mobileOrderCard} key={order.reference}>
               <div className={styles.mobileOrderHeading}>
-                <strong>{order.reference}</strong>
+                  <strong>
+                    <Link
+                      aria-label={`Ouvrir le détail fictif de la commande ${order.reference}`}
+                      className={styles.orderLink}
+                      href={`/commercant/commandes/${order.id}`}
+                    >
+                      {order.reference}
+                    </Link>
+                  </strong>
                 <span>{order.customer}</span>
               </div>
               <dl className={styles.mobileFacts}>
@@ -214,9 +202,19 @@ export function MerchantOrdersList() {
             </article>
           ))}
           {visibleOrders.length === 0 ? (
-            <p className={styles.emptyState}>
-              Aucune commande fictive ne correspond à cette recherche.
-            </p>
+            <div className={styles.emptyState} role="status">
+              <strong>Aucune commande fictive ne correspond.</strong>
+              <span>Modifiez la recherche ou réinitialisez les filtres.</span>
+              <button
+                onClick={() => {
+                  setQuery("");
+                  setFilter("all");
+                }}
+                type="button"
+              >
+                Effacer la recherche et les filtres
+              </button>
+            </div>
           ) : null}
         </div>
 

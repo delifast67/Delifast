@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
+  ClipboardList,
   Clock3,
   CreditCard,
   LayoutDashboard,
@@ -32,6 +33,13 @@ export default function MerchantDashboardPage() {
           >
             <LayoutDashboard aria-hidden="true" size={15} />
             <span>Tableau de bord</span>
+          </Link>
+          <Link
+            className={dashboard.navItem}
+            href="/commercant/commandes"
+          >
+            <ClipboardList aria-hidden="true" size={15} />
+            <span>Commandes · démo</span>
           </Link>
           <Link
             className={dashboard.navItem}

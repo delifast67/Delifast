@@ -232,6 +232,19 @@
   font-weight: 800;
   white-space: nowrap;
 }
+.orderLink {
+  color: inherit;
+  text-decoration: none;
+}
+.orderLink:hover {
+  color: #a84433;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.orderLink:focus-visible {
+  outline: 3px solid rgb(197 74 61 / 25%);
+  outline-offset: 3px;
+}
 .statusPill {
   display: inline-flex;
   max-width: 100%;
@@ -270,6 +283,34 @@
   color: #77716b !important;
   font-size: 10px;
   text-align: center;
+}
+.emptyStateContent {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+}
+.emptyStateContent strong {
+  color: #504a45;
+}
+.emptyStateContent span {
+  color: #89827b;
+  font-size: 9px;
+}
+.emptyStateContent button {
+  min-height: 30px;
+  padding: 5px 9px;
+  border: 1px solid #e8d6ce;
+  border-radius: 8px;
+  background: #fffaf7;
+  color: #984532;
+  cursor: pointer;
+  font: inherit;
+  font-size: 9px;
+  font-weight: 750;
+}
+.emptyStateContent button:focus-visible {
+  outline: 3px solid rgb(197 74 61 / 22%);
+  outline-offset: 2px;
 }
 .mobileOrderList {
   display: none;
@@ -427,6 +468,10 @@
     font-size: 7px;
   }
   .mobileOrderList .emptyState {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 5px;
     height: auto;
     margin: 0;
     border: 1px solid #ece7e2;

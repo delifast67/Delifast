@@ -3,7 +3,6 @@
 import Link from "next/link";
 import {
   ArrowRight,
-  BadgeCheck,
   CircleAlert,
   Clock3,
   ClipboardList,
@@ -13,7 +12,6 @@ import {
   ShieldCheck,
   Store,
 } from "lucide-react";
-import { useState } from "react";
 import { HomeBrand } from "../../../components/public-home/site-header";
 import dashboard from "../../client/client-dashboard.module.css";
 import styles from "./subscription.module.css";
@@ -22,8 +20,6 @@ const plans = [
   { id: "decouverte", name: "Découverte", price: 3_000 },
   { id: "professionnel", name: "Professionnel", price: 4_500 },
 ] as const;
-
-type PlanId = (typeof plans)[number]["id"];
 
 const historyRows = [
   {
@@ -47,9 +43,6 @@ function amountLabel(amount: number) {
 }
 
 export function MerchantSubscriptionManagement() {
-  const [selectedPlan, setSelectedPlan] = useState<PlanId | null>(null);
-  const selectedPlanName = plans.find((plan) => plan.id === selectedPlan)?.name;
-
   return (
     <div className={dashboard.shell}>
       <aside
@@ -197,37 +190,29 @@ export function MerchantSubscriptionManagement() {
             </div>
 
             <div className={styles.planGrid}>
-              {plans.map((plan) => {
-                const isSelected = selectedPlan === plan.id;
-                return (
-                  <article
-                    className={`${styles.planCard} ${isSelected ? styles.selectedPlanCard : ""}`}
-                    key={plan.id}
-                  >
-                    <div className={styles.planHeading}>
-                      <div>
-                        <h3>{plan.name}</h3>
-                        <p className={styles.planPrice}>
-                          <strong>{amountLabel(plan.price)}</strong>
-                          <span>/ mois</span>
-                        </p>
-                      </div>
-                      <span className={styles.planTag}>Forfait · démo</span>
+              {plans.map((plan) => (
+                <article className={styles.planCard} key={plan.id}>
+                  <div className={styles.planHeading}>
+                    <div>
+                      <h3>{plan.name}</h3>
+                      <p className={styles.planPrice}>
+                        <strong>{amountLabel(plan.price)}</strong>
+                        <span>/ mois</span>
+                      </p>
                     </div>
-                    <p className={styles.planFeatures}>
-                      Fonctions, avantages et disponibilité selon la configuration.
-                    </p>
-                    <button
-                      aria-pressed={isSelected}
-                      className={isSelected ? styles.selectedPlanButton : styles.planButton}
-                      onClick={() => setSelectedPlan(plan.id)}
-                      type="button"
-                    >
-                      {isSelected ? "Forfait sélectionné · aperçu" : `Choisir ${plan.name} · aperçu`}
-                    </button>
-                  </article>
-                );
-              })}
+                    <span className={styles.planTag}>Forfait · démo</span>
+                  </div>
+                  <p className={styles.planFeatures}>
+                    Fonctions, avantages et disponibilité selon la configuration.
+                  </p>
+                  <Link
+                    className={styles.planButton}
+                    href={`/commercant/abonnement/paiement?forfait=${plan.id}`}
+                  >
+                    Choisir {plan.name} · continuer vers le paiement
+                  </Link>
+                </article>
+              ))}
             </div>
 
             <p className={styles.freeMonthNote}>
@@ -239,15 +224,6 @@ export function MerchantSubscriptionManagement() {
               </span>
             </p>
 
-            {selectedPlanName && (
-              <p className={styles.selectionNotice} role="status" aria-live="polite">
-                <BadgeCheck aria-hidden="true" size={17} />
-                <span>
-                  {selectedPlanName} sélectionné pour cet aperçu local. Aucun abonnement ni
-                  paiement n’a été lancé; l’écran 37 n’est pas inclus dans cette livraison.
-                </span>
-              </p>
-            )}
           </section>
 
           <section

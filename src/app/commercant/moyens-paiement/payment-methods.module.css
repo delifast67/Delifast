@@ -50,6 +50,7 @@
 @media (max-width: 640px) {
   .screenNavigation {
     align-items: flex-start;
+    flex-wrap: wrap;
   }
 
   .screenNavigation a {

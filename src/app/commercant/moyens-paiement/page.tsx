@@ -150,6 +150,9 @@ export default function MerchantPaymentMethodsPage() {
               <span aria-hidden="true">←</span> Retour à la gestion de la localisation
             </Link>
             <span className={dashboard.demoBadge}>Écran 26 sur 53</span>
+            <Link href="/commercant/livraison">
+              Configuration de la livraison <span aria-hidden="true">→</span>
+            </Link>
           </nav>
         </main>
       </div>

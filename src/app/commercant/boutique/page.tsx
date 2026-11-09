@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LayoutDashboard, Store } from "lucide-react";
+import { LayoutDashboard, MapPin, Store } from "lucide-react";
 import { HomeBrand } from "../../../components/public-home/site-header";
 import dashboard from "../../client/client-dashboard.module.css";
 import { StoreManagementForm } from "./store-management-form";
@@ -30,6 +30,10 @@ export default function StoreManagementPage() {
           >
             <Store aria-hidden="true" size={15} />
             <span>Gestion de la boutique</span>
+          </Link>
+          <Link className={dashboard.navItem} href="/commercant/localisation">
+            <MapPin aria-hidden="true" size={15} />
+            <span>Gestion de la localisation</span>
           </Link>
         </nav>
         <div className={dashboard.sidebarNote}>

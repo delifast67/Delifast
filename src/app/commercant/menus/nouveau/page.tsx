@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import {
   BookOpen,
+  ClipboardList,
   CreditCard,
   LayoutDashboard,
   MapPin,
@@ -63,6 +64,10 @@ export default function MerchantMenuFormPage() {
             <BookOpen aria-hidden="true" size={15} />
             <span>Menus</span>
           </Link>
+          <Link className={dashboard.navItem} href="/commercant/commandes">
+            <ClipboardList aria-hidden="true" size={15} />
+            <span>Commandes</span>
+          </Link>
         </nav>
         <div className={dashboard.sidebarNote}>
           <span aria-hidden="true">●</span> Mode démonstration
@@ -112,6 +117,9 @@ export default function MerchantMenuFormPage() {
             <Link href="/commercant/menus">
               <span aria-hidden="true">←</span>
               Retour à la liste des menus
+            </Link>
+            <Link href="/commercant/commandes">
+              Voir l’écran 32 · Liste des commandes <span aria-hidden="true">→</span>
             </Link>
             <span>Écran 31 sur 53 · Données fictives</span>
           </nav>

@@ -4,7 +4,7 @@ Delifast est une marketplace destinée au Burkina Faso, avec un lancement initia
 
 ## État actuel
 
-Le dépôt contient le socle technique initial et la documentation de référence. L’application Next.js n’implémente pas encore d’écran métier, de compte réel, de paiement, de schéma de base de données ou de migration Supabase ; sa page d’accueil reste un écran temporaire d’initialisation.
+Le dépôt contient le socle technique initial et la documentation de référence. L’application Next.js propose des interfaces de démonstration pour les parcours publics, client et commerçant. Les actions et les données restent fictives et locales : aucun backend n’est encore connecté, aucun compte réel ni paiement n’est implémenté et aucune persistance réelle n’est configurée. Le schéma de base de données et les migrations Supabase ne sont pas encore en place.
 
 La phase de conception comprend maintenant une [galerie statique des 53 maquettes](docs/maquettes/README.md), avec un rendu individuel pour chaque écran et une planche des états communs. Ces visuels sont des livrables de conception, pas des parcours opérationnels.
 

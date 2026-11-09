@@ -16,9 +16,9 @@ const summary = [
 ] as const;
 
 const clientNavigation = [
-  { label: "Panier", icon: "▣" },
-  { label: "Commandes", icon: "▤" },
-  { label: "Paiements", icon: "◆" },
+  { label: "Panier", icon: "▣", href: "/client/panier" },
+  { label: "Commandes", icon: "▤", href: "/client/commandes" },
+  { label: "Paiements", icon: "◆", href: "/client/paiements" },
   { label: "Profil client", icon: "♙", href: "/client/profil" },
 ] as const;
 
@@ -35,23 +35,16 @@ export default function ClientDashboardPage() {
             <span aria-hidden="true">⌂</span>
             <span>Client</span>
           </Link>
-          {clientNavigation.map((item) =>
-            item.label === "Panier" || item.label === "Profil client" ? (
-              <Link
-                className={styles.navItem}
-                href={item.label === "Profil client" ? item.href : "/client/panier"}
-                key={item.label}
-              >
-                <span aria-hidden="true">{item.icon}</span>
-                <span>{item.label}</span>
-              </Link>
-            ) : (
-              <span className={styles.navItem} key={item.label}>
-                <span aria-hidden="true">{item.icon}</span>
-                <span>{item.label}</span>
-              </span>
-            ),
-          )}
+          {clientNavigation.map((item) => (
+            <Link
+              className={styles.navItem}
+              href={item.href}
+              key={item.label}
+            >
+              <span aria-hidden="true">{item.icon}</span>
+              <span>{item.label}</span>
+            </Link>
+          ))}
         </nav>
         <div className={styles.sidebarNote}>
           <span aria-hidden="true">●</span> Mode démonstration

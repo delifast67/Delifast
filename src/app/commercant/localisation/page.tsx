@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LayoutDashboard, MapPin, Store } from "lucide-react";
+import { CreditCard, LayoutDashboard, MapPin, Store } from "lucide-react";
 import { HomeBrand } from "../../../components/public-home/site-header";
 import dashboard from "../../client/client-dashboard.module.css";
 import { LocationManagementForm } from "./location-management-form";
@@ -76,6 +76,10 @@ export default function MerchantLocationManagementPage() {
           >
             <MapPin aria-hidden="true" size={15} />
             <span>Gestion de la localisation</span>
+          </Link>
+          <Link className={dashboard.navItem} href="/commercant/moyens-paiement">
+            <CreditCard aria-hidden="true" size={15} />
+            <span>Gestion des moyens de paiement</span>
           </Link>
         </nav>
         <div className={dashboard.sidebarNote}>

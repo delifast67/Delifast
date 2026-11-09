@@ -6,6 +6,7 @@ import {
   Info,
   LayoutDashboard,
   MapPin,
+  Package,
   Store,
   Truck,
 } from "lucide-react";
@@ -50,6 +51,10 @@ export default function MerchantDeliveryPage() {
           >
             <Truck aria-hidden="true" size={15} />
             <span>Configuration de la livraison</span>
+          </Link>
+          <Link className={dashboard.navItem} href="/commercant/produits">
+            <Package aria-hidden="true" size={15} />
+            <span>Produits</span>
           </Link>
         </nav>
         <div className={dashboard.sidebarNote}>

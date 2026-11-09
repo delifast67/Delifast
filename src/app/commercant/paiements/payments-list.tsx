@@ -282,7 +282,11 @@ export function MerchantPaymentsList() {
                   <div><dt>Montant</dt><dd>{formatAmount(selectedPayment.amount)}</dd></div>
                 </dl>
                 <p className={styles.paymentSelectionNote}>
-                  L’examen de la preuve et la décision manuelle appartiennent à l’écran 35, non inclus dans cette étape.
+                  La vérification humaine est disponible sur{" "}
+                  <Link href={`/commercant/paiements/${selectedPayment.reference}`}>
+                    l’écran 35 · Détail du paiement
+                  </Link>
+                  .
                 </p>
               </section>
             )}
@@ -342,7 +346,10 @@ export function MerchantPaymentsList() {
                           <td className={styles.paymentAmount}>{formatAmount(payment.amount)}</td>
                           <td>{payment.date}</td>
                           <td><span className={`${styles.paymentStatus} ${paymentStatusClass(payment.status)}`}><span aria-hidden="true">●</span>{paymentStatusLabel(payment.status)}</span></td>
-                          <td><button className={styles.paymentInspectButton} onClick={() => inspectPayment(payment)} type="button">{selectedPayment?.reference === payment.reference ? "Masquer" : "Examiner"}</button></td>
+                          <td>
+                            <button className={styles.paymentInspectButton} onClick={() => inspectPayment(payment)} type="button">{selectedPayment?.reference === payment.reference ? "Masquer" : "Examiner"}</button>{" "}
+                            <Link className={styles.paymentOrderLink} href={`/commercant/paiements/${payment.reference}`}>Détail</Link>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -366,6 +373,9 @@ export function MerchantPaymentsList() {
                         <div><dt>Date</dt><dd>{payment.date}</dd></div>
                       </dl>
                       <button className={styles.paymentInspectButton} onClick={() => inspectPayment(payment)} type="button">{selectedPayment?.reference === payment.reference ? "Masquer le résumé" : "Examiner"}</button>
+                      <Link className={styles.paymentOrderLink} href={`/commercant/paiements/${payment.reference}`}>
+                        Ouvrir le détail et vérifier →
+                      </Link>
                     </article>
                   ))}
                 </div>

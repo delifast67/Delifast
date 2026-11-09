@@ -135,6 +135,7 @@ export default async function MerchantOrderDetailPage({
 
           <nav className={styles.screenNavigation} aria-label="Navigation des écrans commerçant">
             <Link href="/commercant/commandes">← Retour à l’écran 32 · Liste des commandes</Link>
+            <Link href="/commercant/paiements">Écran suivant 34 · Liste des paiements →</Link>
             <span>Écran 33 sur 53 · Données fictives</span>
           </nav>
         </main>

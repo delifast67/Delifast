@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
+  BookOpen,
   CreditCard,
   LayoutDashboard,
   MapPin,
@@ -56,6 +57,10 @@ export default function MerchantProductCreatePage() {
           >
             <Package aria-hidden="true" size={15} />
             <span>Produits</span>
+          </Link>
+          <Link className={dashboard.navItem} href="/commercant/menus">
+            <BookOpen aria-hidden="true" size={15} />
+            <span>Menus</span>
           </Link>
         </nav>
         <div className={dashboard.sidebarNote}>

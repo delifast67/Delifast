@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { BookOpen, Info, Plus, Search, SquarePen } from "lucide-react";
 import styles from "./menus.module.css";
 
@@ -38,7 +39,6 @@ const demoMenus: Menu[] = [
 
 export function MenuList() {
   const [query, setQuery] = useState("");
-  const [feedback, setFeedback] = useState("");
 
   const visibleMenus = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase("fr");
@@ -52,13 +52,6 @@ export function MenuList() {
     );
   }, [query]);
 
-  function previewForm(action: "création" | "modification", name?: string) {
-    const subject = name ? ` « ${name} »` : "";
-    setFeedback(
-      `Aperçu local uniquement : le formulaire menu (écran 31) n’est pas inclus dans ce lot. Aucune ${action} de menu${subject} n’a eu lieu.`,
-    );
-  }
-
   return (
     <>
       <div className={styles.headingRow}>
@@ -69,14 +62,10 @@ export function MenuList() {
             Organisez les menus présentés dans la vitrine de votre commerce.
           </p>
         </div>
-        <button
-          className={styles.primaryButton}
-          onClick={() => previewForm("création")}
-          type="button"
-        >
+        <Link className={styles.primaryButton} href="/commercant/menus/nouveau">
           <Plus aria-hidden="true" size={16} />
           Créer un menu
-        </button>
+        </Link>
       </div>
 
       <div className={styles.demoNotice} role="note">
@@ -143,15 +132,14 @@ export function MenuList() {
                   </td>
                   <td data-label="Dernière modification">{menu.updatedAt}</td>
                   <td data-label="Actions">
-                    <button
+                    <Link
                       aria-label={`Modifier ${menu.name} · aperçu local`}
                       className={styles.editButton}
-                      onClick={() => previewForm("modification", menu.name)}
-                      type="button"
+                      href={`/commercant/menus/nouveau?modifier=${menu.id}`}
                     >
                       <SquarePen aria-hidden="true" size={14} />
                       Modifier
-                    </button>
+                    </Link>
                   </td>
                 </tr>
               ))}
@@ -166,11 +154,6 @@ export function MenuList() {
           </table>
         </div>
 
-        {feedback && (
-          <p className={styles.feedback} role="status" aria-live="polite">
-            {feedback}
-          </p>
-        )}
       </section>
     </>
   );

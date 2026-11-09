@@ -7,12 +7,14 @@ type LocationValues = {
   address: string;
   city: string;
   complement: string;
+  mapsLink: string;
 };
 
 const initialValues: LocationValues = {
   address: "",
   city: "",
   complement: "",
+  mapsLink: "",
 };
 
 export function LocationManagementForm() {
@@ -81,7 +83,59 @@ export function LocationManagementForm() {
             value={values.complement}
           />
         </label>
+        <label className={`${styles.field} ${styles.fieldWide}`} htmlFor="merchant-location-maps-link">
+          <span>
+            Lien Google Maps <span className={styles.optional}>(facultatif)</span>
+          </span>
+          <input
+            aria-describedby="merchant-location-maps-help"
+            autoComplete="off"
+            id="merchant-location-maps-link"
+            inputMode="url"
+            maxLength={2048}
+            name="demoMapsLink"
+            onChange={(event) => updateField("mapsLink", event.target.value)}
+            placeholder="https://maps.app.goo.gl/exemple-lieu-fictif"
+            spellCheck={false}
+            type="url"
+            value={values.mapsLink}
+          />
+          <small id="merchant-location-maps-help">
+            Collez le lien de partage Google Maps de votre établissement. Exemple fictif uniquement :
+            https://maps.app.goo.gl/exemple-lieu-fictif. Le lien reste dans cet aperçu : il n’est
+            ni transmis, ni enregistré, ni ouvert.
+          </small>
+        </label>
       </div>
+
+      {previewReady && (
+        <section
+          aria-label="Aperçu local des modifications"
+          className={styles.localPreview}
+        >
+          <h3>Aperçu local · non enregistré</h3>
+          <dl>
+            <div>
+              <dt>Adresse</dt>
+              <dd>{values.address}</dd>
+            </div>
+            <div>
+              <dt>Ville</dt>
+              <dd>{values.city}</dd>
+            </div>
+            {values.complement && (
+              <div>
+                <dt>Complément</dt>
+                <dd>{values.complement}</dd>
+              </div>
+            )}
+            <div>
+              <dt>Lien Google Maps</dt>
+              <dd>{values.mapsLink || "Aucun lien ajouté."}</dd>
+            </div>
+          </dl>
+        </section>
+      )}
 
       <div className={styles.formFooter}>
         <p>Les données de ce formulaire ne sont pas enregistrées.</p>
@@ -91,7 +145,7 @@ export function LocationManagementForm() {
       </div>
       <p aria-live="polite" className={styles.localStatus} role="status">
         {previewReady
-          ? "Saisie validée pour la démonstration. Rien n’a été transmis ni enregistré."
+          ? "Aperçu local mis à jour. Rien n’a été transmis, enregistré ni ouvert."
           : "Démonstration uniquement : les modifications restent dans cette page et disparaissent en la quittant."}
       </p>
     </form>

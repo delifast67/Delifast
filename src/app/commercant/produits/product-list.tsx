@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { Info, Plus, Search } from "lucide-react";
@@ -128,12 +129,6 @@ export function ProductList() {
     );
   }
 
-  function explainAddAction() {
-    setFeedback(
-      "L’ajout complet est prévu à l’écran 29 (formulaire produit), hors de cet aperçu. Aucun produit n’a été créé.",
-    );
-  }
-
   const filters: { id: Filter; label: string; count: number }[] = [
     { id: "all", label: "Tous les produits", count: counts.all },
     { id: "available", label: "Disponibles", count: counts.available },
@@ -151,10 +146,10 @@ export function ProductList() {
             Gérez vos produits, leur disponibilité et le suivi de stock facultatif.
           </p>
         </div>
-        <button className={styles.primaryButton} onClick={explainAddAction} type="button">
+        <Link className={styles.primaryButton} href="/commercant/produits/nouveau">
           <Plus aria-hidden="true" size={15} />
           Ajouter un produit
-        </button>
+        </Link>
       </div>
 
       <div className={styles.demoNotice} role="note">

@@ -122,6 +122,12 @@ export default function AdminLogin() {
               <span className={styles.noticeIcon} aria-hidden="true">i</span>
               <p>Aucune inscription publique ni création d’un autre compte administrateur.</p>
             </div>
+            <div className={styles.demoEntry}>
+              <span>Sans ouverture de session</span>
+              <Link href="/admin/tableau-de-bord">
+                Voir l’aperçu fictif (écran 39) <span aria-hidden="true">→</span>
+              </Link>
+            </div>
             <p className={styles.cardFoot}>Delifast <span>·</span> Accès privé</p>
           </div>
         </section>

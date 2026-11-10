@@ -16,26 +16,28 @@ import {
   Users,
 } from "lucide-react";
 import styles from "./admin-dashboard-demo.module.css";
+import Link from "next/link";
 
 type DashboardItem = {
   label: string;
   screen: number;
   icon: LucideIcon;
+  href: string;
 };
 
 const navigation: DashboardItem[] = [
-  { label: "Utilisateurs", screen: 40, icon: Users },
-  { label: "Commerçants", screen: 42, icon: Store },
-  { label: "Restaurants", screen: 44, icon: Utensils },
-  { label: "Commandes", screen: 46, icon: ClipboardList },
-  { label: "Gestion des abonnements", screen: 48, icon: BadgeCheck },
-  { label: "Paiements", screen: 50, icon: CreditCard },
+  { label: "Utilisateurs", screen: 40, icon: Users, href: "/admin/utilisateurs" },
+  { label: "Commerçants", screen: 42, icon: Store, href: "/admin/commercants" },
+  { label: "Restaurants", screen: 44, icon: Utensils, href: "/admin/restaurants" },
+  { label: "Commandes", screen: 46, icon: ClipboardList, href: "/admin/commandes" },
+  { label: "Gestion des abonnements", screen: 48, icon: BadgeCheck, href: "/admin/abonnements" },
+  { label: "Paiements", screen: 50, icon: CreditCard, href: "/admin/paiements" },
 ];
 
 const shortcuts: DashboardItem[] = [
-  { label: "Utilisateurs", screen: 40, icon: ArrowUpRight },
-  { label: "Abonnements", screen: 48, icon: ArrowUpRight },
-  { label: "Paiements", screen: 50, icon: ArrowUpRight },
+  { label: "Utilisateurs", screen: 40, icon: ArrowUpRight, href: "/admin/utilisateurs" },
+  { label: "Abonnements", screen: 48, icon: ArrowUpRight, href: "/admin/abonnements" },
+  { label: "Paiements", screen: 50, icon: ArrowUpRight, href: "/admin/paiements" },
 ];
 
 const searchItems = [
@@ -47,12 +49,14 @@ const searchItems = [
     label: "À vérifier",
     screen: 50,
     icon: CreditCard,
+    href: "/admin/paiements",
     description: "Preuves de paiement et de remboursement · exemple fictif",
   },
   {
     label: "Activité",
     screen: 39,
     icon: Activity,
+    href: "/admin/tableau-de-bord",
     description: "Commandes et comptes fictifs de maquette",
   },
 ];
@@ -75,16 +79,6 @@ export default function AdminDashboardDemo() {
     );
   }, [normalizedQuery]);
 
-  function openUnavailableSection(item: DashboardItem) {
-    if (item.screen === 39) {
-      setFeedback("Les commandes et comptes affichés ici sont uniquement des exemples fictifs de ce tableau de bord.");
-      return;
-    }
-    setFeedback(
-      `La rubrique « ${item.label} » (écran ${screenLabel(item.screen)}) n’est pas intégrée à cette démonstration. Aucune donnée réelle n’a été consultée.`,
-    );
-  }
-
   return (
     <div className={styles.frame} data-testid="admin-demo-dashboard" data-screen="39">
       <aside className={styles.sidebar} aria-label="Navigation de la démonstration">
@@ -96,22 +90,21 @@ export default function AdminDashboardDemo() {
         </div>
         <p className={styles.sidebarLabel}>Espace administration</p>
         <nav className={styles.navigation} aria-label="Rubriques">
-          <span className={`${styles.navItem} ${styles.navActive}`} aria-current="page">
+          <Link className={`${styles.navItem} ${styles.navActive}`} aria-current="page" href="/admin/tableau-de-bord">
             <LayoutDashboard size={15} aria-hidden="true" />
             <span>Général</span>
-          </span>
+          </Link>
           {navigation.map((item) => {
             const Icon = item.icon;
             return (
-              <button
+              <Link
                 className={styles.navItem}
+                href={item.href}
                 key={item.label}
-                type="button"
-                onClick={() => openUnavailableSection(item)}
               >
                 <Icon size={15} aria-hidden="true" />
                 <span>{item.label}</span>
-              </button>
+              </Link>
             );
           })}
         </nav>
@@ -119,6 +112,10 @@ export default function AdminDashboardDemo() {
           <span className={styles.footDot} aria-hidden="true" />
           <span>Mode démonstration</span>
           <p>Aucune donnée réelle</p>
+          <div className={styles.systemFooterLinks}>
+            <Link href="/admin/erreur">Écran 52 · Erreur</Link>
+            <Link href="/admin/page-introuvable">Écran 53 · 404</Link>
+          </div>
         </div>
       </aside>
 
@@ -173,16 +170,15 @@ export default function AdminDashboardDemo() {
                   {searchResults.map((item, index) => {
                     const Icon = item.icon;
                     return (
-                      <button
+                      <Link
                         className={styles.resultItem}
+                        href={item.href}
                         key={`${item.label}-${item.screen}-${index}`}
-                        type="button"
-                        onClick={() => openUnavailableSection(item)}
                       >
                         <Icon size={15} aria-hidden="true" />
                         <span><strong>{item.label}</strong><small>{item.description}</small></span>
                         <ArrowRight size={15} aria-hidden="true" />
-                      </button>
+                      </Link>
                     );
                   })}
                 </div>
@@ -233,13 +229,12 @@ export default function AdminDashboardDemo() {
                     <span>Contenu fictif de démonstration · aucun dossier réel</span>
                   </div>
                 </div>
-                <button
+                <Link
                   className={styles.textAction}
-                  type="button"
-                  onClick={() => setFeedback("La file de vérification n’est pas ouverte dans cette démo. Aucun paiement ni remboursement n’est traité.")}
+                  href="/admin/paiements"
                 >
                   Ouvrir la file <span aria-hidden="true">→</span>
-                </button>
+                </Link>
               </section>
 
               <section className={styles.panel} aria-labelledby="activity-title">
@@ -274,11 +269,10 @@ export default function AdminDashboardDemo() {
                   {shortcuts.map((item) => {
                     const Icon = item.icon;
                     return (
-                      <button
+                      <Link
                         className={styles.shortcut}
+                        href={item.href}
                         key={item.label}
-                        type="button"
-                        onClick={() => openUnavailableSection(item)}
                       >
                         <span className={styles.shortcutIcon}><Icon size={16} aria-hidden="true" /></span>
                         <span className={styles.shortcutText}>
@@ -286,7 +280,7 @@ export default function AdminDashboardDemo() {
                           <small>Ouvrir la section · écran {screenLabel(item.screen)}</small>
                         </span>
                         <span className={styles.shortcutLink}>Voir <span aria-hidden="true">→</span></span>
-                      </button>
+                      </Link>
                     );
                   })}
                 </div>
